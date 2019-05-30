@@ -1,4 +1,4 @@
-package manager;
+package version1.manager;
 
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.DataTypes;

@@ -1,7 +1,7 @@
-package main;
+package version1.main;
 
-import managerOld.CacheSystemOld;
-import managerOld.ConfigManager;
+import version1.managerOld.CacheSystemOld;
+import version1.managerOld.ConfigManager;
 import org.aeonbits.owner.ConfigFactory;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -15,9 +15,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
 
-import static managerOld.CacheSystemOld.log;
+import static version1.managerOld.CacheSystemOld.log;
 
-//spark-submit --class main.Main --master spark://10.129.149.70:7077 --deploy-mode client target/CachingSystem-1.0-SNAPSHOT-jar-with-dependencies.jar ./cachesystemold.properties
+//spark-submit --class version1.main.Main --master spark://10.129.149.70:7077 --deploy-mode client target/CachingSystem-1.0-SNAPSHOT-jar-with-dependencies.jar ./cachesystemold.properties
 public class MainOld {
 
     public static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");

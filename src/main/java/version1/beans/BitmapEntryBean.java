@@ -1,4 +1,4 @@
-package beans;
+package version1.beans;
 
 import java.io.Serializable;
 import java.util.BitSet;

@@ -1,4 +1,4 @@
-package manager;
+package version1.manager;
 
 import java.io.File;
 import java.io.FileWriter;

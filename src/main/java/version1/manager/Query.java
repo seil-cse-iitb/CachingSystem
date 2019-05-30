@@ -1,4 +1,4 @@
-package managerOld;
+package version1.manager;
 
 import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.Row;
@@ -13,56 +13,54 @@ import scala.collection.Iterator;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static java.util.Collections.sort;
 
-public class QueryOld implements Serializable {
+public class Query implements Serializable {
 
 
-    public static MapFunction<Row, QueryOld> queryMapFunction = new MapFunction<Row, QueryOld>() {
-        public QueryOld call(Row value) throws Exception {
+    public static MapFunction<Row, Query> queryMapFunction = new MapFunction<Row, Query>() {
+        public Query call(Row value) throws Exception {
             Timestamp queryTimestamp = value.getTimestamp(value.fieldIndex("event_time"));
             String queryStr = value.getString(value.fieldIndex("argument"));
             String userHost = value.getAs("user_host");
-            QueryOld queryOld = new QueryOld(queryTimestamp, queryStr, userHost);
-            return queryOld;
+            Query query = new Query(queryTimestamp, queryStr, userHost);
+            return query;
         }
     };
-
-    public String granularity;
-    public String tableName;
-    public String tsColumnName="TS";
-    public String sensorIdColumnName="sensor_id";
     private Timestamp queryTimestamp;
     private String queryStr;
     private String userHost;
-    private ArrayList<Expression> tsConditions = new ArrayList<>();
-    private ArrayList<Expression> sensorIdConditions = new ArrayList<>();
-    private ArrayList<TimeRange> timeRanges = new ArrayList<>();
-    private ArrayList<String> sensorIds = new ArrayList<>();
+    private final ArrayList<Expression> tsConditions = new ArrayList<>();
+    private final ArrayList<Expression> sensorIdConditions = new ArrayList<>();
+    private final Map<Sensor, List<TimeRange>> sensorTimeRangeMap = new HashMap<>();
 
-    public QueryOld() {
+
+    public Query() {
     }
 
-    public QueryOld(Timestamp queryTimestamp, String queryStr, String userHost) {
+    public Query(Timestamp queryTimestamp, String queryStr, String userHost) {
         this.queryTimestamp = queryTimestamp;
         this.queryStr = queryStr;
         this.userHost = userHost;
     }
 
-    public static List<QueryOld> preprocessQueries(List<QueryOld> queries) {
-        for (QueryOld queryOld : queries) {
-            LogicalPlan parsePlan = new SparkSqlParser(new SQLConf()).parsePlan(queryOld.getQueryStr());
+    public static List<Query> preprocessQueries(List<Query> queries) {
+        for (Query query : queries) {
+            LogManager.logDebugInfo("[PreprocessingQuery]" + query);
+            LogicalPlan parsePlan = new SparkSqlParser(new SQLConf()).parsePlan(query.getQueryStr());
             LogicalPlan filterPlan = getFilterPlan(parsePlan);
-            Expression whereConditions = ((Filter)filterPlan).condition();
-            getTSAndSensorIdConditions(queryOld,whereConditions, null, queryOld.getTsConditions(), queryOld.getSensorIdConditions());
-            queryOld.tableName = ((UnresolvedRelation) getUnresolvedRelation(filterPlan)).tableName();
-            extractSensorIds(queryOld);
-            calculateTimeRanges(queryOld);
-            calculateGranularity(queryOld);
+            Expression whereConditions = ((Filter) filterPlan).condition();
+            String tableName = ((UnresolvedRelation) getUnresolvedRelation(filterPlan)).tableName();
+            MySQLTable cacheMySQLTable = PropertiesManager.getProperties().cacheMySQLTableSchemaTypeMap.get(MySQLTable.SchemaType.valueOf(tableName));
+            extractTSAndSensorIdConditions(query, cacheMySQLTable, whereConditions, null);
+            ArrayList<Sensor> sensors = extractSensors(query);
+            for (Sensor sensor : sensors) {
+                ArrayList<TimeRange> timeRanges = extractTimeRanges(query);
+                query.sensorTimeRangeMap.put(sensor, timeRanges);
+            }
+
         }
         return queries;
     }
@@ -72,38 +70,24 @@ public class QueryOld implements Serializable {
         else return getUnresolvedRelation(logicalPlan.children().head());
     }
 
-    private static void extractSensorIds(QueryOld queryOld) {
-        ArrayList<Expression> sensorIdConditions = queryOld.getSensorIdConditions();
+    private static ArrayList<Sensor> extractSensors(Query query) {
+        ArrayList<Sensor> sensors = new ArrayList<>();
+        ArrayList<Expression> sensorIdConditions = query.getSensorIdConditions();
         for (Expression sensorIdCondition : sensorIdConditions) {
             if (sensorIdCondition.children().head() instanceof Literal) {
-                queryOld.getSensorIds().add(((UTF8String) ((Literal) sensorIdCondition.children().head()).value()).toString());
+                sensors.add(PropertiesManager.getProperties().sensorMap.get(((UTF8String) ((Literal) sensorIdCondition.children().head()).value()).toString()));
             } else if (sensorIdCondition.children().last() instanceof Literal) {
-                queryOld.getSensorIds().add(((UTF8String) ((Literal) sensorIdCondition.children().last()).value()).toString());
+                sensors.add(PropertiesManager.getProperties().sensorMap.get(((UTF8String) ((Literal) sensorIdCondition.children().last()).value()).toString()));
             }
         }
+        return sensors;
     }
 
-    private static void calculateGranularity(QueryOld queryOld) {
-        ArrayList<TimeRange> timeRanges = queryOld.getTimeRanges();
-        long totalTime = 0;
-        for (TimeRange timeRange : timeRanges) {
-            totalTime += timeRange.endTime - timeRange.startTime;
-        }
-        if (totalTime <= 4 * 24 * 60 * 60) { // less than 4 Days
-            queryOld.granularity = "1 minute";
-        } else if (totalTime <= 2 * 30 * 24 * 60 * 60) { // less than 2 months
-            queryOld.granularity = "1 hour";
-        } else if (totalTime <= 370 * 24 * 60 * 60) { // less than 1 year
-            queryOld.granularity = "1 day";
-        } else {
-            queryOld.granularity = "1 day";
-        }
-    }
-
-    private static void calculateTimeRanges(QueryOld queryOld) {
+    private static ArrayList<TimeRange> extractTimeRanges(Query query) {
         //TODO Check logic and extend for more generic time ranges
         //Very bad code down there. Correct it when you are free.
-        ArrayList<Expression> tsConditions = queryOld.getTsConditions();
+        ArrayList<TimeRange> timeRanges = new ArrayList<>();
+        ArrayList<Expression> tsConditions = query.getTsConditions();
         ArrayList<Long> startTimes = new ArrayList<>();
         ArrayList<Long> endTimes = new ArrayList<>();
         for (Expression tsExpr : tsConditions) {
@@ -132,17 +116,17 @@ public class QueryOld implements Serializable {
         while (!startTimes.isEmpty() && !endTimes.isEmpty()) {
 
             if (startTimes.get(0) < endTimes.get(0)) {
-                queryOld.getTimeRanges().add(new TimeRange(startTimes.get(0), endTimes.get(0)));
+                timeRanges.add(new TimeRange(startTimes.get(0), endTimes.get(0)));
                 startTimes.remove(0);
                 endTimes.remove(0);
             } else {
                 //TODO edit in previous TimeRange
+                LogManager.logInfo("[Skipping query]Bad Time Ranges in Query");
+                break;
             }
 
         }
-//        System.out.println("Remaining StartTimes: " + startTimes);
-//        System.out.println("Remaining EndTimes: " + endTimes);
-//        System.out.println("Proper TimeRanges: " + timeRanges);
+        return timeRanges;
     }
 
     private static Long extractTS(Expression tsExpr) {
@@ -151,7 +135,7 @@ public class QueryOld implements Serializable {
         } else if (tsExpr.children().last() instanceof Literal) {
             return ((Integer) ((Literal) tsExpr.children().last()).value()).longValue();
         }
-        return -1l;
+        return -1L;
     }
 
     private static LogicalPlan getFilterPlan(LogicalPlan logicalPlan) {
@@ -159,59 +143,32 @@ public class QueryOld implements Serializable {
         else return getFilterPlan(logicalPlan.children().head());
     }
 
-    private static void getTSAndSensorIdConditions(QueryOld queryOld, Expression curExpr, Expression parentExpr, ArrayList<Expression> tsConditions, ArrayList<Expression> sensorIdConditions) {
+    private static void extractTSAndSensorIdConditions(Query query, MySQLTable cacheMySQLTable, Expression curExpr, Expression parentExpr) {
         if (curExpr.nodeName().equalsIgnoreCase("UnresolvedAttribute")) {
             if (curExpr.flatArguments().hasNext()) {
-                if (((String) curExpr.flatArguments().next()).equals(queryOld.tsColumnName)) {
-                    tsConditions.add(parentExpr);
-                } else if (curExpr.flatArguments().next().equals(queryOld.sensorIdColumnName)) {
-                    sensorIdConditions.add(parentExpr);
+                if (((String) curExpr.flatArguments().next()).equalsIgnoreCase(cacheMySQLTable.getTsColumnName())) {
+                    query.getTsConditions().add(parentExpr);
+                } else if (((String) curExpr.flatArguments().next()).equalsIgnoreCase(cacheMySQLTable.getSensorIdColumnName())) {
+                    query.getSensorIdConditions().add(parentExpr);
                 }
             }
         }
         Iterator<Expression> iterator = curExpr.children().iterator();
         while (iterator.hasNext()) {
-            getTSAndSensorIdConditions(queryOld, iterator.next(), curExpr, tsConditions, sensorIdConditions);
+            extractTSAndSensorIdConditions(query, cacheMySQLTable, iterator.next(), curExpr);
         }
     }
 
     @Override
     public String toString() {
         return "Query{" +
-                "granularity='" + granularity + '\'' +
-                ", tableName='" + tableName + '\'' +
-                ", tsColumnName='" + tsColumnName + '\'' +
-                ", sensorIdColumnName='" + sensorIdColumnName + '\'' +
-                ", queryTimestamp=" + queryTimestamp +
+                "queryTimestamp=" + queryTimestamp +
                 ", queryStr='" + queryStr + '\'' +
                 ", userHost='" + userHost + '\'' +
                 ", tsConditions=" + tsConditions +
                 ", sensorIdConditions=" + sensorIdConditions +
-                ", timeRanges=" + timeRanges +
-                ", sensorIds=" + sensorIds +
+                ", sensorTimeRangeMap=" + sensorTimeRangeMap +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof QueryOld)) return false;
-
-        QueryOld queryOld = (QueryOld) o;
-
-        if (!getQueryTimestamp().equals(queryOld.getQueryTimestamp())) return false;
-        if (!getQueryStr().equals(queryOld.getQueryStr())) return false;
-        if (!getTsConditions().equals(queryOld.getTsConditions())) return false;
-        return getSensorIdConditions().equals(queryOld.getSensorIdConditions());
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getQueryTimestamp().hashCode();
-        result = 31 * result + getQueryStr().hashCode();
-        result = 31 * result + getTsConditions().hashCode();
-        result = 31 * result + getSensorIdConditions().hashCode();
-        return result;
     }
 
     public Timestamp getQueryTimestamp() {
@@ -238,16 +195,9 @@ public class QueryOld implements Serializable {
         return sensorIdConditions;
     }
 
-    public ArrayList<TimeRange> getTimeRanges() {
-        return timeRanges;
-    }
 
-    public ArrayList<String> getSensorIds() {
-        return sensorIds;
-    }
-
-    public void setSensorIds(ArrayList<String> sensorIds) {
-        this.sensorIds = sensorIds;
+    public Map<Sensor, List<TimeRange>> getSensorTimeRangeMap() {
+        return sensorTimeRangeMap;
     }
 
     public String getUserHost() {

@@ -1,6 +1,6 @@
-package managerOld;
+package version1.managerOld;
 
-import beans.BitmapEntryBean;
+import version1.beans.BitmapEntryBean;
 
 import java.util.ArrayList;
 import java.util.BitSet;

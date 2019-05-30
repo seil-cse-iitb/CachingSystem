@@ -1,4 +1,4 @@
-package manager;
+package version1.manager;
 
 public class Sensor {
 

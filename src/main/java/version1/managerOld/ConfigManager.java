@@ -1,4 +1,4 @@
-package managerOld;
+package version1.managerOld;
 //http://owner.aeonbits.org/docs/
 
 public interface ConfigManager extends org.aeonbits.owner.Config {

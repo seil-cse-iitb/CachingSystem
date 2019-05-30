@@ -1,13 +1,6 @@
-package manager;
+package version1.manager;
 
-import javax.mail.Message;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.net.URLEncoder;
-import java.util.Properties;
 
 public class ReportManager {
 	public static void report(String subject, String text) {
