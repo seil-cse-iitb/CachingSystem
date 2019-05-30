@@ -1,62 +1,36 @@
 package main;
 
 import manager.CacheSystem;
-import manager.ConfigManager;
-import manager.Query;
-import org.aeonbits.owner.ConfigFactory;
+import manager.LogManager;
+import manager.PropertiesManager;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.sql.SparkSession;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Properties;
-
-import static manager.CacheSystem.log;
-
 //spark-submit --class main.Main --master spark://10.129.149.70:7077 --deploy-mode client target/CachingSystem-1.0-SNAPSHOT-jar-with-dependencies.jar ./cachesystem.properties
 public class Main {
 
-    public static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-    public static ConfigManager config = null;
     public static SparkSession sparkSession = null;
 
     public static void main(String[] args) {
-        logsOff();
-        config = loadConfig(args);
-        System.out.println("[Config]: " + config);
-        SparkConf conf = new SparkConf().setAppName(config.appName()).set("spark.driver.host", config.driverHostname());
+        if (args.length > 0) {
+            String propertiesFileName = args[0];
+            PropertiesManager.loadProperties(propertiesFileName);
+        }
+        LogManager.logDebugInfo("[MyProperties]"+PropertiesManager.getProperties());
+        if (PropertiesManager.getProperties().STOP_SPARK_LOGGING)
+            logsOff();
+        SparkConf conf = new SparkConf().setAppName(PropertiesManager.getProperties().APP_NAME);
         conf.setIfMissing("spark.master", "local[4]");
         sparkSession = SparkSession.builder().config(conf).getOrCreate();
-        log(sparkSession.conf().get("spark.executor.memory"));
-
-        CacheSystem cacheSystem = new CacheSystem(config, sparkSession);
+        CacheSystem cacheSystem = new CacheSystem(sparkSession);
         cacheSystem.start();
     }
+
     public static void logsOff() {
         Logger.getLogger("org").setLevel(Level.OFF);
         Logger.getLogger("akka").setLevel(Level.OFF);
-    }
-
-    private static ConfigManager loadConfig(String[] args) {
-        ConfigManager cfg;
-        if (args.length > 0) {
-            try {
-                Properties props = new Properties();
-                props.load(new FileInputStream(new File(args[0])));
-                cfg = ConfigFactory.create(ConfigManager.class, props);
-                return cfg;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        cfg = ConfigFactory.create(ConfigManager.class);
-        return cfg;
     }
 }
 

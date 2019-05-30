@@ -1,8 +1,8 @@
-package manager;
+package managerOld;
 
 import java.util.Properties;
 
-public class MySQL {
+public class MySQLOld {
 
     private final String host;
     private final String user;
@@ -11,7 +11,7 @@ public class MySQL {
     private Properties properties;
 
 
-    public MySQL(String host, String user, String password, String database) {
+    public MySQLOld(String host, String user, String password, String database) {
         this.host = host;
         this.user = user;
         this.password = password;
