@@ -7,24 +7,24 @@ import org.apache.spark.sql.types.StructType;
 import java.util.Properties;
 
 public class MySQLTable {
-    public final static StructType powerTableSchema = new StructType(new StructField[]{
-            new StructField("granularity", DataTypes.IntegerType, true, null),
-            new StructField("sensor_id", DataTypes.StringType, true, null),
-            new StructField("ts", DataTypes.TimestampType, true, null),
-            new StructField("sum_power", DataTypes.DoubleType, true, null),
-            new StructField("sum_voltage", DataTypes.DoubleType, true, null),
-            new StructField("sum_current", DataTypes.DoubleType, true, null),
-            new StructField("energy_consumed", DataTypes.DoubleType, true, null),
-            new StructField("count_agg_rows", DataTypes.LongType, true, null),
-
-    });
-    public final static StructType temperatureTableSchema = new StructType(new StructField[]{
-            new StructField("granularity", DataTypes.IntegerType, true, null),
-            new StructField("sensor_id", DataTypes.StringType, true, null),
-            new StructField("ts", DataTypes.TimestampType, true, null),
-            new StructField("sum_temperature", DataTypes.DoubleType, true, null),
-            new StructField("count_agg_rows", DataTypes.LongType, true, null),
-    });
+//    public final static StructType powerTableSchema = new StructType(new StructField[]{
+//            new StructField("granularity", DataTypes.IntegerType, true, null),
+//            new StructField("sensor_id", DataTypes.StringType, true, null),
+//            new StructField("ts", DataTypes.TimestampType, true, null),
+//            new StructField("sum_power", DataTypes.DoubleType, true, null),
+//            new StructField("sum_voltage", DataTypes.DoubleType, true, null),
+//            new StructField("sum_current", DataTypes.DoubleType, true, null),
+//            new StructField("energy_consumed", DataTypes.DoubleType, true, null),
+//            new StructField("count_agg_rows", DataTypes.LongType, true, null),
+//
+//    });
+//    public final static StructType temperatureTableSchema = new StructType(new StructField[]{
+//            new StructField("granularity", DataTypes.IntegerType, true, null),
+//            new StructField("sensor_id", DataTypes.StringType, true, null),
+//            new StructField("ts", DataTypes.TimestampType, true, null),
+//            new StructField("sum_temperature", DataTypes.DoubleType, true, null),
+//            new StructField("count_agg_rows", DataTypes.LongType, true, null),
+//    });
 
     private final String host;
     private final String user;

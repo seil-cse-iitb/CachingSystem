@@ -32,13 +32,13 @@ public class MyProperties {
                 ", cacheMySQLLogTable=" + cacheMySQLLogTable +
                 ", granularities=" + granularities +
                 ", cacheMySQLTableSensorMap=" + cacheMySQLTableSensorMap +
-                ", REPORT_RECEIVER_EMAIL='" + REPORT_RECEIVER_EMAIL + '\'' +
-                ", LOG_FILE_PATH='" + LOG_FILE_PATH + '\'' +
-                ", APP_NAME='" + APP_NAME + '\'' +
-                ", REPORT_ERROR=" + REPORT_ERROR +
-                ", STOP_SPARK_LOGGING=" + STOP_SPARK_LOGGING +
-                ", GRANULARITY_TABLE_NAME_SUFFIX='" + GRANULARITY_TABLE_NAME_SUFFIX + '\'' +
-                ", BITMAP_TABLE_NAME_SUFFIX='" + BITMAP_TABLE_NAME_SUFFIX + '\'' +
+                ", reportReceiverEmail='" + REPORT_RECEIVER_EMAIL + '\'' +
+                ", logFilePath='" + LOG_FILE_PATH + '\'' +
+                ", appName='" + APP_NAME + '\'' +
+                ", reportError=" + REPORT_ERROR +
+                ", stopSparkLogging=" + STOP_SPARK_LOGGING +
+                ", granularityTableNameSuffix='" + GRANULARITY_TABLE_NAME_SUFFIX + '\'' +
+                ", bitmapTableNameSuffix='" + BITMAP_TABLE_NAME_SUFFIX + '\'' +
                 '}';
     }
 }
