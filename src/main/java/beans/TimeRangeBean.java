@@ -9,6 +9,7 @@ public class TimeRangeBean {
     public TimeRangeBean(Long startTime, Long endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
+        assert startTime<=endTime;
     }
 
     @Override
