@@ -124,9 +124,13 @@ public class QueryController {
         ArrayList<SensorBean> sensors = new ArrayList<>();
         for (Expression sensorIdCondition : sensorIdConditions) {
             if (sensorIdCondition.children().head() instanceof Literal) {
-                sensors.add(c.cb.sensorBeanMap.get(((UTF8String) ((Literal) sensorIdCondition.children().head()).value()).toString()));
+                SensorBean sensorBean = c.cb.sensorBeanMap.get(((UTF8String) ((Literal) sensorIdCondition.children().head()).value()).toString());
+                if (sensorBean != null)
+                    sensors.add(sensorBean);
             } else if (sensorIdCondition.children().last() instanceof Literal) {
-                sensors.add(c.cb.sensorBeanMap.get(((UTF8String) ((Literal) sensorIdCondition.children().last()).value()).toString()));
+                SensorBean sensorBean = c.cb.sensorBeanMap.get(((UTF8String) ((Literal) sensorIdCondition.children().last()).value()).toString());
+                if (sensorBean != null)
+                    sensors.add(sensorBean);
             }
         }
         return sensors;
