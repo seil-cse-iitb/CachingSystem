@@ -15,6 +15,42 @@ public class BitmapController {
         this.c = c;
     }
 
+    public void initBitmapsIfNotExists(SensorBean sensorBean){
+        FLCacheTableBean flc = sensorBean.getFlCacheTableBean();
+        try {
+            Connection connection = DriverManager.getConnection(c.databaseController.getURL(flc.getDatabaseBean()), c.databaseController.getProperties(flc.getDatabaseBean()));
+            String tableName = flc.getTableName() + "_" + c.cb.bitmapTableNameSuffix;
+            int i = connection.prepareStatement(String.format("create table if not exists %s (%s varchar(200), granularity varchar(50), bitmapStartTime long, bitmapEndTime long, fl_bitset mediumblob, sl_bitset mediumblob, CONSTRAINT PK_%s PRIMARY KEY (%s,granularity))", tableName, flc.getSensorIdColumnName(), tableName, flc.getSensorIdColumnName()))
+                    .executeUpdate();
+            assert i == 0;
+
+            for (GranularityBean granularity : c.cb.granularityBeanMap.values()) {
+                Blob flBlob = connection.createBlob();
+                flBlob.setBytes(1, sensorBean.getFlBitmapBean().granularityBeanBitSetMap.get(granularity).toByteArray());
+                Blob slBlob = connection.createBlob();
+                slBlob.setBytes(1, sensorBean.getSlBitmapBean().granularityBeanBitSetMap.get(granularity).toByteArray());
+
+                PreparedStatement preparedStatement = connection.prepareStatement(String.format("insert ignore into %s (%s,granularity,bitmapStartTime,bitmapEndTime,fl_bitset,sl_bitset) values(?,?,?,?,?,?)", tableName, flc.getSensorIdColumnName()));
+                preparedStatement.setString(1, sensorBean.getSensorId());
+                preparedStatement.setString(2, granularity.getGranularityId());
+                preparedStatement.setLong(3, getTimeInSec(sensorBean.getFlBitmapBean().startTime));
+                preparedStatement.setLong(4, getTimeInSec(sensorBean.getFlBitmapBean().endTime));
+                preparedStatement.setBlob(5, flBlob);
+                preparedStatement.setBlob(6, slBlob);
+                preparedStatement.close();
+            }
+            connection.close();
+        } catch (SQLException e) {
+            c.logManager.logError("[" + this.getClass() + "][initBitmapsIfNotExists]" + e.getMessage());
+        }
+    }
+    public void initBitmapsIfNotExists() {
+        c.logManager.logInfo("[Initializing bitmap for all sensors]");
+        for (SensorBean sensorBean : c.cb.sensorBeanMap.values()) {
+            initBitmapsIfNotExists(sensorBean);
+        }
+    }
+
     public void loadBitmaps(SensorBean sensorBean) {
         c.logManager.logInfo("[Loading bitmap for sensor: " + sensorBean.getSensorId() + "]");
         FLCacheTableBean flc = sensorBean.getFlCacheTableBean();

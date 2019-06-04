@@ -51,6 +51,9 @@ public class CacheSystemController {
         queryLogManager.startQueryLogCleanupThread();
         //save granularities in db
         granularityController.saveGranularities(sparkSession);
+        //initialize bitmaps if not exists
+        bitmapController.initBitmapsIfNotExists();
+
         this.addAllSensorsToExecutingList();
         int poolCount = 0;
         while (true) {

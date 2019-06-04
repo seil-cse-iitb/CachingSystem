@@ -139,6 +139,14 @@
       "tsColumnName": "ts"
     },
     {
+      "tableId": "source_power_rish",
+      "databaseId": "source_mysql",
+      "tableName": "rish_1_view",
+      "schemaType": "power",
+      "sensorIdColumnName": "sensor_id",
+      "tsColumnName": "ts"
+    },
+    {
       "tableId": "source_temperature",
       "databaseId": "source_mysql",
       "tableName": "temp_3_view",
@@ -1158,6 +1166,1547 @@
           "startTime":"01/01/2016",
           "endTime":"01/01/2022",
           "tableId": "source_power"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_1",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_10",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_16",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_17",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_18",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_2",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_200",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_207",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_208",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_209",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_21",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_210",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_211",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_212",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_213",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_214",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_215",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_217",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_218",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_219",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_22",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_221",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_223",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_224",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_225",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_226",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_227",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_228",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_229",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_23",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_230",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_231",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_233",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_234",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_235",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_236",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_237",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_238",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_239",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_24",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_240",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_241",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_242",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_243",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_244",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_245",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_246",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_247",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_25",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_26",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_27",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_28",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_29",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_3",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_30",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_31",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_32",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_33",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_34",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_35",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_36",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_37",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_4",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_5",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_6",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_8",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
+        }
+      ]
+    },
+    {
+      "sensorId": "aravali_meter11",
+      "flCacheTableId": "fl_power",
+      "slCacheTableIds": [
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2018",
+          "tableId":"sl_power1"
+        },
+        {
+          "startTime":"01/01/2018",
+          "endTime":"01/01/2022",
+          "tableId":"sl_power2"
+        }
+      ],
+      "sourceTableIds":[
+        {
+          "startTime":"01/01/2016",
+          "endTime":"01/01/2022",
+          "tableId": "source_power_rish"
         }
       ]
     },
