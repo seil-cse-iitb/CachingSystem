@@ -9,7 +9,6 @@ import org.apache.spark.sql.SparkSession;
 import java.util.*;
 
 public class CacheSystemController {
-    //TODO cache one smaller granularities as well in second level cache
     //TODO cache replacements policy
 
     public final SparkSession sparkSession;
@@ -80,6 +79,7 @@ public class CacheSystemController {
                     @Override
                     public void run() {
                         sparkSession.sparkContext().setLocalProperty("spark.scheduler.pool", "queryExecutingThreads" + currentPoolCount);
+
                         for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
                             bitmapController.loadBitmaps(sensorBean);
                         }

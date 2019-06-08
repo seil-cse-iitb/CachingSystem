@@ -6,14 +6,18 @@ import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.DataTypes;
+import version1.manager.CacheSystem;
 
 import static org.apache.spark.sql.functions.*;
 
 public class AggregationManager {
-    public AggregationManager(CacheSystemController cb) {
+    CacheSystemController c;
+    public AggregationManager(CacheSystemController c) {
+        this.c = c;
     }
 
     public Dataset<Row> aggregateFromSL(Dataset<Row> rows, GranularityBean requiredGranularity, SLCacheTableBean sl) {
+        c.logManager.logPriorityInfo("[aggregateFromSL]");
         Column window = window(col(sl.getTsColumnName()).cast(DataTypes.TimestampType), requiredGranularity.getWindowDuration());
         Column count_agg_rows = sum("count_agg_rows").as("count_agg_rows");
         Dataset<Row> agg = null;
@@ -36,6 +40,7 @@ public class AggregationManager {
     }
 
     public Dataset<Row> aggregateFromSource(Dataset<Row> rows, GranularityBean requiredGranularity, SourceTableBean sourceTable) {
+        c.logManager.logPriorityInfo("[aggregateFromSource]");
         Column window = window(col(sourceTable.getTsColumnName()).cast(DataTypes.TimestampType), requiredGranularity.getWindowDuration());
         Column count_agg_rows = count("*").as("count_agg_rows");
         Dataset<Row> agg = null;
