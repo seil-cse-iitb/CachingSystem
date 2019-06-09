@@ -10,6 +10,15 @@ public class GranularityBean implements Serializable {
     Integer numPartitionsForEachInterval;
     Integer displayPriority; //This parameter gives ordering in which data will be sent to visualisation portal
     // this will generally be in increasing order of displayLimitInSeconds
+    Integer numParallelQuery;
+
+    public Integer getNumParallelQuery() {
+        return numParallelQuery;
+    }
+
+    public void setNumParallelQuery(Integer numParallelQuery) {
+        this.numParallelQuery = numParallelQuery;
+    }
 
     public String getGranularityId() {
         return granularityId;
@@ -77,6 +86,7 @@ public class GranularityBean implements Serializable {
                 ", fetchIntervalAtOnceInSeconds=" + fetchIntervalAtOnceInSeconds +
                 ", numPartitionsForEachInterval=" + numPartitionsForEachInterval +
                 ", displayPriority=" + displayPriority +
+                ", numParallelQuery=" + numParallelQuery +
                 '}';
     }
 }

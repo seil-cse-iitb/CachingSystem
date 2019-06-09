@@ -45,7 +45,7 @@ public class AggregationManager {
         Column count_agg_rows = count("*").as("count_agg_rows");
         Dataset<Row> agg = null;
         if (sourceTable.getSchemaType() == ConfigurationBean.SchemaType.power) {
-            Column power = sum("power").as("sum_power");
+            Column power = sum(abs(col("power"))).as("sum_power");
             Column voltage = sum("voltage").as("sum_voltage");
             Column current = avg("current").as("sum_current");
             Column energyConsumed = last("energy_consumed").as("energy_consumed");

@@ -49,6 +49,7 @@ public class ConfigurationController {
                 granularityBean.setDisplayPriority(granularity.get("displayPriority").getAsInt());
                 granularityBean.setFetchIntervalAtOnceInSeconds(granularity.get("fetchIntervalAtOnceInSeconds").getAsInt());
                 granularityBean.setNumPartitionsForEachInterval(granularity.get("numPartitionsForEachInterval").getAsInt());
+                granularityBean.setNumParallelQuery(granularity.get("numParallelQuery").getAsInt());
                 cb.granularityBeanMap.put(granularityBean.getGranularityId(), granularityBean);
             }
 

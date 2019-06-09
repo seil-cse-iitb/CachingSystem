@@ -13,6 +13,7 @@ public class CacheSystemController {
 
     public final SparkSession sparkSession;
     public final ConfigurationBean cb;
+    public final Map<GranularityBean, Integer> granularityExecutingMap = new HashMap<>();
     public QueryController queryController;
     public GranularityController granularityController;
     public BitmapController bitmapController;
@@ -24,7 +25,6 @@ public class CacheSystemController {
     public AggregationManager aggregationManager;
     public QueryLogManager queryLogManager;
     public LogManager logManager;
-
     public Map<SensorBean, List<TimeRangeBean>> executingList = new HashMap<>();
 
     public CacheSystemController(SparkSession sparkSession, ConfigurationBean cb) {
@@ -54,7 +54,7 @@ public class CacheSystemController {
         bitmapController.initBitmapsIfNotExists();
 
         this.addAllSensorsToExecutingList();
-        int poolCount = 0;
+        this.addAllGranularityToExecutingMap();
         while (true) {
             //poll query log and get new queries
             List<QueryBean> newQueries = queryLogManager.getNewQueries();
@@ -74,12 +74,9 @@ public class CacheSystemController {
                         logManager.logPriorityInfo("added all timeranges");
                     }
                 }
-                int currentPoolCount = poolCount++;
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        sparkSession.sparkContext().setLocalProperty("spark.scheduler.pool", "queryExecutingThreads" + currentPoolCount);
-
                         for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
                             bitmapController.loadBitmaps(sensorBean);
                         }
@@ -107,6 +104,12 @@ public class CacheSystemController {
             } catch (InterruptedException e) {
                 logManager.logError("[" + this.getClass() + "]" + e.getMessage());
             }
+        }
+    }
+
+    private void addAllGranularityToExecutingMap() {
+        for (GranularityBean granularityBean : cb.granularityBeanMap.values()) {
+            this.granularityExecutingMap.put(granularityBean, 0);
         }
     }
 
@@ -190,6 +193,14 @@ public class CacheSystemController {
         for (SensorBean sensorBean : sensorTimeRangeMap.keySet()) {
             List<TimeRangeBean> timeRanges = sensorTimeRangeMap.get(sensorBean);
             GranularityBean granularity = granularityController.eligibleGranularity(timeRanges);
+            String poolName = "queryExecutingThreads(" + granularity.getGranularityId() + ")";
+            synchronized (this.granularityExecutingMap) {
+                Integer count = this.granularityExecutingMap.get(granularity);
+                this.granularityExecutingMap.put(granularity, count + 1);
+                poolName += "(" + ((count + 1) % granularity.getNumParallelQuery()) + ")";
+            }
+            sparkSession.sparkContext().setLocalProperty("spark.scheduler.pool", poolName);
+
             LogManager.logPriorityInfo("[Eligible granularity:" + granularity.getGranularityId() + "]");
             LogManager.logPriorityInfo("[TimeRanges required:" + timeRanges + "]");
             ArrayList<TimeRangeBean> nonExistingDataRanges = new ArrayList<>();
@@ -206,6 +217,10 @@ public class CacheSystemController {
                 LogManager.logInfo("[Complete data exists of this query]");
             }
             bitmapController.saveBitmaps(sensorBean);
+            synchronized (this.granularityExecutingMap){
+                Integer count = this.granularityExecutingMap.get(granularity);
+                this.granularityExecutingMap.put(granularity, count - 1);
+            }
         }
     }
 
