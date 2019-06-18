@@ -9,44 +9,46 @@
   "reportError": "False",
   "debug": "False",
   "stopSparkLogging": "True",
-  "cacheReplacementPolicy": {
-    "cacheSizeInTermsOfRecords": "1048576" ,//1gb if 1kb is record size
-    "triggerPercent":"80",
-    "emptyTillPercent":"70"
-  },
   "granularities": [
+    {
+      "granularityId": "1 second",
+      "windowDuration": "1 second",
+      "inTermsOfSeconds": "1",
+      "displayLimitInSeconds": "21600",
+      "displayPriority": "1",
+      "fetchIntervalAtOnceInSeconds": "7200",
+      "numPartitionsForEachInterval": "2",
+      "numParallelQuery": "50"
+    },
     {
       "granularityId": "1 minute",
       "windowDuration": "1 minute",
       "inTermsOfSeconds": "60",
-      "displayLimitInSeconds": "345600",
-      "displayPriority": "1",
-      "fetchIntervalAtOnceInSeconds": "34560",
-      "numPartitionsForEachInterval": "30",
-      "numParallelQuery": "5",
-      "cacheEntrySizeInSeconds": "86400"
+      "displayLimitInSeconds": "432000",
+      "displayPriority": "2",
+      "fetchIntervalAtOnceInSeconds": "86400",
+      "numPartitionsForEachInterval": "24",
+      "numParallelQuery": "15"
     },
     {
       "granularityId": "1 hour",
       "windowDuration": "1 hour",
       "inTermsOfSeconds": "3600",
-      "displayLimitInSeconds": "5184000",
-      "displayPriority": "2",
-      "fetchIntervalAtOnceInSeconds": "129600",
-      "numPartitionsForEachInterval": "50",
-      "numParallelQuery": "3",
-      "cacheEntrySizeInSeconds": "432000"
+      "displayLimitInSeconds": "12960000",
+      "displayPriority": "3",
+      "fetchIntervalAtOnceInSeconds": "1296000",
+      "numPartitionsForEachInterval": "120",
+      "numParallelQuery": "8"
     },
     {
       "granularityId": "1 day",
       "windowDuration": "1 day",
       "inTermsOfSeconds": "86400",
-      "displayLimitInSeconds": "31968000",
-      "displayPriority": "3",
-      "fetchIntervalAtOnceInSeconds": "864000",
-      "numPartitionsForEachInterval": "120",
-      "numParallelQuery": "2",
-      "cacheEntrySizeInSeconds": "5184000"
+      "displayLimitInSeconds": "157680000",
+      "displayPriority": "4",
+      "fetchIntervalAtOnceInSeconds": "10512000",
+      "numPartitionsForEachInterval": "240",
+      "numParallelQuery": "3"
     }
   ],
   "databases": [
