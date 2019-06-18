@@ -1,6 +1,6 @@
 {
-  "bitmapStartTime": "01/01/2016",
-  "bitmapEndTime": "01/01/2020",
+  "bitmapStartTime": "01/01/2017",
+  "bitmapEndTime": "01/10/2019",
   "queryLogCleanupDurationInSeconds": "300",
   "queryPollingDurationInSeconds": "5",
   "reportReceiverEmail": "sapantanted99@gmail.com",
@@ -191,420 +191,420 @@
         }
       ]
     },
-    {
-      "sensorId": "power_k_ch_a",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_ch_l",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_ch_p1",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_ch_p2",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_clsrm_ac1",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_clsrm_ac2",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_clsrm_ac3",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_cr_a",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_cr_p",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_dil_a",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_dil_l",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_dil_p",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_erts_a",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_erts_l",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_erts_p",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_f2_a",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_f2_l",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_f2_p",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
+//    {
+//      "sensorId": "power_k_ch_a",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_ch_l",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_ch_p1",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_ch_p2",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_clsrm_ac1",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_clsrm_ac2",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_clsrm_ac3",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_cr_a",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_cr_p",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_dil_a",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_dil_l",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_dil_p",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_erts_a",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_erts_l",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_erts_p",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_f2_a",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_f2_l",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_f2_p",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
     {
       "sensorId": "power_k_fck_a",
       "flCacheTableId": "fl_power",
@@ -651,75 +651,75 @@
         }
       ]
     },
-    {
-      "sensorId": "power_k_lab_od1",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_lab_od2",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
-    {
-      "sensorId": "power_k_lab_od3",
-      "flCacheTableId": "fl_power",
-      "slCacheTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
-        }
-      ],
-      "sourceTableIds": [
-        {
-          "startTime": "01/01/2016",
-          "endTime": "01/01/2022",
-          "tableId": "source_power"
-        }
-      ]
-    },
+//    {
+//      "sensorId": "power_k_lab_od1",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_lab_od2",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
+//    {
+//      "sensorId": "power_k_lab_od3",
+//      "flCacheTableId": "fl_power",
+//      "slCacheTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2018",
+//          "tableId": "sl_power1"
+//        },
+//        {
+//          "startTime": "01/01/2018",
+//          "endTime": "01/01/2022",
+//          "tableId": "sl_power2"
+//        }
+//      ],
+//      "sourceTableIds": [
+//        {
+//          "startTime": "01/01/2016",
+//          "endTime": "01/01/2022",
+//          "tableId": "source_power"
+//        }
+//      ]
+//    },
     {
       "sensorId": "power_k_lh_a",
       "flCacheTableId": "fl_power",
