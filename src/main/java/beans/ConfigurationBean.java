@@ -132,7 +132,7 @@ public class ConfigurationBean {
         this.bitmapTableNameSuffix = bitmapTableNameSuffix;
     }
 
-    public enum SchemaType {power, temperature}
+    public enum SchemaType {power, temperature, temperature_humidity}
 
 
 }

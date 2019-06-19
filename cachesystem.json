@@ -10,16 +10,16 @@
   "debug": "False",
   "stopSparkLogging": "True",
   "granularities": [
-    {
-      "granularityId": "1 second",
-      "windowDuration": "1 second",
-      "inTermsOfSeconds": "1",
-      "displayLimitInSeconds": "21600",
-      "displayPriority": "1",
-      "fetchIntervalAtOnceInSeconds": "7200",
-      "numPartitionsForEachInterval": "2",
-      "numParallelQuery": "50"
-    },
+//    {
+//      "granularityId": "1 second",
+//      "windowDuration": "1 second",
+//      "inTermsOfSeconds": "1",
+//      "displayLimitInSeconds": "21600",
+//      "displayPriority": "1",
+//      "fetchIntervalAtOnceInSeconds": "7200",
+//      "numPartitionsForEachInterval": "2",
+//      "numParallelQuery": "50"
+//    },
     {
       "granularityId": "1 minute",
       "windowDuration": "1 minute",
@@ -105,6 +105,14 @@
       "schemaType": "temperature",
       "sensorIdColumnName": "sensor_id",
       "tsColumnName": "ts"
+    },
+    {
+      "tableId": "fl_temperature_humidity",
+      "databaseId": "fl_mysql",
+      "tableName": "temperature_humidity_cache",
+      "schemaType": "temperature_humidity",
+      "sensorIdColumnName": "sensor_id",
+      "tsColumnName": "ts"
     }
   ],
   "slCacheTables": [
@@ -125,6 +133,14 @@
       "tsColumnName": "ts"
     },
     {
+      "tableId": "sl_temperature_humidity1",
+      "databaseId": "sl_mysql1",
+      "tableName": "temperature_humidity_cache",
+      "schemaType": "temperature_humidity",
+      "sensorIdColumnName": "sensor_id",
+      "tsColumnName": "ts"
+    },
+    {
       "tableId": "sl_power2",
       "databaseId": "sl_mysql2",
       "tableName": "power_cache",
@@ -137,6 +153,14 @@
       "databaseId": "sl_mysql2",
       "tableName": "temperature_cache",
       "schemaType": "temperature",
+      "sensorIdColumnName": "sensor_id",
+      "tsColumnName": "ts"
+    },
+    {
+      "tableId": "sl_temperature_humidity2",
+      "databaseId": "sl_mysql2",
+      "tableName": "temperature_humidity_cache",
+      "schemaType": "temperature_humidity",
       "sensorIdColumnName": "sensor_id",
       "tsColumnName": "ts"
     }
@@ -163,6 +187,14 @@
       "databaseId": "source_mysql",
       "tableName": "temp_3_view",
       "schemaType": "temperature",
+      "sensorIdColumnName": "sensor_id",
+      "tsColumnName": "ts"
+    },
+    {
+      "tableId": "source_temperature_humidity",
+      "databaseId": "source_mysql",
+      "tableName": "dht_7_view",
+      "schemaType": "temperature_humidity",
       "sensorIdColumnName": "sensor_id",
       "tsColumnName": "ts"
     }
@@ -2810,6 +2842,196 @@
           "tableId": "source_temperature"
         }
       ]
+    },
+    {
+      "sensorId": "temp_k_fck1",
+      "flCacheTableId": "fl_temperature_humidity",
+      "slCacheTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "sl_temperature_humidity1"
+        }
+      ],
+      "sourceTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "source_temperature_humidity"
+        }
+      ]
+    },
+    {
+      "sensorId": "temp_k_fck2",
+      "flCacheTableId": "fl_temperature_humidity",
+      "slCacheTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "sl_temperature_humidity1"
+        }
+      ],
+      "sourceTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "source_temperature_humidity"
+        }
+      ]
+    },
+    {
+      "sensorId": "temp_k_fck3",
+      "flCacheTableId": "fl_temperature_humidity",
+      "slCacheTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "sl_temperature_humidity1"
+        }
+      ],
+      "sourceTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "source_temperature_humidity"
+        }
+      ]
+    },
+    {
+      "sensorId": "temp_k_lh_1",
+      "flCacheTableId": "fl_temperature_humidity",
+      "slCacheTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "sl_temperature_humidity1"
+        }
+      ],
+      "sourceTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "source_temperature_humidity"
+        }
+      ]
+    },
+    {
+      "sensorId": "temp_k_lh_2",
+      "flCacheTableId": "fl_temperature_humidity",
+      "slCacheTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "sl_temperature_humidity1"
+        }
+      ],
+      "sourceTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "source_temperature_humidity"
+        }
+      ]
+    },
+    {
+      "sensorId": "temp_k_lh_3",
+      "flCacheTableId": "fl_temperature_humidity",
+      "slCacheTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "sl_temperature_humidity1"
+        }
+      ],
+      "sourceTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "source_temperature_humidity"
+        }
+      ]
+    },
+    {
+      "sensorId": "temp_k_sr_1",
+      "flCacheTableId": "fl_temperature_humidity",
+      "slCacheTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "sl_temperature_humidity1"
+        }
+      ],
+      "sourceTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "source_temperature_humidity"
+        }
+      ]
+    },
+    {
+      "sensorId": "temp_k_sr_2",
+      "flCacheTableId": "fl_temperature_humidity",
+      "slCacheTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "sl_temperature_humidity1"
+        }
+      ],
+      "sourceTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "source_temperature_humidity"
+        }
+      ]
+    },
+    {
+      "sensorId": "temp_k_sr_3",
+      "flCacheTableId": "fl_temperature_humidity",
+      "slCacheTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "sl_temperature_humidity1"
+        }
+      ],
+      "sourceTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "source_temperature_humidity"
+        }
+      ]
+    },
+    {
+      "sensorId": "temp_k_sr_4",
+      "flCacheTableId": "fl_temperature_humidity",
+      "slCacheTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "sl_temperature_humidity1"
+        }
+      ],
+      "sourceTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "source_temperature_humidity"
+        }
+      ]
     }
   ]
 }
+
+
+
+
+
+
+
+
+
+

@@ -1,17 +1,20 @@
 package managers;
 
-import beans.*;
+import beans.ConfigurationBean;
+import beans.GranularityBean;
+import beans.SLCacheTableBean;
+import beans.SourceTableBean;
 import controllers.CacheSystemController;
 import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.DataTypes;
-import version1.manager.CacheSystem;
 
 import static org.apache.spark.sql.functions.*;
 
 public class AggregationManager {
     CacheSystemController c;
+
     public AggregationManager(CacheSystemController c) {
         this.c = c;
     }
@@ -32,6 +35,12 @@ public class AggregationManager {
             Column temperature = sum("sum_temperature").as("sum_temperature");
             agg = rows.groupBy(window, col(sl.getSensorIdColumnName()))
                     .agg(temperature, count_agg_rows);
+        } else if (sl.getSchemaType() == ConfigurationBean.SchemaType.temperature_humidity) {
+            Column temperature = sum("sum_temperature").as("sum_temperature");
+            Column humidity = sum("sum_humidity").as("sum_humidity");
+            Column batteryVoltage = sum("sum_battery_voltage").as("sum_battery_voltage");
+            agg = rows.groupBy(window, col(sl.getSensorIdColumnName()))
+                    .agg(temperature, humidity, batteryVoltage, count_agg_rows);
         }
         assert agg != null;
         agg = agg.withColumn(sl.getTsColumnName(), col("window.start").cast(DataTypes.DoubleType)).drop("window")
@@ -55,6 +64,12 @@ public class AggregationManager {
             Column temperature = sum("temperature").as("sum_temperature");
             agg = rows.groupBy(window, col(sourceTable.getSensorIdColumnName()).as(sourceTable.getSensorIdColumnName()))
                     .agg(temperature, count_agg_rows);
+        } else if (sourceTable.getSchemaType() == ConfigurationBean.SchemaType.temperature_humidity) {
+            Column temperature = sum("temperature").as("sum_temperature");
+            Column humidity = sum("humidity").as("sum_humidity");
+            Column batteryVoltage = sum("battery_voltage").as("sum_battery_voltage");
+            agg = rows.groupBy(window, col(sourceTable.getSensorIdColumnName()).as(sourceTable.getSensorIdColumnName()))
+                    .agg(temperature,humidity,batteryVoltage, count_agg_rows);
         }
         assert agg != null;
         agg = agg.withColumn(sourceTable.getTsColumnName(), col("window.start").cast(DataTypes.DoubleType)).drop("window")
