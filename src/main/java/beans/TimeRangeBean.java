@@ -9,15 +9,12 @@ public class TimeRangeBean {
     public TimeRangeBean(Long startTime, Long endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
-        assert startTime<=endTime;
+        assert startTime <= endTime;
     }
 
     @Override
     public String toString() {
-        return "TimeRange{" +
-                "startDate=" + new Date(startTime * 1000) +
-                ", endDate=" + new Date(endTime * 1000) +
-                '}';
+        return "TimeRange{" + new Date(startTime * 1000) + " to " + new Date(endTime * 1000) + '}';
     }
 
 

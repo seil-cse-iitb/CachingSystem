@@ -85,6 +85,23 @@ public class BitmapController {
         }
     }
 
+    public void clearBitmaps() {
+        c.logManager.logInfo("[Clearning bitmap for all sensors]");
+        for (SensorBean sensorBean : c.cb.sensorBeanMap.values()) {
+            BitmapBean flBitmapBean = sensorBean.getFlBitmapBean();
+            BitmapBean slBitmapBean = sensorBean.getSlBitmapBean();
+            for (BitSet bitset : flBitmapBean.granularityBeanBitSetMap.values()) {
+                bitset.clear();
+                ;
+            }
+            for (BitSet bitset : slBitmapBean.granularityBeanBitSetMap.values()) {
+                bitset.clear();
+                ;
+            }
+        }
+    }
+
+
     public void saveBitmaps(SensorBean sensorBean) {
         if (sensorBean.getFlBitmapBean().isDirty || sensorBean.getSlBitmapBean().isDirty) {
             FLCacheTableBean flc = sensorBean.getFlCacheTableBean();
@@ -111,7 +128,7 @@ public class BitmapController {
                     assert preparedStatement.executeUpdate() >= 1;
                     preparedStatement.close();
                 }
-                c.logManager.logPriorityInfo("Updated Bimap for sensor:"+sensorBean.getSensorId());
+                c.logManager.logPriorityInfo("Updated Bimap for sensor:" + sensorBean.getSensorId());
                 connection.close();
             } catch (SQLException e) {
                 c.logManager.logError("[" + this.getClass() + "][SaveBitmap]" + e.getMessage());

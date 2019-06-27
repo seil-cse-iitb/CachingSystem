@@ -1,6 +1,7 @@
 package controllers;
 
 import beans.*;
+import org.apache.commons.lang3.time.StopWatch;
 import org.apache.spark.sql.catalyst.analysis.UnresolvedRelation;
 import org.apache.spark.sql.catalyst.expressions.*;
 import org.apache.spark.sql.catalyst.plans.logical.Filter;
@@ -12,6 +13,7 @@ import scala.collection.Iterator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.Collections.sort;
 
@@ -25,6 +27,7 @@ public class QueryController {
 
     public List<QueryBean> preprocessQueries(List<QueryBean> queries) {
         for (QueryBean query : queries) {
+            StopWatch preprocessingSW = StopWatch.createStarted();
             c.logManager.logDebugInfo("[PreprocessingQueryBean]" + query);
             LogicalPlan parsePlan = new SparkSqlParser(new SQLConf()).parsePlan(query.getQueryStr());
             LogicalPlan filterPlan = getFilterPlan(parsePlan);
@@ -51,7 +54,8 @@ public class QueryController {
                 ArrayList<TimeRangeBean> timeRanges = extractTimeRanges(tsConditions);
                 query.getSensorTimeRangeListMap().put(sensor, timeRanges);
             }
-
+            preprocessingSW.stop();
+            c.logManager.logExecutionStatistics(query,"[Preprocessing Time:"+preprocessingSW.getTime(TimeUnit.NANOSECONDS)+"]");
         }
         return queries;
     }

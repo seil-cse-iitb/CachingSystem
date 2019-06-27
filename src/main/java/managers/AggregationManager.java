@@ -56,7 +56,7 @@ public class AggregationManager {
         if (sourceTable.getSchemaType() == ConfigurationBean.SchemaType.power) {
             Column power = sum(abs(col("power"))).as("sum_power");
             Column voltage = sum("voltage").as("sum_voltage");
-            Column current = avg("current").as("sum_current");
+            Column current = sum("current").as("sum_current");
             Column energyConsumed = last("energy_consumed").as("energy_consumed");
             agg = rows.groupBy(window, col(sourceTable.getSensorIdColumnName()).as(sourceTable.getSensorIdColumnName()))
                     .agg(power, voltage, current, energyConsumed, count_agg_rows);

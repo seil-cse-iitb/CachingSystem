@@ -41,7 +41,7 @@ public class FLCacheController {
                         ArrayList<TimeRangeBean> nonExistingDataRange = c.bitmapController.getNonExistingDataRange(sensorBean.getSlBitmapBean(), currentGranularity, currentTimeRangeBean);
                         c.logManager.logPriorityInfo("NonExistingDataRange:"+nonExistingDataRange);
                         for (TimeRangeBean existingTimeRangeBean : existingDataRanges) {
-                            c.logManager.logPriorityInfo("Data found in SL" + existingTimeRangeBean);
+                            c.logManager.logPriorityInfo("Data found in SL " + existingTimeRangeBean);
                             updateSLAndFLCacheFromSL(sensorBean, requiredGranularity, slCacheTableBeanPair.getRight(), flCacheTableBean, currentGranularity, existingTimeRangeBean);
                         }
                         newTimeRangeBeans.addAll(c.bitmapController.getNonExistingDataRange(sensorBean.getSlBitmapBean(), currentGranularity, currentTimeRangeBean));
@@ -63,7 +63,7 @@ public class FLCacheController {
         for (Pair<TimeRangeBean, SourceTableBean> sourceTableBeanPair : intersectionTimeRangeVsSourceTables) {
             TimeRangeBean currentTimeRangeBean = sourceTableBeanPair.getLeft();
             SourceTableBean sourceTable = sourceTableBeanPair.getRight();
-            c.logManager.logInfo("--[From SourceTable][Aggregation Started]: " + currentTimeRangeBean);
+            c.logManager.logPriorityInfo("--[From SourceTable][Aggregation Started]: " + currentTimeRangeBean);
             currentTimeRangeBean.startTime = currentTimeRangeBean.startTime - (currentTimeRangeBean.startTime % requiredGranularity.getGranularityInTermsOfSeconds());
             currentTimeRangeBean.endTime = currentTimeRangeBean.endTime + (requiredGranularity.getGranularityInTermsOfSeconds() - (currentTimeRangeBean.endTime % requiredGranularity.getGranularityInTermsOfSeconds()));
             long i = currentTimeRangeBean.startTime;

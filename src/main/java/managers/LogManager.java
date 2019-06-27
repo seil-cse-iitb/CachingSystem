@@ -1,5 +1,7 @@
 package managers;
 
+import beans.QueryBean;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -40,5 +42,9 @@ public class LogManager {
 
     public void logCacheInit() {
         logInfo("[Cache System Initializing]");
+    }
+
+    public void logExecutionStatistics(QueryBean queryBean, String text) {
+        LogManager.log("[ExecutionStatistics][Query:" + queryBean.getSensorTimeRangeListMap() + "]" + text);
     }
 }
