@@ -9,44 +9,46 @@
   "reportError": "False",
   "debug": "False",
   "stopSparkLogging": "True",
-  "cacheReplacementPolicy": {
-    "cacheSizeInTermsOfRecords": "1048576" ,//1gb if 1kb is record size
-    "triggerPercent":"80",
-    "emptyTillPercent":"70"
-  },
   "granularities": [
+//    {
+//      "granularityId": "1 second",
+//      "windowDuration": "1 second",
+//      "inTermsOfSeconds": "1",
+//      "displayLimitInSeconds": "21600",
+//      "displayPriority": "1",
+//      "fetchIntervalAtOnceInSeconds": "21600",
+//      "numPartitionsForEachInterval": "1",
+//      "numParallelQuery": "4"
+//    },
     {
       "granularityId": "1 minute",
       "windowDuration": "1 minute",
       "inTermsOfSeconds": "60",
-      "displayLimitInSeconds": "345600",
-      "displayPriority": "1",
-      "fetchIntervalAtOnceInSeconds": "34560",
-      "numPartitionsForEachInterval": "30",
-      "numParallelQuery": "5",
-      "cacheEntrySizeInSeconds": "86400"
+      "displayLimitInSeconds": "432000",
+      "displayPriority": "2",
+      "fetchIntervalAtOnceInSeconds": "432000",
+      "numPartitionsForEachInterval": "5",
+      "numParallelQuery": "3"
     },
     {
       "granularityId": "1 hour",
       "windowDuration": "1 hour",
       "inTermsOfSeconds": "3600",
-      "displayLimitInSeconds": "5184000",
-      "displayPriority": "2",
-      "fetchIntervalAtOnceInSeconds": "129600",
-      "numPartitionsForEachInterval": "50",
-      "numParallelQuery": "3",
-      "cacheEntrySizeInSeconds": "432000"
+      "displayLimitInSeconds": "12960000",
+      "displayPriority": "3",
+      "fetchIntervalAtOnceInSeconds": "12960000",
+      "numPartitionsForEachInterval": "150",
+      "numParallelQuery": "3"
     },
     {
       "granularityId": "1 day",
       "windowDuration": "1 day",
       "inTermsOfSeconds": "86400",
-      "displayLimitInSeconds": "31968000",
-      "displayPriority": "3",
-      "fetchIntervalAtOnceInSeconds": "864000",
-      "numPartitionsForEachInterval": "120",
-      "numParallelQuery": "2",
-      "cacheEntrySizeInSeconds": "5184000"
+      "displayLimitInSeconds": "157680000",
+      "displayPriority": "4",
+      "fetchIntervalAtOnceInSeconds": "157680000",
+      "numPartitionsForEachInterval": "1825",
+      "numParallelQuery": "2"
     }
   ],
   "databases": [
@@ -62,16 +64,7 @@
     {
       "databaseId": "sl_mysql1",
       "databaseType": "SQL",
-      "databaseName": "seil_sensor_data_sl1",
-      "host": "10.129.149.19",
-      "port": "3306",
-      "username": "root",
-      "password": "MySQL@seil"
-    },
-    {
-      "databaseId": "sl_mysql2",
-      "databaseType": "SQL",
-      "databaseName": "seil_sensor_data_sl2",
+      "databaseName": "sl_cache1",
       "host": "10.129.149.19",
       "port": "3306",
       "username": "root",
@@ -80,12 +73,21 @@
     {
       "databaseId": "fl_mysql",
       "databaseType": "SQL",
-      "databaseName": "seil_sensor_data",
+      "databaseName": "fl_cache",
       "host": "10.129.149.19",
       "port": "3306",
       "username": "root",
       "password": "MySQL@seil"
     }
+//    {
+//      "databaseId": "fl_postgres",
+//      "databaseType": "postgres",
+//      "databaseName": "testdb",
+//      "host": "10.129.149.33",
+//      "port": "5432",
+//      "username": "postgres",
+//      "password": "password"
+//    }
   ],
   "flCacheTables": [
     {
@@ -103,7 +105,23 @@
       "schemaType": "temperature",
       "sensorIdColumnName": "sensor_id",
       "tsColumnName": "ts"
+    },
+    {
+      "tableId": "fl_temperature_humidity",
+      "databaseId": "fl_mysql",
+      "tableName": "temperature_humidity_cache",
+      "schemaType": "temperature_humidity",
+      "sensorIdColumnName": "sensor_id",
+      "tsColumnName": "ts"
     }
+//    {
+//      "tableId": "fl_power",
+//      "databaseId": "fl_postgres",
+//      "tableName": "power_cache",
+//      "schemaType": "power",
+//      "sensorIdColumnName": "sensor_id",
+//      "tsColumnName": "ts"
+//    }
   ],
   "slCacheTables": [
     {
@@ -123,18 +141,10 @@
       "tsColumnName": "ts"
     },
     {
-      "tableId": "sl_power2",
-      "databaseId": "sl_mysql2",
-      "tableName": "power_cache",
-      "schemaType": "power",
-      "sensorIdColumnName": "sensor_id",
-      "tsColumnName": "ts"
-    },
-    {
-      "tableId": "sl_temperature2",
-      "databaseId": "sl_mysql2",
-      "tableName": "temperature_cache",
-      "schemaType": "temperature",
+      "tableId": "sl_temperature_humidity1",
+      "databaseId": "sl_mysql1",
+      "tableName": "temperature_humidity_cache",
+      "schemaType": "temperature_humidity",
       "sensorIdColumnName": "sensor_id",
       "tsColumnName": "ts"
     }
@@ -163,6 +173,14 @@
       "schemaType": "temperature",
       "sensorIdColumnName": "sensor_id",
       "tsColumnName": "ts"
+    },
+    {
+      "tableId": "source_temperature_humidity",
+      "databaseId": "source_mysql",
+      "tableName": "dht_7_view",
+      "schemaType": "temperature_humidity",
+      "sensorIdColumnName": "sensor_id",
+      "tsColumnName": "ts"
     }
   ],
   "sensors": [
@@ -172,13 +190,8 @@
       "slCacheTableIds": [
         {
           "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
-          "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
           "endTime": "01/01/2022",
-          "tableId": "sl_power2"
+          "tableId": "sl_power1"
         }
       ],
       "sourceTableIds": [
@@ -195,13 +208,8 @@
       "slCacheTableIds": [
         {
           "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
+         "endTime": "01/01/2022",
           "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
         }
       ],
       "sourceTableIds": [
@@ -218,13 +226,8 @@
       "slCacheTableIds": [
         {
           "startTime": "01/01/2016",
-          "endTime": "01/01/2018",
+         "endTime": "01/01/2022",
           "tableId": "sl_power1"
-        },
-        {
-          "startTime": "01/01/2018",
-          "endTime": "01/01/2022",
-          "tableId": "sl_power2"
         }
       ],
       "sourceTableIds": [
@@ -2808,6 +2811,196 @@
           "tableId": "source_temperature"
         }
       ]
+   },
+   {
+     "sensorId": "temp_k_fck1",
+     "flCacheTableId": "fl_temperature_humidity",
+     "slCacheTableIds": [
+       {
+         "startTime": "01/01/2016",
+         "endTime": "01/01/2022",
+         "tableId": "sl_temperature_humidity1"
+       }
+     ],
+     "sourceTableIds": [
+       {
+         "startTime": "01/01/2016",
+         "endTime": "01/01/2022",
+         "tableId": "source_temperature_humidity"
+       }
+     ]
+   },
+   {
+     "sensorId": "temp_k_fck2",
+     "flCacheTableId": "fl_temperature_humidity",
+     "slCacheTableIds": [
+       {
+         "startTime": "01/01/2016",
+         "endTime": "01/01/2022",
+         "tableId": "sl_temperature_humidity1"
+       }
+     ],
+     "sourceTableIds": [
+       {
+         "startTime": "01/01/2016",
+         "endTime": "01/01/2022",
+         "tableId": "source_temperature_humidity"
+       }
+     ]
+   },
+   {
+     "sensorId": "temp_k_fck3",
+     "flCacheTableId": "fl_temperature_humidity",
+     "slCacheTableIds": [
+       {
+         "startTime": "01/01/2016",
+         "endTime": "01/01/2022",
+         "tableId": "sl_temperature_humidity1"
+       }
+     ],
+     "sourceTableIds": [
+       {
+         "startTime": "01/01/2016",
+         "endTime": "01/01/2022",
+         "tableId": "source_temperature_humidity"
+       }
+     ]
+   },
+   {
+     "sensorId": "temp_k_lh_1",
+     "flCacheTableId": "fl_temperature_humidity",
+     "slCacheTableIds": [
+       {
+         "startTime": "01/01/2016",
+         "endTime": "01/01/2022",
+         "tableId": "sl_temperature_humidity1"
+       }
+     ],
+     "sourceTableIds": [
+       {
+         "startTime": "01/01/2016",
+         "endTime": "01/01/2022",
+         "tableId": "source_temperature_humidity"
+       }
+     ]
+   },
+   {
+     "sensorId": "temp_k_lh_2",
+     "flCacheTableId": "fl_temperature_humidity",
+     "slCacheTableIds": [
+       {
+         "startTime": "01/01/2016",
+         "endTime": "01/01/2022",
+         "tableId": "sl_temperature_humidity1"
+       }
+     ],
+     "sourceTableIds": [
+       {
+         "startTime": "01/01/2016",
+         "endTime": "01/01/2022",
+         "tableId": "source_temperature_humidity"
+       }
+     ]
+   },
+   {
+     "sensorId": "temp_k_lh_3",
+     "flCacheTableId": "fl_temperature_humidity",
+     "slCacheTableIds": [
+       {
+         "startTime": "01/01/2016",
+         "endTime": "01/01/2022",
+         "tableId": "sl_temperature_humidity1"
+       }
+     ],
+     "sourceTableIds": [
+       {
+         "startTime": "01/01/2016",
+         "endTime": "01/01/2022",
+         "tableId": "source_temperature_humidity"
+    }
+  ]
+   },
+    {
+      "sensorId": "temp_k_sr_1",
+      "flCacheTableId": "fl_temperature_humidity",
+      "slCacheTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "sl_temperature_humidity1"
+        }
+      ],
+      "sourceTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "source_temperature_humidity"
+        }
+      ]
+    },
+    {
+      "sensorId": "temp_k_sr_2",
+      "flCacheTableId": "fl_temperature_humidity",
+      "slCacheTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "sl_temperature_humidity1"
+        }
+      ],
+      "sourceTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "source_temperature_humidity"
+        }
+      ]
+    },
+    {
+      "sensorId": "temp_k_sr_3",
+      "flCacheTableId": "fl_temperature_humidity",
+      "slCacheTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "sl_temperature_humidity1"
+}
+      ],
+      "sourceTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "source_temperature_humidity"
+        }
+      ]
+    },
+    {
+      "sensorId": "temp_k_sr_4",
+      "flCacheTableId": "fl_temperature_humidity",
+      "slCacheTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "sl_temperature_humidity1"
+        }
+      ],
+      "sourceTableIds": [
+        {
+          "startTime": "01/01/2016",
+          "endTime": "01/01/2022",
+          "tableId": "source_temperature_humidity"
+        }
+      ]
     }
   ]
 }
+
+
+
+
+
+
+
+
+
+
