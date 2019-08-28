@@ -1,6 +1,7 @@
 package managers;
 
 import beans.QueryBean;
+import main.Main;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -45,6 +46,7 @@ public class LogManager {
     }
 
     public void logExecutionStatistics(QueryBean queryBean, String text) {
+        if(Main.logExecutionStatistics)
         LogManager.log("[ExecutionStatistics][Query:" + queryBean.getSensorTimeRangeListMap() + "]" + text);
     }
 }

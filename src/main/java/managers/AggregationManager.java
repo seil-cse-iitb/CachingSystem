@@ -29,8 +29,16 @@ public class AggregationManager {
             Column voltage = sum("sum_voltage").as("sum_voltage");
             Column current = sum("sum_current").as("sum_current");
             Column energyConsumed = last("energy_consumed").as("energy_consumed");
+            Column slotEnergyConsumed = sum("slot_energy_consumed").as("slot_energy_consumed");
+            Column minPower = min(abs(col("min_power"))).as("min_power");
+            Column minVoltage = min(abs(col("min_voltage"))).as("min_voltage");
+            Column minCurrent = min(abs(col("min_current"))).as("min_current");
+            Column maxPower = max(abs(col("max_power"))).as("max_power");
+            Column maxVoltage = max(abs(col("max_voltage"))).as("max_voltage");
+            Column maxCurrent = max(abs(col("max_current"))).as("max_current");
+
             agg = rows.groupBy(window, col(sl.getSensorIdColumnName()))
-                    .agg(power, voltage, current, energyConsumed, count_agg_rows);
+                    .agg(power, voltage, current, energyConsumed, minPower, maxPower, minVoltage, maxVoltage, minCurrent, maxCurrent, slotEnergyConsumed, count_agg_rows);
         } else if (sl.getSchemaType() == ConfigurationBean.SchemaType.temperature) {
             Column temperature = sum("sum_temperature").as("sum_temperature");
             agg = rows.groupBy(window, col(sl.getSensorIdColumnName()))
@@ -58,8 +66,15 @@ public class AggregationManager {
             Column voltage = sum("voltage").as("sum_voltage");
             Column current = sum("current").as("sum_current");
             Column energyConsumed = last("energy_consumed").as("energy_consumed");
+            Column slotEnergyConsumed = last("energy_consumed").minus(first("energy_consumed")).as("slot_energy_consumed");
+            Column minPower = min(abs(col("power"))).as("min_power");
+            Column minVoltage = min(abs(col("voltage"))).as("min_voltage");
+            Column minCurrent = min(abs(col("current"))).as("min_current");
+            Column maxPower = max(abs(col("power"))).as("max_power");
+            Column maxVoltage = max(abs(col("voltage"))).as("max_voltage");
+            Column maxCurrent = max(abs(col("current"))).as("max_current");
             agg = rows.groupBy(window, col(sourceTable.getSensorIdColumnName()).as(sourceTable.getSensorIdColumnName()))
-                    .agg(power, voltage, current, energyConsumed, count_agg_rows);
+                    .agg(power, voltage, current, energyConsumed, minPower, maxPower, minVoltage, maxVoltage, minCurrent, maxCurrent, slotEnergyConsumed, count_agg_rows);
         } else if (sourceTable.getSchemaType() == ConfigurationBean.SchemaType.temperature) {
             Column temperature = sum("temperature").as("sum_temperature");
             agg = rows.groupBy(window, col(sourceTable.getSensorIdColumnName()).as(sourceTable.getSensorIdColumnName()))
@@ -69,7 +84,7 @@ public class AggregationManager {
             Column humidity = sum("humidity").as("sum_humidity");
             Column batteryVoltage = sum("battery_voltage").as("sum_battery_voltage");
             agg = rows.groupBy(window, col(sourceTable.getSensorIdColumnName()).as(sourceTable.getSensorIdColumnName()))
-                    .agg(temperature,humidity,batteryVoltage, count_agg_rows);
+                    .agg(temperature, humidity, batteryVoltage, count_agg_rows);
         }
         assert agg != null;
         agg = agg.withColumn(sourceTable.getTsColumnName(), col("window.start").cast(DataTypes.DoubleType)).drop("window")

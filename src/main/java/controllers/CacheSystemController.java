@@ -66,10 +66,14 @@ public class CacheSystemController {
         this.addAllGranularityToExecutingMap();
         while (true) {
             //poll query log and get new queries
-//            List<QueryBean> newQueries = queryLogManager.getNewQueries();
-            List<QueryBean> newQueries = Main.getNewQueries();
-            newQueries = queryController.preprocessQueries(newQueries);
-            boolean serialExecution = Main.serialQueryExecution;
+            List<QueryBean> newQueries;
+
+            if(Main.runPredefinedQueries) {
+                newQueries= Main.getNewQueries();
+                newQueries = queryController.preprocessQueries(newQueries);
+            }else{
+                newQueries = queryLogManager.getNewQueries();
+            }
             //currently assuming a query is about only a single sensor
             //start a thread for each query with their bitmaps
             for (QueryBean queryBean : newQueries) {
@@ -110,7 +114,7 @@ public class CacheSystemController {
                     threadName += "(" + sensorBean.getSensorId() + ")";
                 thread.setName(threadName);
                 thread.start();
-                if (serialExecution) {
+                if (Main.serialQueryExecution) {
                     try {
                         thread.join();
                     } catch (InterruptedException e) {

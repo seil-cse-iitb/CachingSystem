@@ -32,14 +32,14 @@ public class QueryLogManager {
     }
 
     public void startQueryLogCleanupThread() {
-        c.logManager.logInfo("[Starting cache databases query logging]");
+        c.logManager.logPriorityInfo("[Starting cache databases query logging]");
         for (DatabaseBean db : databaseBeans) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     c.sparkSession.sparkContext().setLocalProperty("spark.scheduler.pool","queryLogCleanupThread");
                     while (true) {
-                        c.logManager.logInfo("[Query log cleanup][" + db.getHost() + "]");
+                        c.logManager.logPriorityInfo("[Query log cleanup][" + db.getHost() + "]");
                         try {
                             Connection connection = DriverManager.getConnection(c.databaseController.getURL(db, "mysql"), c.databaseController.getProperties(db));
                             assert connection.prepareStatement("START TRANSACTION").executeUpdate() == 0;

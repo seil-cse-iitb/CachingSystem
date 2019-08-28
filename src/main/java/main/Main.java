@@ -15,10 +15,12 @@ import java.util.List;
 import static managers.Utils.sparkLogsOff;
 
 public class Main {
-    public static boolean serialQueryExecution = true;
-    public static boolean singleTimeExecution = true;
-    public static boolean clearCacheSystemInitially = true;
-    public static boolean clearCacheSystemAfterEveryQuery=true;
+    public static boolean runPredefinedQueries=false;
+    public static boolean serialQueryExecution = false;
+    public static boolean singleTimeExecution = false;
+    public static boolean clearCacheSystemInitially = false;
+    public static boolean clearCacheSystemAfterEveryQuery=false;
+    public static boolean logExecutionStatistics=false;
     private static String queryType = "zoomOutQueries";//zoomInQueries,zoomOutQueries,slideQueries
 
     public static void main(String[] args) {
