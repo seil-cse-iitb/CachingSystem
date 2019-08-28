@@ -14,10 +14,7 @@ public class TimeRangeBean {
 
     @Override
     public String toString() {
-        return "TimeRange{" +
-                "startDate=" + new Date(startTime * 1000) +
-                ", endDate=" + new Date(endTime * 1000) +
-                '}';
+        return "TimeRange{" + new Date(startTime * 1000) + " to " + new Date(endTime * 1000) + '}';
     }
 
 

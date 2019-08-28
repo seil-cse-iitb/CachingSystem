@@ -6,6 +6,10 @@ import managers.LogManager;
 import managers.QueryLogManager;
 import org.apache.spark.sql.SparkSession;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
 
 public class CacheSystemController {
@@ -224,4 +228,38 @@ public class CacheSystemController {
         }
     }
 
+
+    private void clearCacheAndBitmapTables() {
+        for (FLCacheTableBean flc : cb.flCacheTableBeanMap.values()) {
+            try {
+                Connection connection = DriverManager.getConnection(databaseController.getURL(flc.getDatabaseBean()), databaseController.getProperties(flc.getDatabaseBean()));
+                String tableName = flc.getTableName() + "_" + cb.bitmapTableNameSuffix;
+                PreparedStatement preparedStatement = connection.prepareStatement(String.format("truncate %s", tableName));
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+
+                tableName = flc.getTableName();
+                preparedStatement = connection.prepareStatement(String.format("truncate %s", tableName));
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+
+                connection.close();
+            } catch (SQLException e) {
+                logManager.logError("[" + this.getClass() + "][clearCacheAndBitmapTables]" + flc + e.getMessage());
+            }
+        }
+        for (SLCacheTableBean slc : cb.slCacheTableBeanMap.values()) {
+            try {
+                Connection connection = DriverManager.getConnection(databaseController.getURL(slc.getDatabaseBean()), databaseController.getProperties(slc.getDatabaseBean()));
+                String tableName = slc.getTableName();
+                PreparedStatement preparedStatement = connection.prepareStatement(String.format("truncate %s", tableName));
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+
+                connection.close();
+            } catch (SQLException e) {
+                logManager.logError("[" + this.getClass() + "][clearCacheAndBitmapTables]" + slc + e.getMessage());
+            }
+        }
+    }
 }

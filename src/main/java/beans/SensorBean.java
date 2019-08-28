@@ -65,6 +65,11 @@ public class SensorBean {
     }
 
     @Override
+    public String toString() {
+        return sensorId;
+    }
+
+    @Override
     public int hashCode() {
         return getSensorId().hashCode();
     }
