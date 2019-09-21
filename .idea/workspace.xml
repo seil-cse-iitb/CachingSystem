@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d95c8f3f-b4c4-4078-b49b-4ead5b0b92d0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build_and_submit.sh" beforeDir="false" afterPath="$PROJECT_DIR$/build_and_submit.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cachesystem.json" beforeDir="false" afterPath="$PROJECT_DIR$/cachesystem.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/CacheSystemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controllers/CacheSystemController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/managers/AggregationManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/managers/AggregationManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/managers/LogManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/managers/LogManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/managers/QueryLogManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/managers/QueryLogManager.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -38,8 +36,8 @@
     <session id="-214638513">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="19" />
-          <entry key="project.open.time.0" value="1" />
+          <entry key="project.closed" value="21" />
+          <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.1" value="3" />
           <entry key="project.open.time.10" value="7" />
           <entry key="project.open.time.11" value="7" />
@@ -53,22 +51,22 @@
           <entry key="project.open.time.7" value="2" />
           <entry key="project.open.time.8" value="3" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="38" />
+          <entry key="project.opened" value="39" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="LIST" value="1" />
           <entry key="MF" value="1" />
-          <entry key="bak" value="1" />
+          <entry key="bak" value="2" />
           <entry key="class" value="5" />
-          <entry key="java" value="422" />
-          <entry key="json" value="24" />
-          <entry key="log" value="4" />
+          <entry key="java" value="430" />
+          <entry key="json" value="25" />
+          <entry key="log" value="5" />
           <entry key="md" value="7" />
           <entry key="properties" value="13" />
-          <entry key="scala" value="43" />
-          <entry key="sh" value="2" />
+          <entry key="scala" value="45" />
+          <entry key="sh" value="3" />
           <entry key="sql" value="2" />
           <entry key="xml" value="11" />
         </counts>
@@ -76,14 +74,14 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CLASS" value="5" />
-          <entry key="JAVA" value="422" />
-          <entry key="JSON" value="25" />
+          <entry key="JAVA" value="430" />
+          <entry key="JSON" value="27" />
           <entry key="Manifest" value="1" />
           <entry key="Markdown" value="7" />
-          <entry key="PLAIN_TEXT" value="7" />
+          <entry key="PLAIN_TEXT" value="9" />
           <entry key="Properties" value="13" />
           <entry key="SQL" value="1" />
-          <entry key="Scala" value="43" />
+          <entry key="Scala" value="45" />
           <entry key="Scratch" value="1" />
           <entry key="XML" value="11" />
         </counts>
@@ -91,8 +89,9 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="87" />
-          <entry key="java" value="59832" />
-          <entry key="json" value="2210" />
+          <entry key="java" value="59887" />
+          <entry key="json" value="2321" />
+          <entry key="log" value="1" />
           <entry key="md" value="1367" />
           <entry key="properties" value="793" />
           <entry key="scala" value="2" />
@@ -102,10 +101,10 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="59830" />
-          <entry key="JSON" value="2210" />
+          <entry key="JAVA" value="59885" />
+          <entry key="JSON" value="2321" />
           <entry key="Markdown" value="1367" />
-          <entry key="PLAIN_TEXT" value="1172" />
+          <entry key="PLAIN_TEXT" value="1173" />
           <entry key="Properties" value="793" />
           <entry key="SQL" value="2" />
           <entry key="Scala" value="2" />
@@ -124,291 +123,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cachesystem.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="594">
-              <caret line="51" column="5" selection-start-line="51" selection-start-column="5" selection-end-line="51" selection-end-column="5" />
+            <state relative-caret-position="156">
+              <caret line="792" column="26" lean-forward="true" selection-start-line="792" selection-start-column="26" selection-end-line="792" selection-end-column="26" />
               <folding>
-                <element signature="e#368#375#0" />
-                <element signature="e#1648#1655#0" />
-                <element signature="e#1892#2117#0" />
-                <element signature="e#2123#2358#0" />
-                <element signature="e#2364#2591#0" />
-                <element signature="e#2598#2823#0" />
-                <element signature="e#2829#3054#0" />
-                <element signature="e#3060#3271#0" />
-                <element signature="e#3272#3279#0" />
-                <element signature="e#3539#4444#0" />
-                <element signature="e#3545#3744#0" />
-                <element signature="e#3750#3967#0" />
-                <element signature="e#3973#4217#0" />
-                <element signature="e#4218#4225#0" />
-                <element signature="e#4465#5837#0" />
-                <element signature="e#4471#4672#0" />
-                <element signature="e#4678#4897#0" />
-                <element signature="e#4903#5149#0" />
-                <element signature="e#5155#5356#0" />
-                <element signature="e#5362#5581#0" />
-                <element signature="e#5587#5833#0" />
-                <element signature="e#5857#7454#0" />
-                <element signature="e#5863#6069#0" />
-                <element signature="e#6071#6078#0" />
-                <element signature="e#6771#6983#0" />
-                <element signature="e#6989#7208#0" />
-                <element signature="e#7214#7450#0" />
-                <element signature="e#7735#8681#0" />
-                <element signature="e#7569#7829#0" />
-                <element signature="e#7579#7695#0" />
-                <element signature="e#7705#7821#0" />
-                <element signature="e#8115#8675#0" />
-                <element signature="e#8125#8244#0" />
-                <element signature="e#8246#8257#0" />
-                <element signature="e#8682#8689#0" />
-                <element signature="e#15091#15619#0" />
-                <element signature="e#15190#15450#0" />
-                <element signature="e#15200#15316#0" />
-                <element signature="e#15326#15442#0" />
-                <element signature="e#15476#15613#0" />
-                <element signature="e#15486#15605#0" />
-                <element signature="e#15625#16153#0" />
-                <element signature="e#15724#15984#0" />
-                <element signature="e#15734#15850#0" />
-                <element signature="e#15860#15976#0" />
-                <element signature="e#16010#16147#0" />
-                <element signature="e#16020#16139#0" />
-                <element signature="e#16159#16687#0" />
-                <element signature="e#16258#16518#0" />
-                <element signature="e#16268#16384#0" />
-                <element signature="e#16394#16510#0" />
-                <element signature="e#16544#16681#0" />
-                <element signature="e#16554#16673#0" />
-                <element signature="e#17240#17247#0" />
-                <element signature="e#21492#22437#0" />
-                <element signature="e#21586#21846#0" />
-                <element signature="e#21596#21712#0" />
-                <element signature="e#21722#21838#0" />
-                <element signature="e#21872#22431#0" />
-                <element signature="e#21882#22001#0" />
-                <element signature="e#21742#21753#0" />
-                <element signature="e#23404#23411#0" />
-                <element signature="e#23509#24454#0" />
-                <element signature="e#23603#23863#0" />
-                <element signature="e#23613#23729#0" />
-                <element signature="e#23739#23855#0" />
-                <element signature="e#23889#24448#0" />
-                <element signature="e#23899#24018#0" />
-                <element signature="e#23759#23770#0" />
-                <element signature="e#24460#25410#0" />
-                <element signature="e#24559#24819#0" />
-                <element signature="e#24569#24685#0" />
-                <element signature="e#24695#24811#0" />
-                <element signature="e#24845#25404#0" />
-                <element signature="e#24855#24974#0" />
-                <element signature="e#24715#24726#0" />
-                <element signature="e#25416#26366#0" />
-                <element signature="e#25515#25775#0" />
-                <element signature="e#25525#25641#0" />
-                <element signature="e#25651#25767#0" />
-                <element signature="e#25801#26360#0" />
-                <element signature="e#25811#25930#0" />
-                <element signature="e#25671#25682#0" />
-                <element signature="e#26372#27322#0" />
-                <element signature="e#26471#26731#0" />
-                <element signature="e#26481#26597#0" />
-                <element signature="e#26607#26723#0" />
-                <element signature="e#26757#27316#0" />
-                <element signature="e#26767#26886#0" />
-                <element signature="e#26627#26638#0" />
-                <element signature="e#27328#28276#0" />
-                <element signature="e#27425#27685#0" />
-                <element signature="e#27435#27551#0" />
-                <element signature="e#27561#27677#0" />
-                <element signature="e#27711#28270#0" />
-                <element signature="e#27721#27840#0" />
-                <element signature="e#27581#27592#0" />
-                <element signature="e#28282#29230#0" />
-                <element signature="e#28379#28639#0" />
-                <element signature="e#28389#28505#0" />
-                <element signature="e#28515#28631#0" />
-                <element signature="e#28665#29224#0" />
-                <element signature="e#28675#28794#0" />
-                <element signature="e#28535#28546#0" />
-                <element signature="e#30289#30296#0" />
-                <element signature="e#30289#30296#0" />
-                <element signature="e#50639#51169#0" />
-                <element signature="e#50735#50995#0" />
-                <element signature="e#50745#50861#0" />
-                <element signature="e#50871#50987#0" />
-                <element signature="e#51021#51163#0" />
-                <element signature="e#51031#51155#0" />
-                <element signature="e#51175#51705#0" />
-                <element signature="e#51271#51531#0" />
-                <element signature="e#51281#51397#0" />
-                <element signature="e#51407#51523#0" />
-                <element signature="e#51557#51699#0" />
-                <element signature="e#51567#51691#0" />
-                <element signature="e#51711#52241#0" />
-                <element signature="e#51807#52067#0" />
-                <element signature="e#51817#51933#0" />
-                <element signature="e#51943#52059#0" />
-                <element signature="e#52093#52235#0" />
-                <element signature="e#52103#52227#0" />
-                <element signature="e#52247#52777#0" />
-                <element signature="e#52343#52603#0" />
-                <element signature="e#52353#52469#0" />
-                <element signature="e#52479#52595#0" />
-                <element signature="e#52629#52771#0" />
-                <element signature="e#52639#52763#0" />
-                <element signature="e#52783#53313#0" />
-                <element signature="e#52879#53139#0" />
-                <element signature="e#52889#53005#0" />
-                <element signature="e#53015#53131#0" />
-                <element signature="e#53165#53307#0" />
-                <element signature="e#53175#53299#0" />
-                <element signature="e#53319#53849#0" />
-                <element signature="e#53415#53675#0" />
-                <element signature="e#53425#53541#0" />
-                <element signature="e#53551#53667#0" />
-                <element signature="e#53701#53843#0" />
-                <element signature="e#53711#53835#0" />
-                <element signature="e#53855#54385#0" />
-                <element signature="e#53951#54211#0" />
-                <element signature="e#53961#54077#0" />
-                <element signature="e#54087#54203#0" />
-                <element signature="e#54237#54379#0" />
-                <element signature="e#54247#54371#0" />
-                <element signature="e#54391#54921#0" />
-                <element signature="e#54487#54747#0" />
-                <element signature="e#54497#54613#0" />
-                <element signature="e#54623#54739#0" />
-                <element signature="e#54773#54915#0" />
-                <element signature="e#54783#54907#0" />
-                <element signature="e#54927#55457#0" />
-                <element signature="e#55023#55283#0" />
-                <element signature="e#55033#55149#0" />
-                <element signature="e#55159#55275#0" />
-                <element signature="e#55309#55451#0" />
-                <element signature="e#55319#55443#0" />
-                <element signature="e#58356#58363#0" />
-                <element signature="e#75261#75705#0" />
-                <element signature="e#75372#75521#0" />
-                <element signature="e#75382#75513#0" />
-                <element signature="e#75547#75699#0" />
-                <element signature="e#75557#75691#0" />
-                <element signature="e#75711#76155#0" />
-                <element signature="e#75822#75971#0" />
-                <element signature="e#75832#75963#0" />
-                <element signature="e#75997#76149#0" />
-                <element signature="e#76007#76141#0" />
-                <element signature="e#76161#76605#0" />
-                <element signature="e#76272#76421#0" />
-                <element signature="e#76282#76413#0" />
-                <element signature="e#76447#76599#0" />
-                <element signature="e#76457#76591#0" />
-                <element signature="e#76611#77055#0" />
-                <element signature="e#76722#76871#0" />
-                <element signature="e#76732#76863#0" />
-                <element signature="e#76897#77049#0" />
-                <element signature="e#76907#77041#0" />
+                <element signature="e#697#999#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/main/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="20" column="59" selection-start-line="20" selection-start-column="54" selection-end-line="20" selection-end-column="59" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/managers/AggregationManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="23" column="29" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/apache/spark/spark-sql_2.11/2.3.1/spark-sql_2.11-2.3.1-sources.jar!/org/apache/spark/sql/functions.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="2948" column="10" selection-start-line="2948" selection-start-column="10" selection-end-line="2948" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/apache/spark/spark-catalyst_2.11/2.3.1/spark-catalyst_2.11-2.3.1-sources.jar!/org/apache/spark/sql/catalyst/expressions/TimeWindow.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="470">
-              <caret line="117" column="24" selection-start-line="117" selection-start-column="24" selection-end-line="117" selection-end-column="24" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/apache/spark/spark-unsafe_2.11/2.3.1/spark-unsafe_2.11-2.3.1-sources.jar!/org/apache/spark/unsafe/types/CalendarInterval.java">
-          <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="414">
-              <caret line="192" column="45" selection-start-line="192" selection-start-column="41" selection-end-line="192" selection-end-column="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/managers/LogManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="702">
-              <caret line="48" column="38" selection-start-line="48" selection-start-column="38" selection-end-line="48" selection-end-column="38" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/controllers/CacheSystemController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="867">
-              <caret line="279" column="17" selection-start-line="279" selection-start-column="17" selection-end-line="279" selection-end-column="17" />
+              <caret line="23" column="46" selection-start-line="23" selection-start-column="46" selection-end-line="23" selection-end-column="46" />
               <folding>
                 <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/controllers/QueryController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="27" column="34" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
-              <folding>
-                <element signature="method#getFilterPlan#0;class#QueryController#0" />
-                <element signature="method#getUnresolvedRelation#0;class#QueryController#0" />
-                <element signature="method#extractSensorIdConditions#0;class#QueryController#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/managers/QueryLogManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="50" column="70" selection-start-line="50" selection-start-column="70" selection-end-line="50" selection-end-column="70" />
-              <folding>
-                <element signature="method#QueryLogManager#0;class#QueryLogManager#0" />
               </folding>
             </state>
           </provider>
@@ -425,8 +158,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>fetch</find>
-      <find>sensorId</find>
       <find>&quot;sensorId&quot;</find>
       <find>temperature_hu</find>
       <find>power_k_m</find>
@@ -455,6 +186,8 @@
       <find>FL</find>
       <find>initializ</find>
       <find>source_mysql</find>
+      <find>1 day</find>
+      <find>week</find>
     </findStrings>
     <replaceStrings>
       <replace>main</replace>
@@ -478,7 +211,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="cacheconfigchanges" />
+        <entry key="$PROJECT_DIR$" value="version_2" />
       </map>
     </option>
     <favorite-branches>
@@ -498,7 +231,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/beans/SchemaType.java" />
         <option value="$PROJECT_DIR$/src/main/java/beans/SchemaTypeBean.java" />
         <option value="$PROJECT_DIR$/src/main/java/beans/DatabaseBean.java" />
         <option value="$PROJECT_DIR$/cachesystem.properties" />
@@ -547,8 +279,9 @@
         <option value="$PROJECT_DIR$/src/main/java/managers/QueryLogManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/managers/LogManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/managers/AggregationManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/main/Main.java" />
         <option value="$PROJECT_DIR$/cachesystem.json" />
+        <option value="$PROJECT_DIR$/zoomOutQueries.log" />
+        <option value="$PROJECT_DIR$/src/main/java/main/Main.java" />
       </list>
     </option>
   </component>
@@ -587,6 +320,11 @@
             <path>
               <item name="CachingSystem" type="b2602c69:ProjectViewProjectNode" />
               <item name="CachingSystem" type="462c0819:PsiDirectoryNode" />
+              <item name="logs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CachingSystem" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CachingSystem" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -601,14 +339,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CachingSystem" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CachingSystem" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="beans" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="CachingSystem" type="b2602c69:ProjectViewProjectNode" />
@@ -617,14 +347,6 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CachingSystem" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CachingSystem" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="CachingSystem" type="b2602c69:ProjectViewProjectNode" />
@@ -648,7 +370,7 @@
     <property name="SearchEverywhereHistoryKey" value="org.apache.spark.unsafe.types.CalendarInterval&#9;PSI&#9;JAVA://org.apache.spark.unsafe.types.CalendarInterval&#10;Ca&#9;FILE&#9;file:///home/seil/JavaProjects/CachingSystem/src/main/java/manager/CacheSystem.java&#10;mys&#9;FILE&#9;file:///home/seil/JavaProjects/CachingSystem/src/main/java/manager/MySQLTable.java&#10;Re&#9;FILE&#9;file:///home/seil/JavaProjects/CachingSystem/README.md&#10;Cache&#9;FILE&#9;file:///home/seil/JavaProjects/CachingSystem/src/main/java/manager/CacheSystem.java&#10;Gra&#9;FILE&#9;file:///home/seil/JavaProjects/CachingSystem/src/main/java/manager/Granularity.java&#10;logha&#9;PSI&#9;JAVA://sun.rmi.log.LogHandler&#10;config&#9;FILE&#9;file:///home/seil/JavaProjects/CachingSystem/src/main/java/manager/ConfigManager.java" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1561456782398" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1567946156534" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/Change SQL Dialect" value="GenericSQL&#10;MySQL" />
     <property name="database.console.LAST_STATE" value="false" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -659,21 +381,24 @@
     <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.importing" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/logs/hdd" />
+    </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
       <recent name="temperature_humidity" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="manager" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/src/main/java/controller" />
-      <recent name="$PROJECT_DIR$/src/main/java/manager" />
-    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="manager" />
       <recent name="main" />
       <recent name="config" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src/main/java/controller" />
+      <recent name="$PROJECT_DIR$/src/main/java/manager" />
     </key>
     <key name="CreateClassDialog.RecentsKey">
       <recent name="beans" />
@@ -766,6 +491,7 @@
       <workItem from="1561545723064" duration="2241000" />
       <workItem from="1561671011311" duration="4903000" />
       <workItem from="1561713384903" duration="10462000" />
+      <workItem from="1567750060645" duration="3679000" />
     </task>
     <task id="LOCAL-00001" summary="a working prototype">
       <created>1554013826664</created>
@@ -869,13 +595,12 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="439284000" />
+    <option name="totallyTimeSpent" value="450130000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="59" y="-4" width="1861" height="1084" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2137741" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15647383" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -903,13 +628,13 @@
       <window_info anchor="right" id="Ant Build" order="4" weight="0.24958678" />
       <window_info anchor="right" id="Database" order="5" />
       <window_info anchor="right" id="Theme Preview" order="6" />
-      <window_info anchor="right" id="Bean Validation" order="7" weight="0.3294766" />
-      <window_info anchor="right" id="Palette&#9;" order="8" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Bean Validation" order="8" weight="0.32837465" />
       <window_info anchor="right" id="Maven Projects" order="9" />
       <window_info anchor="right" x="0" y="0" width="415" height="884" id="Documentation" order="10" side_tool="true" weight="0.3294766" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16363636" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15647383" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -931,14 +656,14 @@
       <window_info anchor="bottom" id="Database Console" order="12" weight="0.3294979" />
       <window_info anchor="bottom" id="Messages" order="13" weight="0.3294979" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24958678" />
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="Capture Analysis" order="4" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="1" weight="0.24958678" />
+      <window_info anchor="right" id="Palette" order="2" />
+      <window_info anchor="right" id="Capture Analysis" order="3" />
+      <window_info anchor="right" id="Ant Build" order="4" weight="0.24958678" />
       <window_info anchor="right" id="Database" order="5" />
       <window_info anchor="right" id="Theme Preview" order="6" />
-      <window_info anchor="right" id="Bean Validation" order="7" weight="0.3294766" />
-      <window_info anchor="right" id="Palette&#9;" order="8" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Bean Validation" order="8" weight="0.32837465" />
       <window_info anchor="right" id="Maven Projects" order="9" />
       <window_info anchor="right" x="0" y="0" width="415" height="884" id="Documentation" order="10" side_tool="true" weight="0.3294766" />
     </layout-to-restore>
@@ -1014,13 +739,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/controllers/SensorController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="19" column="75" selection-start-line="19" selection-start-column="75" selection-end-line="19" selection-end-column="75" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cachesystem.log" />
     <entry file="file://$PROJECT_DIR$/src/main/java/version1/manager/CacheSystem.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1064,13 +782,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build_and_submit.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="388" lean-forward="true" selection-start-line="1" selection-end-line="1" selection-end-column="388" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/controllers/SLCacheController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -1088,8 +799,8 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/beans/CacheReplacementPolicyBean.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/managers/Utils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="21" column="3" lean-forward="true" selection-start-line="21" selection-start-column="3" selection-end-line="24" selection-end-column="5" />
+        <state relative-caret-position="108">
+          <caret line="17" column="30" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -1148,8 +859,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/controllers/ConfigurationController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="91" column="64" lean-forward="true" selection-start-line="91" selection-start-column="64" selection-end-line="91" selection-end-column="64" />
+        <state relative-caret-position="764">
+          <caret line="147" lean-forward="true" selection-start-line="147" selection-end-line="147" />
         </state>
       </provider>
     </entry>
@@ -1258,16 +969,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/controllers/FLCacheController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="84" column="31" selection-start-line="84" selection-start-column="29" selection-end-line="84" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cachesystem.json.bak">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/version1/manager/UtilsManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -1314,20 +1015,63 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/controllers/CacheSystemController.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/spark/spark-sql_2.11/2.3.1/spark-sql_2.11-2.3.1-sources.jar!/org/apache/spark/sql/functions.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="867">
-          <caret line="279" column="17" selection-start-line="279" selection-start-column="17" selection-end-line="279" selection-end-column="17" />
+        <state relative-caret-position="408">
+          <caret line="2948" column="13" selection-start-line="2948" selection-start-column="13" selection-end-line="2948" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/spark/spark-catalyst_2.11/2.3.1/spark-catalyst_2.11-2.3.1-sources.jar!/org/apache/spark/sql/catalyst/expressions/TimeWindow.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="560">
+          <caret line="117" column="34" selection-start-line="117" selection-start-column="34" selection-end-line="117" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/spark/spark-unsafe_2.11/2.3.1/spark-unsafe_2.11-2.3.1-sources.jar!/org/apache/spark/unsafe/types/CalendarInterval.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1463">
+          <caret line="78" column="62" selection-start-line="78" selection-start-column="58" selection-end-line="78" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cachesystem.json.bak">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2646" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build_and_submit.sh">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zoomOutQueries.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="133" selection-start-line="11" selection-start-column="133" selection-end-line="11" selection-end-column="133" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cachesystem.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="792" column="26" lean-forward="true" selection-start-line="792" selection-start-column="26" selection-end-line="792" selection-end-column="26" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#697#999#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/main/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/controllers/FLCacheController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="20" column="59" selection-start-line="20" selection-start-column="54" selection-end-line="20" selection-end-column="59" />
+        <state relative-caret-position="373">
+          <caret line="87" column="33" selection-start-line="87" selection-start-column="33" selection-end-line="87" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/controllers/CacheSystemController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4500">
+          <caret line="250" column="32" selection-start-line="250" selection-start-column="32" selection-end-line="250" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1336,221 +1080,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/managers/AggregationManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="23" column="29" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
+        <state relative-caret-position="-503">
+          <caret line="23" column="27" selection-start-line="23" selection-start-column="27" selection-end-line="23" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/spark/spark-sql_2.11/2.3.1/spark-sql_2.11-2.3.1-sources.jar!/org/apache/spark/sql/functions.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="2948" column="10" selection-start-line="2948" selection-start-column="10" selection-end-line="2948" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/spark/spark-catalyst_2.11/2.3.1/spark-catalyst_2.11-2.3.1-sources.jar!/org/apache/spark/sql/catalyst/expressions/TimeWindow.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="470">
-          <caret line="117" column="24" selection-start-line="117" selection-start-column="24" selection-end-line="117" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/spark/spark-unsafe_2.11/2.3.1/spark-unsafe_2.11-2.3.1-sources.jar!/org/apache/spark/unsafe/types/CalendarInterval.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/main/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="414">
-          <caret line="192" column="45" selection-start-line="192" selection-start-column="41" selection-end-line="192" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cachesystem.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="51" column="5" selection-start-line="51" selection-start-column="5" selection-end-line="51" selection-end-column="5" />
+          <caret line="23" column="46" selection-start-line="23" selection-start-column="46" selection-end-line="23" selection-end-column="46" />
           <folding>
-            <element signature="e#368#375#0" />
-            <element signature="e#1648#1655#0" />
-            <element signature="e#1892#2117#0" />
-            <element signature="e#2123#2358#0" />
-            <element signature="e#2364#2591#0" />
-            <element signature="e#2598#2823#0" />
-            <element signature="e#2829#3054#0" />
-            <element signature="e#3060#3271#0" />
-            <element signature="e#3272#3279#0" />
-            <element signature="e#3539#4444#0" />
-            <element signature="e#3545#3744#0" />
-            <element signature="e#3750#3967#0" />
-            <element signature="e#3973#4217#0" />
-            <element signature="e#4218#4225#0" />
-            <element signature="e#4465#5837#0" />
-            <element signature="e#4471#4672#0" />
-            <element signature="e#4678#4897#0" />
-            <element signature="e#4903#5149#0" />
-            <element signature="e#5155#5356#0" />
-            <element signature="e#5362#5581#0" />
-            <element signature="e#5587#5833#0" />
-            <element signature="e#5857#7454#0" />
-            <element signature="e#5863#6069#0" />
-            <element signature="e#6071#6078#0" />
-            <element signature="e#6771#6983#0" />
-            <element signature="e#6989#7208#0" />
-            <element signature="e#7214#7450#0" />
-            <element signature="e#7735#8681#0" />
-            <element signature="e#7569#7829#0" />
-            <element signature="e#7579#7695#0" />
-            <element signature="e#7705#7821#0" />
-            <element signature="e#8115#8675#0" />
-            <element signature="e#8125#8244#0" />
-            <element signature="e#8246#8257#0" />
-            <element signature="e#8682#8689#0" />
-            <element signature="e#15091#15619#0" />
-            <element signature="e#15190#15450#0" />
-            <element signature="e#15200#15316#0" />
-            <element signature="e#15326#15442#0" />
-            <element signature="e#15476#15613#0" />
-            <element signature="e#15486#15605#0" />
-            <element signature="e#15625#16153#0" />
-            <element signature="e#15724#15984#0" />
-            <element signature="e#15734#15850#0" />
-            <element signature="e#15860#15976#0" />
-            <element signature="e#16010#16147#0" />
-            <element signature="e#16020#16139#0" />
-            <element signature="e#16159#16687#0" />
-            <element signature="e#16258#16518#0" />
-            <element signature="e#16268#16384#0" />
-            <element signature="e#16394#16510#0" />
-            <element signature="e#16544#16681#0" />
-            <element signature="e#16554#16673#0" />
-            <element signature="e#17240#17247#0" />
-            <element signature="e#21492#22437#0" />
-            <element signature="e#21586#21846#0" />
-            <element signature="e#21596#21712#0" />
-            <element signature="e#21722#21838#0" />
-            <element signature="e#21872#22431#0" />
-            <element signature="e#21882#22001#0" />
-            <element signature="e#21742#21753#0" />
-            <element signature="e#23404#23411#0" />
-            <element signature="e#23509#24454#0" />
-            <element signature="e#23603#23863#0" />
-            <element signature="e#23613#23729#0" />
-            <element signature="e#23739#23855#0" />
-            <element signature="e#23889#24448#0" />
-            <element signature="e#23899#24018#0" />
-            <element signature="e#23759#23770#0" />
-            <element signature="e#24460#25410#0" />
-            <element signature="e#24559#24819#0" />
-            <element signature="e#24569#24685#0" />
-            <element signature="e#24695#24811#0" />
-            <element signature="e#24845#25404#0" />
-            <element signature="e#24855#24974#0" />
-            <element signature="e#24715#24726#0" />
-            <element signature="e#25416#26366#0" />
-            <element signature="e#25515#25775#0" />
-            <element signature="e#25525#25641#0" />
-            <element signature="e#25651#25767#0" />
-            <element signature="e#25801#26360#0" />
-            <element signature="e#25811#25930#0" />
-            <element signature="e#25671#25682#0" />
-            <element signature="e#26372#27322#0" />
-            <element signature="e#26471#26731#0" />
-            <element signature="e#26481#26597#0" />
-            <element signature="e#26607#26723#0" />
-            <element signature="e#26757#27316#0" />
-            <element signature="e#26767#26886#0" />
-            <element signature="e#26627#26638#0" />
-            <element signature="e#27328#28276#0" />
-            <element signature="e#27425#27685#0" />
-            <element signature="e#27435#27551#0" />
-            <element signature="e#27561#27677#0" />
-            <element signature="e#27711#28270#0" />
-            <element signature="e#27721#27840#0" />
-            <element signature="e#27581#27592#0" />
-            <element signature="e#28282#29230#0" />
-            <element signature="e#28379#28639#0" />
-            <element signature="e#28389#28505#0" />
-            <element signature="e#28515#28631#0" />
-            <element signature="e#28665#29224#0" />
-            <element signature="e#28675#28794#0" />
-            <element signature="e#28535#28546#0" />
-            <element signature="e#30289#30296#0" />
-            <element signature="e#30289#30296#0" />
-            <element signature="e#50639#51169#0" />
-            <element signature="e#50735#50995#0" />
-            <element signature="e#50745#50861#0" />
-            <element signature="e#50871#50987#0" />
-            <element signature="e#51021#51163#0" />
-            <element signature="e#51031#51155#0" />
-            <element signature="e#51175#51705#0" />
-            <element signature="e#51271#51531#0" />
-            <element signature="e#51281#51397#0" />
-            <element signature="e#51407#51523#0" />
-            <element signature="e#51557#51699#0" />
-            <element signature="e#51567#51691#0" />
-            <element signature="e#51711#52241#0" />
-            <element signature="e#51807#52067#0" />
-            <element signature="e#51817#51933#0" />
-            <element signature="e#51943#52059#0" />
-            <element signature="e#52093#52235#0" />
-            <element signature="e#52103#52227#0" />
-            <element signature="e#52247#52777#0" />
-            <element signature="e#52343#52603#0" />
-            <element signature="e#52353#52469#0" />
-            <element signature="e#52479#52595#0" />
-            <element signature="e#52629#52771#0" />
-            <element signature="e#52639#52763#0" />
-            <element signature="e#52783#53313#0" />
-            <element signature="e#52879#53139#0" />
-            <element signature="e#52889#53005#0" />
-            <element signature="e#53015#53131#0" />
-            <element signature="e#53165#53307#0" />
-            <element signature="e#53175#53299#0" />
-            <element signature="e#53319#53849#0" />
-            <element signature="e#53415#53675#0" />
-            <element signature="e#53425#53541#0" />
-            <element signature="e#53551#53667#0" />
-            <element signature="e#53701#53843#0" />
-            <element signature="e#53711#53835#0" />
-            <element signature="e#53855#54385#0" />
-            <element signature="e#53951#54211#0" />
-            <element signature="e#53961#54077#0" />
-            <element signature="e#54087#54203#0" />
-            <element signature="e#54237#54379#0" />
-            <element signature="e#54247#54371#0" />
-            <element signature="e#54391#54921#0" />
-            <element signature="e#54487#54747#0" />
-            <element signature="e#54497#54613#0" />
-            <element signature="e#54623#54739#0" />
-            <element signature="e#54773#54915#0" />
-            <element signature="e#54783#54907#0" />
-            <element signature="e#54927#55457#0" />
-            <element signature="e#55023#55283#0" />
-            <element signature="e#55033#55149#0" />
-            <element signature="e#55159#55275#0" />
-            <element signature="e#55309#55451#0" />
-            <element signature="e#55319#55443#0" />
-            <element signature="e#58356#58363#0" />
-            <element signature="e#75261#75705#0" />
-            <element signature="e#75372#75521#0" />
-            <element signature="e#75382#75513#0" />
-            <element signature="e#75547#75699#0" />
-            <element signature="e#75557#75691#0" />
-            <element signature="e#75711#76155#0" />
-            <element signature="e#75822#75971#0" />
-            <element signature="e#75832#75963#0" />
-            <element signature="e#75997#76149#0" />
-            <element signature="e#76007#76141#0" />
-            <element signature="e#76161#76605#0" />
-            <element signature="e#76272#76421#0" />
-            <element signature="e#76282#76413#0" />
-            <element signature="e#76447#76599#0" />
-            <element signature="e#76457#76591#0" />
-            <element signature="e#76611#77055#0" />
-            <element signature="e#76722#76871#0" />
-            <element signature="e#76732#76863#0" />
-            <element signature="e#76897#77049#0" />
-            <element signature="e#76907#77041#0" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
