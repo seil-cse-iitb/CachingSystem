@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SensorBean {
-    String sensorId;
-    FLCacheTableBean flCacheTableBean;
-    final List<Pair<TimeRangeBean, SourceTableBean>> timeRangeVsSourceTables = new ArrayList<>();
-    final List<Pair<TimeRangeBean, SLCacheTableBean>> timeRangeVsSLCacheTables = new ArrayList<>();
-    BitmapBean flBitmapBean,slBitmapBean;
+    public String sensorId;
+    public FLCacheTableBean flCacheTableBean;
+    public final List<Pair<TimeRangeBean, SourceTableBean>> timeRangeVsSourceTables = new ArrayList<>();
+    public final List<Pair<TimeRangeBean, SLCacheTableBean>> timeRangeVsSLCacheTables = new ArrayList<>();
+    public BitmapBean flBitmapBean,slBitmapBean;
 
 
     public List<Pair<TimeRangeBean, SourceTableBean>> getTimeRangeVsSourceTables() {

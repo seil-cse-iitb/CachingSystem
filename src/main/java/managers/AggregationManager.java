@@ -11,6 +11,7 @@ import static org.apache.spark.sql.functions.*;
 
 public class AggregationManager {
     CacheSystemController c;
+
     public AggregationManager(CacheSystemController c) {
         this.c = c;
     }
@@ -87,5 +88,35 @@ public class AggregationManager {
                 .withColumn("granularityId", lit(requiredGranularity.getGranularityId()));
         return agg;
 
+    }
+
+    public Dataset<Row> aggregateSpatially(Dataset<Row> rows, SensorGroupBean sensorGroupBean, SourceTableBean commonSourceTableSchema) {
+        c.logManager.logPriorityInfo("[aggregateSpatially]");
+        if (sensorGroupBean.getSpatialAggFunction().equalsIgnoreCase("sum")) {
+            Dataset<Row> agg = null;
+            if (commonSourceTableSchema.getSchemaType() == ConfigurationBean.SchemaType.power) {
+                Column power = sum("power").as("power");
+                Column voltage = sum("voltage").as("voltage");
+                Column current = sum("current").as("current");
+                Column energyConsumed = sum("energy_consumed").as("energy_consumed");
+                agg = rows.groupBy(floor(col(commonSourceTableSchema.getTsColumnName())).as(commonSourceTableSchema.getTsColumnName()))
+                        .agg(power, voltage, current, energyConsumed);
+            } else if (commonSourceTableSchema.getSchemaType() == ConfigurationBean.SchemaType.temperature) {
+                Column temperature = sum("temperature").as("temperature");
+                agg = rows.groupBy(floor(col(commonSourceTableSchema.getTsColumnName())).as(commonSourceTableSchema.getTsColumnName()))
+                        .agg(temperature);
+            } else if (commonSourceTableSchema.getSchemaType() == ConfigurationBean.SchemaType.temperature_humidity) {
+                Column temperature = sum("temperature").as("temperature");
+                Column humidity = sum("humidity").as("humidity");
+                Column batteryVoltage = sum("battery_voltage").as("battery_voltage");
+                agg = rows.groupBy(floor(col(commonSourceTableSchema.getTsColumnName())).as(commonSourceTableSchema.getTsColumnName()))
+                        .agg(temperature, humidity, batteryVoltage);
+            }
+            assert agg != null;
+            agg = agg.withColumn(commonSourceTableSchema.getSensorIdColumnName(), lit(sensorGroupBean.getSensorId()));
+            return agg;
+        }
+        assert false;
+        return null;
     }
 }

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.FileReader;
+
 import static beans.ConfigurationBean.SchemaType;
 import static managers.Utils.df;
 import static managers.Utils.getTimeInSec;
@@ -112,24 +113,27 @@ public class ConfigurationController {
                 SensorBean sensorBean = new SensorBean();
                 sensorBean.setSensorId(sensor.get("sensorId").getAsString());
                 sensorBean.setFlCacheTableBean(cb.flCacheTableBeanMap.get(sensor.get("flCacheTableId").getAsString()));
-
+                SchemaType schemaType = sensorBean.getFlCacheTableBean().getSchemaType();
                 JsonArray slCacheTableIds = sensor.getAsJsonArray("slCacheTableIds");
                 for (JsonElement jsonElement : slCacheTableIds) {
                     JsonObject timeVsTable = jsonElement.getAsJsonObject();
+                    SLCacheTableBean slCacheTableBean = cb.slCacheTableBeanMap.get(timeVsTable.get("tableId").getAsString());
+                    assert schemaType == slCacheTableBean.getSchemaType();
                     Pair<TimeRangeBean, SLCacheTableBean> pair = new MutablePair<>(
                             new TimeRangeBean(getTimeInSec(df.parse(timeVsTable.get("startTime").getAsString()))
-                                    ,getTimeInSec(df.parse(timeVsTable.get("endTime").getAsString()))),
-                            cb.slCacheTableBeanMap.get(timeVsTable.get("tableId").getAsString())
-                    );
+                                    , getTimeInSec(df.parse(timeVsTable.get("endTime").getAsString()))),
+                            slCacheTableBean);
                     sensorBean.getTimeRangeVsSLCacheTables().add(pair);
                 }
                 JsonArray sourceTableIds = sensor.getAsJsonArray("sourceTableIds");
                 for (JsonElement jsonElement : sourceTableIds) {
                     JsonObject timeVsTable = jsonElement.getAsJsonObject();
+                    SourceTableBean sourceTableBean = cb.sourceTableBeanMap.get(timeVsTable.get("tableId").getAsString());
+                    assert schemaType==sourceTableBean.getSchemaType();
                     Pair<TimeRangeBean, SourceTableBean> pair = new MutablePair<>(
                             new TimeRangeBean(getTimeInSec(df.parse(timeVsTable.get("startTime").getAsString()))
-                                    ,getTimeInSec(df.parse(timeVsTable.get("endTime").getAsString()))),
-                            cb.sourceTableBeanMap.get(timeVsTable.get("tableId").getAsString())
+                                    , getTimeInSec(df.parse(timeVsTable.get("endTime").getAsString()))),
+                            sourceTableBean
                     );
                     sensorBean.getTimeRangeVsSourceTables().add(pair);
                 }
@@ -138,6 +142,41 @@ public class ConfigurationController {
                 cb.sensorBeanMap.put(sensorBean.getSensorId(), sensorBean);
             }
 
+            JsonArray sensorGroups = jsonObject.getAsJsonArray("sensorGroups");
+            for (JsonElement sensorGroupElement : sensorGroups) {
+                JsonObject sensorGroup = sensorGroupElement.getAsJsonObject();
+                SensorGroupBean sensorGroupBean = new SensorGroupBean();
+                sensorGroupBean.setSensorId(sensorGroup.get("sensorId").getAsString());
+                sensorGroupBean.setSpatialAggFunction(sensorGroup.get("spatialAggFunction").getAsString());
+
+                sensorGroupBean.setFlCacheTableBean(cb.flCacheTableBeanMap.get(sensorGroup.get("flCacheTableId").getAsString()));
+                SchemaType schemaType = sensorGroupBean.getFlCacheTableBean().getSchemaType();
+                JsonArray slCacheTableIds = sensorGroup.getAsJsonArray("slCacheTableIds");
+                for (JsonElement jsonElement : slCacheTableIds) {
+                    JsonObject timeVsTable = jsonElement.getAsJsonObject();
+                    SLCacheTableBean slCacheTableBean = cb.slCacheTableBeanMap.get(timeVsTable.get("tableId").getAsString());
+                    assert schemaType == slCacheTableBean.getSchemaType();
+                    Pair<TimeRangeBean, SLCacheTableBean> pair = new MutablePair<>(
+                            new TimeRangeBean(getTimeInSec(df.parse(timeVsTable.get("startTime").getAsString()))
+                                    , getTimeInSec(df.parse(timeVsTable.get("endTime").getAsString()))),
+                            slCacheTableBean);
+                    sensorGroupBean.getTimeRangeVsSLCacheTables().add(pair);
+                }
+                sensorGroupBean.setFlBitmapBean(new BitmapBean(cb.bitmapStartTime, cb.bitmapEndTime, cb.granularityBeanMap));
+                sensorGroupBean.setSlBitmapBean(new BitmapBean(cb.bitmapStartTime, cb.bitmapEndTime, cb.granularityBeanMap));
+
+                schemaType = null;
+                JsonArray sensorGroupSensors = sensorGroup.getAsJsonArray("sensors");
+                for (JsonElement sensorElement : sensorGroupSensors) {
+                    SensorBean sensorBean = cb.sensorBeanMap.get(sensorElement.getAsString());
+                    if (schemaType == null) schemaType = sensorBean.getFlCacheTableBean().getSchemaType();
+                    else assert schemaType == sensorBean.getFlCacheTableBean().getSchemaType();
+                    sensorGroupBean.getSensorList().add(sensorBean);
+                }
+                assert !sensorGroupBean.getSensorList().isEmpty();
+                cb.sensorBeanMap.put(sensorGroupBean.getSensorId(), sensorGroupBean);
+//                cb.sensorGroupBeanMap.put(sensorGroupBean.getSensorId(), sensorGroupBean);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

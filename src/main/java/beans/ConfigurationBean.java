@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 public class ConfigurationBean {
@@ -13,6 +14,7 @@ public class ConfigurationBean {
     public final Map<String, SLCacheTableBean> slCacheTableBeanMap = new HashMap<>();
     public final Map<String, SourceTableBean> sourceTableBeanMap = new HashMap<>();
     public final Map<String, SensorBean> sensorBeanMap = new HashMap<>();
+//    public final Map<String, SensorGroupBean> sensorGroupBeanMap = new HashMap<>();
 
     public int queryLogCleanupDurationInSeconds = 300;
     public int queryPollingDurationInSeconds = 5;

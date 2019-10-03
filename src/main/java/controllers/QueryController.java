@@ -48,7 +48,7 @@ public class QueryController {
 
             ArrayList<SensorBean> sensors = extractSensors(sensorIdConditions);
             for (SensorBean sensor : sensors) {
-                ArrayList<TimeRangeBean> timeRanges = extractTimeRanges(tsConditions);
+                ArrayList<TimeRangeBean> timeRanges = extractTimeRanges(tsConditions);//always create new list of timeranges, so that changes in timeRange.startTime and endTime does not affect other sensors of the query
                 query.getSensorTimeRangeListMap().put(sensor, timeRanges);
             }
 
@@ -122,7 +122,7 @@ public class QueryController {
 
     private ArrayList<SensorBean> extractSensors(ArrayList<Expression> sensorIdConditions) {
         ArrayList<SensorBean> sensors = new ArrayList<>();
-        for (Expression sensorIdCondition : sensorIdConditions) {
+        for (Expression sensorIdCondition : sensorIdConditions) { //for now assumption is that there will be only one sensorIdCondition
             if (sensorIdCondition.children().head() instanceof Literal) {
                 SensorBean sensorBean = c.cb.sensorBeanMap.get(((UTF8String) ((Literal) sensorIdCondition.children().head()).value()).toString());
                 if (sensorBean != null)
