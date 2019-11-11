@@ -1,5 +1,5 @@
 {
-  "bitmapStartTime": "01/01/2000",
+  "bitmapStartTime": "01/01/2016",
   "bitmapEndTime": "01/01/2020",
   "queryLogCleanupDurationInSeconds": "300",
   "queryPollingDurationInSeconds": "5",
@@ -800,7 +800,7 @@
       "sourceTableIds": [
         {
           "startTime": "01/01/2000",
-          "endTime": "01/03/2012",
+          "endTime": "01/03/2022",
           "tableId": "source_power1"
         }//,
 //        {
