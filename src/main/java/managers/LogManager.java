@@ -12,7 +12,7 @@ public class LogManager {
         File logFile = new File(LogManager.logFilePath);
         try {
             FileWriter fw = new FileWriter(logFile, true);
-            fw.append("[" + Utils.current_timestamp_str() + "]" + (text) + "\n");
+            fw.append("[" + Utils.current_timestamp_str() + "][Thread:" + Thread.currentThread().getName() + "]" + (text) + "\n");
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
