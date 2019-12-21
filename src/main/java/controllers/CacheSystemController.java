@@ -196,7 +196,13 @@ public class CacheSystemController {
         Map<SensorBean, List<TimeRangeBean>> sensorTimeRangeMap = query.getSensorTimeRangeListMap();
         for (SensorBean sensorBean : sensorTimeRangeMap.keySet()) {
             List<TimeRangeBean> timeRanges = sensorTimeRangeMap.get(sensorBean);
-            GranularityBean granularity = granularityController.eligibleGranularity(timeRanges);
+            GranularityBean granularity;
+            if(queryController.isGranularitySpecified(query)){
+                granularity = queryController.getSpecifiedGranularity(query);
+                granularity = granularity==null?granularityController.eligibleGranularity(timeRanges):granularity;
+            }else {
+                granularity = granularityController.eligibleGranularity(timeRanges);
+            }
             String poolName = "queryExecutingThreads(" + granularity.getGranularityId() + ")";
             synchronized (this.granularityExecutingMap) {
                 Integer count = this.granularityExecutingMap.get(granularity);

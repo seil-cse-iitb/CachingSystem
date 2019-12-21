@@ -1,6 +1,7 @@
 package controllers;
 
 import beans.*;
+import managers.LogManager;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
@@ -15,33 +16,33 @@ import static org.apache.spark.sql.functions.col;
 
 
 public class FLCacheController {
-    CacheSystemController c;
+    private CacheSystemController c;
 
     public FLCacheController(CacheSystemController c) {
         this.c = c;
     }
 
     public void updateCache(SensorBean sensorBean, GranularityBean requiredGranularity, ArrayList<TimeRangeBean> nonExistingDataRanges) {
-        c.logManager.logInfo("[Updating cache databases][NonExistingDataRanges:" + nonExistingDataRanges + "]");
+        LogManager.logInfo("[Updating cache databases][NonExistingDataRanges:" + nonExistingDataRanges + "]");
         FLCacheTableBean flCacheTableBean = sensorBean.getFlCacheTableBean();
         for (TimeRangeBean timeRangeBean : nonExistingDataRanges) {
             List<Pair<TimeRangeBean, SLCacheTableBean>> intersectionTimeRangeVsSLCacheTables = c.sensorController.getIntersectionTimeRangeVsSLCacheTables(sensorBean, timeRangeBean);
-            c.logManager.logPriorityInfo("intersectionTimeRange:" + intersectionTimeRangeVsSLCacheTables);
+            LogManager.logPriorityInfo("intersectionTimeRange:" + intersectionTimeRangeVsSLCacheTables);
             for (Pair<TimeRangeBean, SLCacheTableBean> slCacheTableBeanPair : intersectionTimeRangeVsSLCacheTables) {
                 //fetch this timeRange from this slcachetable
                 ArrayList<TimeRangeBean> slNonExistingTimeRangeBeans = new ArrayList<>();
                 slNonExistingTimeRangeBeans.add(slCacheTableBeanPair.getLeft());
                 for (GranularityBean currentGranularity = requiredGranularity; currentGranularity != null; currentGranularity = c.granularityController.nextSmallerGranularity(currentGranularity)) {
-                    c.logManager.logPriorityInfo("Checking granularity: " + currentGranularity.getGranularityId());
+                    LogManager.logPriorityInfo("Checking granularity: " + currentGranularity.getGranularityId());
                     ArrayList<TimeRangeBean> newTimeRangeBeans = new ArrayList<>();
                     for (TimeRangeBean currentTimeRangeBean : slNonExistingTimeRangeBeans) {
                         //aggregate and update flCacheTable & slCacheTable
                         ArrayList<TimeRangeBean> existingDataRanges = c.bitmapController.getExistingDataRange(sensorBean.getSlBitmapBean(), currentGranularity, currentTimeRangeBean);
-                        c.logManager.logPriorityInfo("ExistingDataRange:" + existingDataRanges);
+                        LogManager.logPriorityInfo("ExistingDataRange:" + existingDataRanges);
                         ArrayList<TimeRangeBean> nonExistingDataRange = c.bitmapController.getNonExistingDataRange(sensorBean.getSlBitmapBean(), currentGranularity, currentTimeRangeBean);
-                        c.logManager.logPriorityInfo("NonExistingDataRange:" + nonExistingDataRange);
+                        LogManager.logPriorityInfo("NonExistingDataRange:" + nonExistingDataRange);
                         for (TimeRangeBean existingTimeRangeBean : existingDataRanges) {
-                            c.logManager.logPriorityInfo("Data found in SL" + existingTimeRangeBean);
+                            LogManager.logPriorityInfo("Data found in SL" + existingTimeRangeBean);
                             updateSLAndFLCacheFromSL(sensorBean, requiredGranularity, slCacheTableBeanPair.getRight(), flCacheTableBean, currentGranularity, existingTimeRangeBean);
                         }
                         newTimeRangeBeans.addAll(c.bitmapController.getNonExistingDataRange(sensorBean.getSlBitmapBean(), currentGranularity, currentTimeRangeBean));
@@ -50,36 +51,37 @@ public class FLCacheController {
                 }
 
                 for (TimeRangeBean currentTimeRangeBean : slNonExistingTimeRangeBeans) {
-                    if (sensorBean instanceof SensorGroupBean)
+                    if (sensorBean instanceof SensorGroupBean) {
                         updateSLAndFLCacheFromSourceSensorGroup((SensorGroupBean) sensorBean, requiredGranularity, slCacheTableBeanPair.getRight(), flCacheTableBean, currentTimeRangeBean);
-                    else
+                    }else {
                         updateSLAndFLCacheFromSource(sensorBean, requiredGranularity, slCacheTableBeanPair.getRight(), flCacheTableBean, currentTimeRangeBean);
+                    }
                 }
             }
         }
     }
 
     private void updateSLAndFLCacheFromSourceSensorGroup(SensorGroupBean sensorGroupBean, GranularityBean requiredGranularity, SLCacheTableBean sl, FLCacheTableBean fl, TimeRangeBean timeRangeBean) {
-        c.logManager.logPriorityInfo("[updateSLAndFLCacheFromSourceSensorGroup]");
+        LogManager.logPriorityInfo("[updateSLAndFLCacheFromSourceSensorGroup]");
         GranularityBean smallerGranularity = c.granularityController.nextSmallerGranularity(requiredGranularity);
         Dataset<Row> sourceDataset = null;
         SourceTableBean commonSourceTableSchema=null;
         for (SensorBean sensorBean : sensorGroupBean.getSensorList()) {
-            c.logManager.logPriorityInfo(sensorBean.toString());
+            LogManager.logPriorityInfo(sensorBean.toString());
             List<Pair<TimeRangeBean, SourceTableBean>> intersectionTimeRangeVsSourceTables = c.sensorController.getIntersectionTimeRangeVsSourceTables(sensorBean, timeRangeBean);
             for (Pair<TimeRangeBean, SourceTableBean> sourceTableBeanPair : intersectionTimeRangeVsSourceTables) {
                 TimeRangeBean currentTimeRangeBean = sourceTableBeanPair.getLeft();
                 SourceTableBean sourceTable = sourceTableBeanPair.getRight();
                 if(commonSourceTableSchema==null)commonSourceTableSchema=sourceTable;
                 assert commonSourceTableSchema.getSchemaType()==sourceTable.getSchemaType();
-                c.logManager.logInfo("--[From SourceTable][Aggregation Started]: " + currentTimeRangeBean);
+                LogManager.logInfo("--[From SourceTable][Aggregation Started]: " + currentTimeRangeBean);
                 currentTimeRangeBean.startTime = currentTimeRangeBean.startTime - (currentTimeRangeBean.startTime % requiredGranularity.getGranularityInTermsOfSeconds());
                 currentTimeRangeBean.endTime = currentTimeRangeBean.endTime + (requiredGranularity.getGranularityInTermsOfSeconds() - (currentTimeRangeBean.endTime % requiredGranularity.getGranularityInTermsOfSeconds()));
                 long i = currentTimeRangeBean.startTime;
                 while (i < currentTimeRangeBean.endTime) {
                     long startTime = i;
                     long endTime = Math.min(startTime + requiredGranularity.getFetchIntervalAtOnceInSeconds(), currentTimeRangeBean.endTime);
-                    c.logManager.logInfo("----[From SourceTable][" + new Date(startTime * 1000) + "] to [" + new Date(endTime * 1000) + "]");
+                    LogManager.logInfo("----[From SourceTable][" + new Date(startTime * 1000) + "] to [" + new Date(endTime * 1000) + "]");
                     System.out.println(c.databaseController.getURL(sourceTable.getDatabaseBean()) + " " + sourceTable.getTableName() + " " + sourceTable.getTsColumnName() + " " + startTime + " " + endTime + " " + requiredGranularity.getNumPartitionsForEachInterval() + " " + c.databaseController.getProperties(sourceTable.getDatabaseBean()));
                     Dataset<Row> sensorDataset = c.sparkSession.read()
                             .jdbc(c.databaseController.getURL(sourceTable.getDatabaseBean()), sourceTable.getTableName(), sourceTable.getTsColumnName(), startTime, endTime, requiredGranularity.getNumPartitionsForEachInterval(), c.databaseController.getProperties(sourceTable.getDatabaseBean()));
@@ -92,7 +94,7 @@ public class FLCacheController {
                     else sourceDataset = sourceDataset.union(sensorDataset);
                     i = endTime;
                 }
-                c.logManager.logInfo("--[From SourceTable][Aggregation Finished]: " + currentTimeRangeBean);
+                LogManager.logInfo("--[From SourceTable][Aggregation Finished]: " + currentTimeRangeBean);
             }
         }
 
@@ -125,7 +127,7 @@ public class FLCacheController {
         aggregatedRequiredGranularity.unpersist();
         if (smallerGranularity != null) {
             //update bitmap of SL if smaller granularity available
-            c.logManager.logPriorityInfo("[updateSLAndFLCacheFromSourceSensorGroup]Bitmap update for " + smallerGranularity.getGranularityId() + " in " + timeRangeBean);
+            LogManager.logPriorityInfo("[updateSLAndFLCacheFromSourceSensorGroup]Bitmap update for " + smallerGranularity.getGranularityId() + " in " + timeRangeBean);
             c.bitmapController.updateBitmap(sensorGroupBean.getSlBitmapBean(), smallerGranularity, timeRangeBean);
             assert c.bitmapController.getNonExistingDataRange(sensorGroupBean.getSlBitmapBean(), smallerGranularity, timeRangeBean).isEmpty();
         }
@@ -133,20 +135,20 @@ public class FLCacheController {
     }
 
     private void updateSLAndFLCacheFromSource(SensorBean sensorBean, GranularityBean requiredGranularity, SLCacheTableBean sl, FLCacheTableBean fl, TimeRangeBean timeRangeBean) {
-        c.logManager.logPriorityInfo("[updateSLAndFLCacheFromSource]");
+        LogManager.logPriorityInfo("[updateSLAndFLCacheFromSource]");
         GranularityBean smallerGranularity = c.granularityController.nextSmallerGranularity(requiredGranularity);
         List<Pair<TimeRangeBean, SourceTableBean>> intersectionTimeRangeVsSourceTables = c.sensorController.getIntersectionTimeRangeVsSourceTables(sensorBean, timeRangeBean);
         for (Pair<TimeRangeBean, SourceTableBean> sourceTableBeanPair : intersectionTimeRangeVsSourceTables) {
             TimeRangeBean currentTimeRangeBean = sourceTableBeanPair.getLeft();
             SourceTableBean sourceTable = sourceTableBeanPair.getRight();
-            c.logManager.logInfo("--[From SourceTable][Aggregation Started]: " + currentTimeRangeBean);
+            LogManager.logInfo("--[From SourceTable][Aggregation Started]: " + currentTimeRangeBean);
             currentTimeRangeBean.startTime = currentTimeRangeBean.startTime - (currentTimeRangeBean.startTime % requiredGranularity.getGranularityInTermsOfSeconds());
             currentTimeRangeBean.endTime = currentTimeRangeBean.endTime + (requiredGranularity.getGranularityInTermsOfSeconds() - (currentTimeRangeBean.endTime % requiredGranularity.getGranularityInTermsOfSeconds()));
             long i = currentTimeRangeBean.startTime;
             while (i < currentTimeRangeBean.endTime) {
                 long startTime = i;
                 long endTime = Math.min(startTime + requiredGranularity.getFetchIntervalAtOnceInSeconds(), currentTimeRangeBean.endTime);
-                c.logManager.logInfo("----[From SourceTable][" + new Date(startTime * 1000) + "] to [" + new Date(endTime * 1000) + "]");
+                LogManager.logInfo("----[From SourceTable][" + new Date(startTime * 1000) + "] to [" + new Date(endTime * 1000) + "]");
                 System.out.println(c.databaseController.getURL(sourceTable.getDatabaseBean()) + " " + sourceTable.getTableName() + " " + sourceTable.getTsColumnName() + " " + startTime + " " + endTime + " " + requiredGranularity.getNumPartitionsForEachInterval() + " " + c.databaseController.getProperties(sourceTable.getDatabaseBean()));
                 Dataset<Row> sourceDataset = c.sparkSession.read()
                         .jdbc(c.databaseController.getURL(sourceTable.getDatabaseBean()), sourceTable.getTableName(), sourceTable.getTsColumnName(), startTime, endTime, requiredGranularity.getNumPartitionsForEachInterval(), c.databaseController.getProperties(sourceTable.getDatabaseBean()));
@@ -180,26 +182,27 @@ public class FLCacheController {
                 aggregatedRequiredGranularity.unpersist();
                 i = endTime;
             }
-            c.logManager.logInfo("--[From SourceTable][Aggregation Finished]: " + currentTimeRangeBean);
+            LogManager.logInfo("--[From SourceTable][Aggregation Finished]: " + currentTimeRangeBean);
         }
+
         if (smallerGranularity != null) {
             //update bitmap of SL if smaller granularity available
-            c.logManager.logPriorityInfo("[updateSLAndFLCacheFromSource]Bitmap update for " + smallerGranularity.getGranularityId() + " in " + timeRangeBean);
+            LogManager.logPriorityInfo("[updateSLAndFLCacheFromSource]Bitmap update for " + smallerGranularity.getGranularityId() + " in " + timeRangeBean);
             c.bitmapController.updateBitmap(sensorBean.getSlBitmapBean(), smallerGranularity, timeRangeBean);
             assert c.bitmapController.getNonExistingDataRange(sensorBean.getSlBitmapBean(), smallerGranularity, timeRangeBean).isEmpty();
         }
     }
 
     private void updateSLAndFLCacheFromSL(SensorBean sensorBean, GranularityBean requiredGranularity, SLCacheTableBean sl, FLCacheTableBean fl, GranularityBean currentGranularity, TimeRangeBean currentTimeRangeBean) {
-        c.logManager.logPriorityInfo("[updateSLAndFLCacheFromSL]");
-        c.logManager.logInfo("--[From SLCache][Aggregation Started]: " + currentTimeRangeBean);
+        LogManager.logPriorityInfo("[updateSLAndFLCacheFromSL]");
+        LogManager.logInfo("--[From SLCache][Aggregation Started]: " + currentTimeRangeBean);
         currentTimeRangeBean.startTime = currentTimeRangeBean.startTime - (currentTimeRangeBean.startTime % requiredGranularity.getGranularityInTermsOfSeconds());
         currentTimeRangeBean.endTime = currentTimeRangeBean.endTime + (requiredGranularity.getGranularityInTermsOfSeconds() - (currentTimeRangeBean.endTime % requiredGranularity.getGranularityInTermsOfSeconds()));
         long i = currentTimeRangeBean.startTime;
         while (i < currentTimeRangeBean.endTime) {
             long startTime = i;
             long endTime = Math.min(startTime + requiredGranularity.getFetchIntervalAtOnceInSeconds(), currentTimeRangeBean.endTime);
-            c.logManager.logInfo("----[From SLCache][" + new Date(startTime * 1000) + "] to [" + new Date(endTime * 1000) + "]");
+            LogManager.logInfo("----[From SLCache][" + new Date(startTime * 1000) + "] to [" + new Date(endTime * 1000) + "]");
             Dataset<Row> slDataset = c.sparkSession.read()
                     .jdbc(c.databaseController.getURL(sl.getDatabaseBean()), sl.getTableName(), sl.getTsColumnName(), startTime, endTime, requiredGranularity.getNumPartitionsForEachInterval(), c.databaseController.getProperties(sl.getDatabaseBean()));
             Column tsFilter = col(sl.getTsColumnName()).$greater$eq(startTime).and(col(sl.getTsColumnName()).$less(endTime));
@@ -223,7 +226,7 @@ public class FLCacheController {
             }
             i = endTime;
         }
-        c.logManager.logInfo("--[From SLCache][Aggregation Finished]: " + currentTimeRangeBean);
+        LogManager.logInfo("--[From SLCache][Aggregation Finished]: " + currentTimeRangeBean);
     }
 
 }

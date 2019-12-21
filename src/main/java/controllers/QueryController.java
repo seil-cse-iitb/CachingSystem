@@ -1,20 +1,28 @@
 package controllers;
 
 import beans.*;
+import managers.LogManager;
 import org.apache.spark.sql.catalyst.analysis.UnresolvedRelation;
 import org.apache.spark.sql.catalyst.expressions.*;
 import org.apache.spark.sql.catalyst.plans.logical.Filter;
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan;
+import org.apache.spark.sql.catalyst.plans.logical.Project;
 import org.apache.spark.sql.execution.SparkSqlParser;
 import org.apache.spark.sql.internal.SQLConf;
 import org.apache.spark.unsafe.types.UTF8String;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import scala.collection.Iterator;
+import scala.collection.Seq;
+import scala.runtime.AbstractFunction1;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Collections.sort;
 
+// var parsePlan = new SparkSqlParser(new SQLConf()).parsePlan("SELECT JSON_OBJECT('meta_data','specified_granularity','specified_granularity','%') as meta_data FROM power WHERE sensor_id ='$power_sensor' and granularity like '$granularity' order by time_sec");
 public class QueryController {
 
     CacheSystemController c;
@@ -25,9 +33,32 @@ public class QueryController {
 
     public List<QueryBean> preprocessQueries(List<QueryBean> queries) {
         for (QueryBean query : queries) {
-            c.logManager.logDebugInfo("[PreprocessingQueryBean]" + query);
+            LogManager.logDebugInfo("[PreprocessingQueryBean]" + query);
             LogicalPlan parsePlan = new SparkSqlParser(new SQLConf()).parsePlan(query.getQueryStr());
             LogicalPlan filterPlan = getFilterPlan(parsePlan);
+            LogicalPlan projectPlan = getProjectPlan(parsePlan);
+            Seq<NamedExpression> namedExpressionSeq = ((Project) projectPlan).projectList();
+            namedExpressionSeq.foreach(new AbstractFunction1<NamedExpression, Object>() {
+                @Override
+                public Object apply(NamedExpression v1) {
+                    if(v1.name().equalsIgnoreCase("meta_data")){
+                        String metaData = ((Expression)v1).children().head().simpleString();
+                        try {
+                            JSONObject metaDataJson= (JSONObject) new JSONParser().parse(metaData);
+                            for (Object key:metaDataJson.keySet()) {
+                                query.getMetaData().put((String)key,(String)metaDataJson.get(key));
+                            }
+                        } catch (ParseException e) {
+                            LogManager.logError("[JSONParsing:"+e.getMessage()+"]putting meta_data=from_cache");
+                            query.getMetaData().put("meta_data","from_cache");
+                        }
+                    }
+                    return false;
+                }
+            });
+            for(String key:query.getMetaData().keySet()){
+                LogManager.logPriorityInfo(key+" : "+query.getMetaData().get(key));
+            }
             Expression whereConditions = ((Filter) filterPlan).condition();
             String tableName = ((UnresolvedRelation) getUnresolvedRelation(filterPlan)).tableName();
             FLCacheTableBean flCacheTableBean = null;
@@ -38,7 +69,7 @@ public class QueryController {
                 }
             }
             if (flCacheTableBean == null) {
-                c.logManager.logError("[Table not found:" + tableName + "]");
+                LogManager.logError("[Table not found:" + tableName + "]");
                 continue;
             }
             ArrayList<Expression> tsConditions = new ArrayList<>();
@@ -54,6 +85,11 @@ public class QueryController {
 
         }
         return queries;
+    }
+
+    private LogicalPlan getProjectPlan(LogicalPlan logicalPlan) {
+        if (logicalPlan.nodeName().equals("Project")) return logicalPlan;
+        else return getProjectPlan(logicalPlan.children().head());
     }
 
     private LogicalPlan getFilterPlan(LogicalPlan logicalPlan) {
@@ -103,7 +139,7 @@ public class QueryController {
                 endTimes.remove(0);
             } else {
                 //TODO edit in previous TimeRange
-                c.logManager.logInfo("[Skipping query]Bad Time Ranges in Query");
+                LogManager.logInfo("[Skipping query]Bad Time Ranges in Query");
                 break;
             }
 
@@ -164,5 +200,18 @@ public class QueryController {
         while (iterator.hasNext()) {
             extractSensorIdConditions(flCacheTableBean, iterator.next(), curExpr, sensorConditions);
         }
+    }
+
+    public boolean isGranularitySpecified(QueryBean query) {
+        return query.getMetaData().get("meta_data").equalsIgnoreCase("specified_granularity");
+    }
+
+    public GranularityBean getSpecifiedGranularity(QueryBean query) {
+        for (String gstr:c.cb.granularityBeanMap.keySet()) {
+         if(query.getMetaData().get("specified_granularity").equalsIgnoreCase(gstr)){
+             return c.cb.granularityBeanMap.get(gstr);
+         }
+        }
+        return null;
     }
 }

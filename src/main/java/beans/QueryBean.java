@@ -26,6 +26,7 @@ public class QueryBean implements Serializable {
     private Timestamp queryTimestamp;
     private String queryStr;
     private String userHost;
+    private final Map<String,String> metaData=new HashMap<>();
     //    private final ArrayList<Expression> tsConditions = new ArrayList<>();
     //    private final ArrayList<Expression> sensorIdConditions = new ArrayList<>();
 
@@ -57,6 +58,10 @@ public class QueryBean implements Serializable {
         this.userHost = userHost;
     }
 
+    public Map<String, String> getMetaData() {
+        return metaData;
+    }
+
     @Override
     public String toString() {
         return "QueryBean{" +
@@ -65,4 +70,5 @@ public class QueryBean implements Serializable {
                 ", userHost='" + userHost + '\'' +
                 '}';
     }
+
 }

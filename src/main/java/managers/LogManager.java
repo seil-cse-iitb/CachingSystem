@@ -38,7 +38,7 @@ public class LogManager {
         LogManager.log("[Info]" + text);
     }
 
-    public void logCacheInit() {
+    public static void logCacheInit() {
         logInfo("[Cache System Initializing]");
     }
 }

@@ -17,7 +17,7 @@ public class AggregationManager {
     }
 
     public Dataset<Row> aggregateFromSL(Dataset<Row> rows, GranularityBean requiredGranularity, SLCacheTableBean sl) {
-        c.logManager.logPriorityInfo("[aggregateFromSL]");
+        LogManager.logPriorityInfo("[aggregateFromSL]");
         Column window = window(col(sl.getTsColumnName()).cast(DataTypes.TimestampType), requiredGranularity.getWindowDuration());
         Column count_agg_rows = sum("count_agg_rows").as("count_agg_rows");
         Dataset<Row> agg = null;
@@ -54,7 +54,7 @@ public class AggregationManager {
     }
 
     public Dataset<Row> aggregateFromSource(Dataset<Row> rows, GranularityBean requiredGranularity, SourceTableBean sourceTable) {
-        c.logManager.logPriorityInfo("[aggregateFromSource]");
+        LogManager.logPriorityInfo("[aggregateFromSource]");
         Column window = window(col(sourceTable.getTsColumnName()).cast(DataTypes.TimestampType), requiredGranularity.getWindowDuration());
         Column count_agg_rows = count("*").as("count_agg_rows");
         Dataset<Row> agg = null;
@@ -91,7 +91,7 @@ public class AggregationManager {
     }
 
     public Dataset<Row> aggregateSpatially(Dataset<Row> rows, SensorGroupBean sensorGroupBean, SourceTableBean commonSourceTableSchema) {
-        c.logManager.logPriorityInfo("[aggregateSpatially]");
+        LogManager.logPriorityInfo("[aggregateSpatially]");
         if (sensorGroupBean.getSpatialAggFunction().equalsIgnoreCase("sum")) {
             Dataset<Row> agg = null;
             if (commonSourceTableSchema.getSchemaType() == ConfigurationBean.SchemaType.power) {

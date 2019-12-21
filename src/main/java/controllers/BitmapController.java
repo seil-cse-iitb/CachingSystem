@@ -1,6 +1,7 @@
 package controllers;
 
 import beans.*;
+import managers.LogManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -42,19 +43,19 @@ public class BitmapController {
             }
             connection.close();
         } catch (SQLException e) {
-            c.logManager.logError("[" + this.getClass() + "][initBitmapsIfNotExists]" + e.getMessage());
+            LogManager.logError("[" + this.getClass() + "][initBitmapsIfNotExists]" + e.getMessage());
         }
     }
 
     public void initBitmapsIfNotExists() {
-        c.logManager.logPriorityInfo("[Initializing bitmap for all sensors]");
+        LogManager.logPriorityInfo("[Initializing bitmap for all sensors]");
         for (SensorBean sensorBean : c.cb.sensorBeanMap.values()) {
             initBitmapsIfNotExists(sensorBean);
         }
     }
 
     public void loadBitmaps(SensorBean sensorBean) {
-        c.logManager.logInfo("[Loading bitmap for sensor: " + sensorBean.getSensorId() + "]");
+        LogManager.logInfo("[Loading bitmap for sensor: " + sensorBean.getSensorId() + "]");
         FLCacheTableBean flc = sensorBean.getFlCacheTableBean();
         try {
             Connection connection = DriverManager.getConnection(c.databaseController.getURL(flc.getDatabaseBean()), c.databaseController.getProperties(flc.getDatabaseBean()));
@@ -74,19 +75,19 @@ public class BitmapController {
             preparedStatement.close();
             connection.close();
         } catch (SQLException e) {
-            c.logManager.logError("[" + this.getClass() + "][LoadBitmap]" + e.getMessage());
+            LogManager.logError("[" + this.getClass() + "][LoadBitmap]" + e.getMessage());
         }
     }
 
     public void loadBitmaps() {
-        c.logManager.logInfo("[Loading bitmap for all sensors]");
+        LogManager.logInfo("[Loading bitmap for all sensors]");
         for (SensorBean sensorBean : c.cb.sensorBeanMap.values()) {
             loadBitmaps(sensorBean);
         }
     }
 
     public void clearBitmaps() {
-        c.logManager.logInfo("[Clearning bitmap for all sensors]");
+        LogManager.logInfo("[Clearning bitmap for all sensors]");
         for (SensorBean sensorBean : c.cb.sensorBeanMap.values()) {
             BitmapBean flBitmapBean = sensorBean.getFlBitmapBean();
             BitmapBean slBitmapBean = sensorBean.getSlBitmapBean();
@@ -126,10 +127,10 @@ public class BitmapController {
                     assert preparedStatement.executeUpdate() >= 1;
                     preparedStatement.close();
                 }
-                c.logManager.logPriorityInfo("Updated Bimap for sensor:"+sensorBean.getSensorId());
+                LogManager.logPriorityInfo("Updated Bimap for sensor:"+sensorBean.getSensorId());
                 connection.close();
             } catch (SQLException e) {
-                c.logManager.logError("[" + this.getClass() + "][SaveBitmap]" + e.getMessage());
+                LogManager.logError("[" + this.getClass() + "][SaveBitmap]" + e.getMessage());
             }
         }
     }
@@ -185,12 +186,11 @@ public class BitmapController {
         int startI = (int) (timeRange.startTime - getTimeInSec(bitmapBean.startTime)) / granularityBean.getGranularityInTermsOfSeconds();
         int endI = (int) (timeRange.endTime - getTimeInSec(bitmapBean.startTime)) / granularityBean.getGranularityInTermsOfSeconds();
         int setBit = bitSet.nextSetBit(startI);
-        if (endI >= setBit && setBit != -1) return true;
-        return false;
+        return endI >= setBit && setBit != -1;
     }
 
     public void updateBitmap(BitmapBean bitmapBean, GranularityBean granularityBean, ArrayList<TimeRangeBean> timeRanges) {
-        c.logManager.logInfo("[Updating Bitmap][Granularity:" + granularityBean.getGranularityId() + "]");
+        LogManager.logInfo("[Updating Bitmap][Granularity:" + granularityBean.getGranularityId() + "]");
         BitSet bitSet = bitmapBean.granularityBeanBitSetMap.get(granularityBean);
         for (TimeRangeBean timeRange : timeRanges) {
             int start = (int) ((timeRange.startTime - getTimeInSec(bitmapBean.startTime)) / granularityBean.getGranularityInTermsOfSeconds());
@@ -201,7 +201,7 @@ public class BitmapController {
     }
 
     public void updateBitmap(BitmapBean bitmapBean, GranularityBean granularityBean, TimeRangeBean timeRange) {
-        c.logManager.logInfo("[Updating Bitmap][Granularity:" + granularityBean.getGranularityId() + "]");
+        LogManager.logInfo("[Updating Bitmap][Granularity:" + granularityBean.getGranularityId() + "]");
         BitSet bitSet = bitmapBean.granularityBeanBitSetMap.get(granularityBean);
         int start = (int) ((timeRange.startTime - getTimeInSec(bitmapBean.startTime)) / granularityBean.getGranularityInTermsOfSeconds());
         int end = (int) (timeRange.endTime - getTimeInSec(bitmapBean.startTime)) / granularityBean.getGranularityInTermsOfSeconds();
