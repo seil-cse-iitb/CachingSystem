@@ -82,7 +82,6 @@ public class FLCacheController {
                     long startTime = i;
                     long endTime = Math.min(startTime + requiredGranularity.getFetchIntervalAtOnceInSeconds(), currentTimeRangeBean.endTime);
                     LogManager.logInfo("----[From SourceTable][" + new Date(startTime * 1000) + "] to [" + new Date(endTime * 1000) + "]");
-                    System.out.println(c.databaseController.getURL(sourceTable.getDatabaseBean()) + " " + sourceTable.getTableName() + " " + sourceTable.getTsColumnName() + " " + startTime + " " + endTime + " " + requiredGranularity.getNumPartitionsForEachInterval() + " " + c.databaseController.getProperties(sourceTable.getDatabaseBean()));
                     Dataset<Row> sensorDataset = c.sparkSession.read()
                             .jdbc(c.databaseController.getURL(sourceTable.getDatabaseBean()), sourceTable.getTableName(), sourceTable.getTsColumnName(), startTime, endTime, requiredGranularity.getNumPartitionsForEachInterval(), c.databaseController.getProperties(sourceTable.getDatabaseBean()));
                     Column tsFilter = col(sourceTable.getTsColumnName()).$greater$eq(startTime).and(col(sourceTable.getTsColumnName()).$less(endTime));
@@ -149,7 +148,6 @@ public class FLCacheController {
                 long startTime = i;
                 long endTime = Math.min(startTime + requiredGranularity.getFetchIntervalAtOnceInSeconds(), currentTimeRangeBean.endTime);
                 LogManager.logInfo("----[From SourceTable][" + new Date(startTime * 1000) + "] to [" + new Date(endTime * 1000) + "]");
-                System.out.println(c.databaseController.getURL(sourceTable.getDatabaseBean()) + " " + sourceTable.getTableName() + " " + sourceTable.getTsColumnName() + " " + startTime + " " + endTime + " " + requiredGranularity.getNumPartitionsForEachInterval() + " " + c.databaseController.getProperties(sourceTable.getDatabaseBean()));
                 Dataset<Row> sourceDataset = c.sparkSession.read()
                         .jdbc(c.databaseController.getURL(sourceTable.getDatabaseBean()), sourceTable.getTableName(), sourceTable.getTsColumnName(), startTime, endTime, requiredGranularity.getNumPartitionsForEachInterval(), c.databaseController.getProperties(sourceTable.getDatabaseBean()));
                 Column tsFilter = col(sourceTable.getTsColumnName()).$greater$eq(startTime).and(col(sourceTable.getTsColumnName()).$less(endTime));
