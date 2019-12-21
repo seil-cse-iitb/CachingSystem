@@ -33,56 +33,59 @@ public class QueryController {
 
     public List<QueryBean> preprocessQueries(List<QueryBean> queries) {
         for (QueryBean query : queries) {
-            LogManager.logDebugInfo("[PreprocessingQueryBean]" + query);
-            LogicalPlan parsePlan = new SparkSqlParser(new SQLConf()).parsePlan(query.getQueryStr());
-            LogicalPlan filterPlan = getFilterPlan(parsePlan);
-            LogicalPlan projectPlan = getProjectPlan(parsePlan);
-            Seq<NamedExpression> namedExpressionSeq = ((Project) projectPlan).projectList();
-            namedExpressionSeq.foreach(new AbstractFunction1<NamedExpression, Object>() {
-                @Override
-                public Object apply(NamedExpression v1) {
-                    if(v1.name().equalsIgnoreCase("meta_data")){
-                        String metaData = ((Expression)v1).children().head().simpleString();
-                        try {
-                            JSONObject metaDataJson= (JSONObject) new JSONParser().parse(metaData);
-                            for (Object key:metaDataJson.keySet()) {
-                                query.getMetaData().put((String)key,(String)metaDataJson.get(key));
+            try {
+                LogManager.logDebugInfo("[PreprocessingQueryBean]" + query);
+                LogicalPlan parsePlan = new SparkSqlParser(new SQLConf()).parsePlan(query.getQueryStr());
+                LogicalPlan filterPlan = getFilterPlan(parsePlan);
+                LogicalPlan projectPlan = getProjectPlan(parsePlan);
+                Seq<NamedExpression> namedExpressionSeq = ((Project) projectPlan).projectList();
+                namedExpressionSeq.foreach(new AbstractFunction1<NamedExpression, Object>() {
+                    @Override
+                    public Object apply(NamedExpression v1) {
+                        if (v1.name().equalsIgnoreCase("meta_data")) {
+                            String metaData = ((Expression) v1).children().head().simpleString();
+                            try {
+                                JSONObject metaDataJson = (JSONObject) new JSONParser().parse(metaData);
+                                for (Object key : metaDataJson.keySet()) {
+                                    query.getMetaData().put((String) key, (String) metaDataJson.get(key));
+                                }
+                            } catch (ParseException e) {
+                                LogManager.logError("["+this.getClass()+"][JSONParsing:" + e.getMessage() + "]putting meta_data=from_cache");
+                                query.getMetaData().put("meta_data", "from_cache");
                             }
-                        } catch (ParseException e) {
-                            LogManager.logError("[JSONParsing:"+e.getMessage()+"]putting meta_data=from_cache");
-                            query.getMetaData().put("meta_data","from_cache");
                         }
+                        return false;
                     }
-                    return false;
+                });
+                for (String key : query.getMetaData().keySet()) {
+                    LogManager.logPriorityInfo(key + " : " + query.getMetaData().get(key));
                 }
-            });
-            for(String key:query.getMetaData().keySet()){
-                LogManager.logPriorityInfo(key+" : "+query.getMetaData().get(key));
-            }
-            Expression whereConditions = ((Filter) filterPlan).condition();
-            String tableName = ((UnresolvedRelation) getUnresolvedRelation(filterPlan)).tableName();
-            FLCacheTableBean flCacheTableBean = null;
-            for (FLCacheTableBean flCacheTableBeanTemp : c.cb.flCacheTableBeanMap.values()) {
-                if (ConfigurationBean.SchemaType.valueOf(tableName) == flCacheTableBeanTemp.getSchemaType()) {
-                    flCacheTableBean = flCacheTableBeanTemp;
-                    break;
+                Expression whereConditions = ((Filter) filterPlan).condition();
+                String tableName = ((UnresolvedRelation) getUnresolvedRelation(filterPlan)).tableName();
+                FLCacheTableBean flCacheTableBean = null;
+                for (FLCacheTableBean flCacheTableBeanTemp : c.cb.flCacheTableBeanMap.values()) {
+                    if (ConfigurationBean.SchemaType.valueOf(tableName) == flCacheTableBeanTemp.getSchemaType()) {
+                        flCacheTableBean = flCacheTableBeanTemp;
+                        break;
+                    }
                 }
-            }
-            if (flCacheTableBean == null) {
-                LogManager.logError("[Table not found:" + tableName + "]");
-                continue;
-            }
-            ArrayList<Expression> tsConditions = new ArrayList<>();
-            extractTSConditions(flCacheTableBean, whereConditions, null, tsConditions);
-            ArrayList<Expression> sensorIdConditions = new ArrayList<>();
-            extractSensorIdConditions(flCacheTableBean, whereConditions, null, sensorIdConditions);
+                if (flCacheTableBean == null) {
+                    LogManager.logError("["+this.getClass()+"][Table not found:" + tableName + "]");
+                    continue;
+                }
+                ArrayList<Expression> tsConditions = new ArrayList<>();
+                extractTSConditions(flCacheTableBean, whereConditions, null, tsConditions);
+                ArrayList<Expression> sensorIdConditions = new ArrayList<>();
+                extractSensorIdConditions(flCacheTableBean, whereConditions, null, sensorIdConditions);
 
-            ArrayList<SensorBean> sensors = extractSensors(sensorIdConditions);
-            for (SensorBean sensor : sensors) {
-                ArrayList<TimeRangeBean> timeRanges = extractTimeRanges(tsConditions);//always create new list of timeranges, so that changes in timeRange.startTime and endTime does not affect other sensors of the query
-                query.getSensorTimeRangeListMap().put(sensor, timeRanges);
+                ArrayList<SensorBean> sensors = extractSensors(sensorIdConditions);
+                for (SensorBean sensor : sensors) {
+                    ArrayList<TimeRangeBean> timeRanges = extractTimeRanges(tsConditions);//always create new list of timeranges, so that changes in timeRange.startTime and endTime does not affect other sensors of the query
+                    query.getSensorTimeRangeListMap().put(sensor, timeRanges);
+                }
+            }catch (Exception e){
+                LogManager.logError("[" + this.getClass() + "][QueryPreprocessing][Query:"+query.getQueryStr()+"]" + e.getMessage());
             }
-
         }
         return queries;
     }
