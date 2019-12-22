@@ -49,7 +49,7 @@ public class CacheSystemController {
 
     public void start() {
         sparkSession.sparkContext().setLocalProperty("spark.scheduler.pool", "mainThread");
-        logManager.logCacheInit();
+        LogManager.logCacheInit();
         //start query log cleanup thread
         queryLogManager.startQueryLogCleanupThread();
         //save granularities in db
@@ -70,12 +70,12 @@ public class CacheSystemController {
                 synchronized (executingList) {
                     if (!shouldExecute(queryBean))
                         continue;
-                    logManager.logInfo("Executing query:" + queryBean);
+                    LogManager.logInfo("Executing query:" + queryBean);
                     //add sensor timeranges in a global list
                     for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
                         List<TimeRangeBean> timeRangeBeans = queryBean.getSensorTimeRangeListMap().get(sensorBean);
                         assert executingList.get(sensorBean).addAll(timeRangeBeans);
-                        logManager.logPriorityInfo("added all timeranges");
+                        LogManager.logPriorityInfo("added all timeranges");
                     }
                 }
                 Thread thread = new Thread(new Runnable() {
@@ -90,7 +90,7 @@ public class CacheSystemController {
                             for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
                                 List<TimeRangeBean> timeRangeBeans = queryBean.getSensorTimeRangeListMap().get(sensorBean);
                                 assert executingList.get(sensorBean).removeAll(timeRangeBeans);
-                                logManager.logPriorityInfo("removed all timeranges");
+                                LogManager.logPriorityInfo("removed all timeranges");
                             }
                         }
                     }
@@ -106,7 +106,7 @@ public class CacheSystemController {
             try {
                 Thread.sleep(cb.queryPollingDurationInSeconds * 1000);
             } catch (InterruptedException e) {
-                logManager.logError("[" + this.getClass() + "]" + e.getMessage());
+                LogManager.logError("[" + this.getClass() + "]" + e.getMessage());
             }
         }
     }
@@ -147,7 +147,7 @@ public class CacheSystemController {
                             //add the extra timerange as a new timerange object
                             TimeRangeBean extra = new TimeRangeBean(e.endTime, n.endTime);
                             timeRangeBeans.add(extra);
-                            logManager.logPriorityInfo("added:" + extra);
+                            LogManager.logPriorityInfo("added:" + extra);
                             n.endTime = e.startTime;
                             break;
 //                                n |-------------------------|
@@ -158,7 +158,7 @@ public class CacheSystemController {
                             //remove because already executing
                             timeRangeBeans.remove(i);
                             i--;
-                            logManager.logPriorityInfo("removed:" + n);
+                            LogManager.logPriorityInfo("removed:" + n);
                             break;
                         } else if (n.startTime >= e.startTime && n.endTime > e.endTime && n.startTime < e.endTime) {
                             n.startTime = e.endTime;
@@ -168,7 +168,7 @@ public class CacheSystemController {
 //                                                        n |-----------|
 //                                       e |-----------|
                         } else {
-                            logManager.logPriorityInfo("above conditions didnt meet!!");
+                            LogManager.logPriorityInfo("above conditions didnt meet!!");
                         }
                     }
                 }
@@ -185,14 +185,11 @@ public class CacheSystemController {
         for (SensorBean sensorBean : faultySensorBean) {
             queryBean.getSensorTimeRangeListMap().remove(sensorBean);
         }
-        if (queryBean.getSensorTimeRangeListMap().keySet().size() > 0)
-            return true;
-        else
-            return false;
+        return queryBean.getSensorTimeRangeListMap().keySet().size() > 0;
     }
 
     public void handleQuery(QueryBean query) {
-        logManager.logInfo("[Handling Query][" + query.getQueryStr() + "]");
+        LogManager.logInfo("[Handling Query][" + query.getQueryStr() + "]");
         Map<SensorBean, List<TimeRangeBean>> sensorTimeRangeMap = query.getSensorTimeRangeListMap();
         for (SensorBean sensorBean : sensorTimeRangeMap.keySet()) {
             List<TimeRangeBean> timeRanges = sensorTimeRangeMap.get(sensorBean);
@@ -251,7 +248,7 @@ public class CacheSystemController {
 
                 connection.close();
             } catch (SQLException e) {
-                logManager.logError("[" + this.getClass() + "][clearCacheAndBitmapTables]" + flc + e.getMessage());
+                LogManager.logError("[" + this.getClass() + "][clearCacheAndBitmapTables]" + flc + e.getMessage());
             }
         }
         for (SLCacheTableBean slc : cb.slCacheTableBeanMap.values()) {
@@ -264,7 +261,7 @@ public class CacheSystemController {
 
                 connection.close();
             } catch (SQLException e) {
-                logManager.logError("[" + this.getClass() + "][clearCacheAndBitmapTables]" + slc + e.getMessage());
+                LogManager.logError("[" + this.getClass() + "][clearCacheAndBitmapTables]" + slc + e.getMessage());
             }
         }
     }
