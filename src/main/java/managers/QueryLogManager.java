@@ -40,8 +40,9 @@ public class QueryLogManager {
                     c.sparkSession.sparkContext().setLocalProperty("spark.scheduler.pool","queryLogCleanupThread");
                     while (true) {
                         LogManager.logInfo("[Query log cleanup][" + db.getHost() + "]");
+                        Connection connection=null;
                         try {
-                            Connection connection = DriverManager.getConnection(c.databaseController.getURL(db, "mysql"), c.databaseController.getProperties(db));
+                            connection = DriverManager.getConnection(c.databaseController.getURL(db, "mysql"), c.databaseController.getProperties(db));
                             assert connection.prepareStatement("START TRANSACTION").executeUpdate() == 0;
                             assert connection.prepareStatement("SET GLOBAL general_log = 'OFF'").executeUpdate() == 0;
                             assert connection.prepareStatement("RENAME TABLE general_log TO general_log_temp").executeUpdate() == 0;
@@ -54,6 +55,14 @@ public class QueryLogManager {
                             connection.close();
                         } catch (SQLException e) {
                             LogManager.logError("[" + this.getClass() + "][startQueryLoggingThread][" + db.getDatabaseId() + "]" + e.getMessage());
+                        }finally{
+                            if(connection!=null) {
+                                try {
+                                    connection.close();
+                                } catch (SQLException e) {
+                                    LogManager.logError("[" + this.getClass() + "][connection closing exception]" + e.getMessage());
+                                }
+                            }
                         }
                         try {
                             Thread.sleep(c.cb.queryLogCleanupDurationInSeconds * 1000);

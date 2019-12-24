@@ -221,9 +221,13 @@ public class CacheSystemController {
                 nonExistingDataRanges.addAll(bitmapController.getNonExistingDataRange(sensorBean.getFlBitmapBean(), granularity, timeRange));
             }
             if (nonExistingDataRanges.size() > 0) {
-                flCacheController.updateCache(sensorBean, granularity, nonExistingDataRanges);
-                bitmapController.updateBitmap(sensorBean.getFlBitmapBean(), granularity, nonExistingDataRanges);
-                bitmapController.updateBitmap(sensorBean.getSlBitmapBean(), granularity, nonExistingDataRanges);
+                try {
+                    flCacheController.updateCache(sensorBean, granularity, nonExistingDataRanges);
+                    bitmapController.updateBitmap(sensorBean.getFlBitmapBean(), granularity, nonExistingDataRanges);
+                    bitmapController.updateBitmap(sensorBean.getSlBitmapBean(), granularity, nonExistingDataRanges);
+                }catch (Exception e){
+                    LogManager.logError("[" + this.getClass() + "][" + query + "]" + e.getMessage());
+                }
             } else {
                 LogManager.logInfo("[Complete data exists of this query]");
             }
@@ -265,8 +269,9 @@ public class CacheSystemController {
 
     private void clearCacheAndBitmapTables() {
         for (FLCacheTableBean flc : cb.flCacheTableBeanMap.values()) {
+            Connection connection=null;
             try {
-                Connection connection = DriverManager.getConnection(databaseController.getURL(flc.getDatabaseBean()), databaseController.getProperties(flc.getDatabaseBean()));
+                connection = DriverManager.getConnection(databaseController.getURL(flc.getDatabaseBean()), databaseController.getProperties(flc.getDatabaseBean()));
                 String tableName = flc.getTableName() + "_" + cb.bitmapTableNameSuffix;
                 PreparedStatement preparedStatement = connection.prepareStatement(String.format("truncate %s", tableName));
                 preparedStatement.executeUpdate();
@@ -280,11 +285,20 @@ public class CacheSystemController {
                 connection.close();
             } catch (SQLException e) {
                 LogManager.logError("[" + this.getClass() + "][clearCacheAndBitmapTables]" + flc + e.getMessage());
+            }finally{
+                if(connection!=null) {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        LogManager.logError("[" + this.getClass() + "][connection closing exception]" + e.getMessage());
+                    }
+                }
             }
         }
         for (SLCacheTableBean slc : cb.slCacheTableBeanMap.values()) {
+            Connection connection=null;
             try {
-                Connection connection = DriverManager.getConnection(databaseController.getURL(slc.getDatabaseBean()), databaseController.getProperties(slc.getDatabaseBean()));
+                connection = DriverManager.getConnection(databaseController.getURL(slc.getDatabaseBean()), databaseController.getProperties(slc.getDatabaseBean()));
                 String tableName = slc.getTableName();
                 PreparedStatement preparedStatement = connection.prepareStatement(String.format("truncate %s", tableName));
                 preparedStatement.executeUpdate();
@@ -293,6 +307,14 @@ public class CacheSystemController {
                 connection.close();
             } catch (SQLException e) {
                 LogManager.logError("[" + this.getClass() + "][clearCacheAndBitmapTables]" + slc + e.getMessage());
+            }finally{
+                if(connection!=null) {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        LogManager.logError("[" + this.getClass() + "][connection closing exception]" + e.getMessage());
+                    }
+                }
             }
         }
     }

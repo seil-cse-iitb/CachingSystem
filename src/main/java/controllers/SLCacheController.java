@@ -22,8 +22,9 @@ public class SLCacheController {
         LogManager.logPriorityInfo("intersectionTimeRange:" + intersectionTimeRangeVsSLCacheTables);
         for (Pair<TimeRangeBean, SLCacheTableBean> slCacheTableBeanPair : intersectionTimeRangeVsSLCacheTables) {
             SLCacheTableBean slCacheTableBean = slCacheTableBeanPair.getRight();
+            Connection connection=null;
             try {
-                Connection connection = DriverManager.getConnection(c.databaseController.getURL(slCacheTableBean.getDatabaseBean()), c.databaseController.getProperties(slCacheTableBean.getDatabaseBean()));
+                connection = DriverManager.getConnection(c.databaseController.getURL(slCacheTableBean.getDatabaseBean()), c.databaseController.getProperties(slCacheTableBean.getDatabaseBean()));
                 PreparedStatement ps = connection.prepareStatement("DELETE from `"+slCacheTableBean.getTableName()+"` where `"+slCacheTableBean.getSensorIdColumnName()+"`=? and `granularityId`=? and `"+slCacheTableBean.getTsColumnName()+"`>=? and `"+slCacheTableBean.getTsColumnName()+"`<?");
                 ps.setString(1,sensorBean.getSensorId());
                 ps.setString(2,specifiedGranularity.getGranularityId());
@@ -34,6 +35,14 @@ public class SLCacheController {
                 connection.close();
             } catch (SQLException e) {
                 LogManager.logError("[" + this.getClass() + "][cleanCache][" + slCacheTableBean.getDatabaseBean().getDatabaseId() + "]" + e.getMessage());
+            }finally{
+                if(connection!=null) {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        LogManager.logError("[" + this.getClass() + "][connection closing exception]" + e.getMessage());
+                    }
+                }
             }
         }
     }

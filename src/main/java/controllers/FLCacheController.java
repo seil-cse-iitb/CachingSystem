@@ -233,8 +233,9 @@ public class FLCacheController {
 
     public void cleanCache(SensorBean sensorBean, GranularityBean specifiedGranularity, TimeRangeBean timeRange) {
         FLCacheTableBean flCacheTableBean = sensorBean.getFlCacheTableBean();
+        Connection connection=null;
         try {
-            Connection connection = DriverManager.getConnection(c.databaseController.getURL(flCacheTableBean.getDatabaseBean()), c.databaseController.getProperties(flCacheTableBean.getDatabaseBean()));
+            connection = DriverManager.getConnection(c.databaseController.getURL(flCacheTableBean.getDatabaseBean()), c.databaseController.getProperties(flCacheTableBean.getDatabaseBean()));
             PreparedStatement ps = connection.prepareStatement("DELETE from `"+flCacheTableBean.getTableName()+"` where `"+flCacheTableBean.getSensorIdColumnName()+"`=? and `granularityId`=? and `"+flCacheTableBean.getTsColumnName()+"`>=? and `"+flCacheTableBean.getTsColumnName()+"`<?");
             ps.setString(1,sensorBean.getSensorId());
             ps.setString(2,specifiedGranularity.getGranularityId());
@@ -245,6 +246,14 @@ public class FLCacheController {
             connection.close();
         } catch (SQLException e) {
             LogManager.logError("[" + this.getClass() + "][cleanCache][" + sensorBean + "]["+specifiedGranularity+"]" + e.getMessage());
-        }
+        }finally{
+                            if(connection!=null) {
+                                try {
+                                    connection.close();
+                                } catch (SQLException e) {
+                                    LogManager.logError("[" + this.getClass() + "][connection closing exception]" + e.getMessage());
+                                }
+                            }
+                        }
     }
 }

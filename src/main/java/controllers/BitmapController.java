@@ -18,8 +18,9 @@ public class BitmapController {
 
     public void initBitmapsIfNotExists(SensorBean sensorBean) {
         FLCacheTableBean flc = sensorBean.getFlCacheTableBean();
+        Connection connection=null;
         try {
-            Connection connection = DriverManager.getConnection(c.databaseController.getURL(flc.getDatabaseBean()), c.databaseController.getProperties(flc.getDatabaseBean()));
+            connection = DriverManager.getConnection(c.databaseController.getURL(flc.getDatabaseBean()), c.databaseController.getProperties(flc.getDatabaseBean()));
             String tableName = flc.getTableName() + "_" + c.cb.bitmapTableNameSuffix;
             int i = connection.prepareStatement(String.format("create table if not exists %s (%s varchar(200), granularity varchar(50), bitmapStartTime long, bitmapEndTime long, fl_bitset mediumblob, sl_bitset mediumblob, CONSTRAINT PK_%s PRIMARY KEY (%s,granularity))", tableName, flc.getSensorIdColumnName(), tableName, flc.getSensorIdColumnName()))
                     .executeUpdate();
@@ -44,6 +45,14 @@ public class BitmapController {
             connection.close();
         } catch (SQLException e) {
             LogManager.logError("[" + this.getClass() + "][initBitmapsIfNotExists]" + e.getMessage());
+        }finally{
+            if(connection!=null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    LogManager.logError("[" + this.getClass() + "][connection closing exception]" + e.getMessage());
+                }
+            }
         }
     }
 
@@ -57,8 +66,9 @@ public class BitmapController {
     public void loadBitmaps(SensorBean sensorBean) {
         LogManager.logInfo("[Loading bitmap for sensor: " + sensorBean.getSensorId() + "]");
         FLCacheTableBean flc = sensorBean.getFlCacheTableBean();
+        Connection connection=null;
         try {
-            Connection connection = DriverManager.getConnection(c.databaseController.getURL(flc.getDatabaseBean()), c.databaseController.getProperties(flc.getDatabaseBean()));
+            connection = DriverManager.getConnection(c.databaseController.getURL(flc.getDatabaseBean()), c.databaseController.getProperties(flc.getDatabaseBean()));
             String tableName = flc.getTableName() + "_" + c.cb.bitmapTableNameSuffix;
             PreparedStatement preparedStatement = connection.prepareStatement(String.format("select %s,granularity,fl_bitset,sl_bitset from %s where %s='%s'", flc.getSensorIdColumnName(), tableName, flc.getSensorIdColumnName(), sensorBean.getSensorId()));
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -76,6 +86,14 @@ public class BitmapController {
             connection.close();
         } catch (SQLException e) {
             LogManager.logError("[" + this.getClass() + "][LoadBitmap]" + e.getMessage());
+        }finally{
+            if(connection!=null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    LogManager.logError("[" + this.getClass() + "][connection closing exception]" + e.getMessage());
+                }
+            }
         }
     }
 
@@ -104,8 +122,9 @@ public class BitmapController {
     public void saveBitmaps(SensorBean sensorBean) {
         if (sensorBean.getFlBitmapBean().isDirty || sensorBean.getSlBitmapBean().isDirty) {
             FLCacheTableBean flc = sensorBean.getFlCacheTableBean();
+            Connection connection=null;
             try {
-                Connection connection = DriverManager.getConnection(c.databaseController.getURL(flc.getDatabaseBean()), c.databaseController.getProperties(flc.getDatabaseBean()));
+                connection = DriverManager.getConnection(c.databaseController.getURL(flc.getDatabaseBean()), c.databaseController.getProperties(flc.getDatabaseBean()));
                 String tableName = flc.getTableName() + "_" + c.cb.bitmapTableNameSuffix;
                 int i = connection.prepareStatement(String.format("create table if not exists %s (%s varchar(200), granularity varchar(50), bitmapStartTime long, bitmapEndTime long, fl_bitset mediumblob, sl_bitset mediumblob, CONSTRAINT PK_%s PRIMARY KEY (%s,granularity))", tableName, flc.getSensorIdColumnName(), tableName, flc.getSensorIdColumnName()))
                         .executeUpdate();
@@ -131,6 +150,14 @@ public class BitmapController {
                 connection.close();
             } catch (SQLException e) {
                 LogManager.logError("[" + this.getClass() + "][SaveBitmap]" + e.getMessage());
+            }finally{
+                if(connection!=null) {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        LogManager.logError("[" + this.getClass() + "][connection closing exception]" + e.getMessage());
+                    }
+                }
             }
         }
     }
