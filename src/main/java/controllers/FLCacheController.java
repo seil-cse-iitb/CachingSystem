@@ -8,6 +8,10 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SaveMode;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -227,4 +231,19 @@ public class FLCacheController {
         LogManager.logInfo("--[From SLCache][Aggregation Finished]: " + currentTimeRangeBean);
     }
 
+    public void cleanCache(SensorBean sensorBean, TimeRangeBean timeRange) {
+        FLCacheTableBean flCacheTableBean = sensorBean.getFlCacheTableBean();
+        try {
+            Connection connection = DriverManager.getConnection(c.databaseController.getURL(flCacheTableBean.getDatabaseBean()), c.databaseController.getProperties(flCacheTableBean.getDatabaseBean()));
+            PreparedStatement ps = connection.prepareStatement("DELETE from `"+flCacheTableBean.getTableName()+"` where `"+flCacheTableBean.getSensorIdColumnName()+"`=? and `"+flCacheTableBean.getTsColumnName()+"`>=? and `"+flCacheTableBean.getTsColumnName()+"`<?");
+            ps.setString(1,sensorBean.getSensorId());
+            ps.setLong(2,timeRange.startTime);
+            ps.setLong(3,timeRange.endTime);
+            ps.executeLargeUpdate();
+            ps.close();
+            connection.close();
+        } catch (SQLException e) {
+            LogManager.logError("[" + this.getClass() + "][cleanCache][" + flCacheTableBean.getDatabaseBean().getDatabaseId() + "]" + e.getMessage());
+        }
+    }
 }

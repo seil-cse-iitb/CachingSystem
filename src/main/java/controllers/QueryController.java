@@ -2,6 +2,7 @@ package controllers;
 
 import beans.*;
 import managers.LogManager;
+import managers.Utils;
 import org.apache.spark.sql.catalyst.analysis.UnresolvedRelation;
 import org.apache.spark.sql.catalyst.expressions.*;
 import org.apache.spark.sql.catalyst.plans.logical.Filter;
@@ -18,8 +19,10 @@ import scala.collection.Seq;
 import scala.runtime.AbstractFunction1;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import static java.lang.Math.min;
 import static java.util.Collections.sort;
 
 // var parsePlan = new SparkSqlParser(new SQLConf()).parsePlan("SELECT JSON_OBJECT('meta_data','specified_granularity','specified_granularity','%') as meta_data FROM power WHERE sensor_id ='$power_sensor' and granularity like '$granularity' order by time_sec");
@@ -111,6 +114,7 @@ public class QueryController {
         ArrayList<TimeRangeBean> timeRanges = new ArrayList<>();
         ArrayList<Long> startTimes = new ArrayList<>();
         ArrayList<Long> endTimes = new ArrayList<>();
+        Date currentDate =new Date();
         for (Expression tsExpr : tsConditions) {
             Long startTime = 0L, endTime = (long) Math.round(System.currentTimeMillis() / 1000);
             if (tsExpr instanceof GreaterThanOrEqual) {
@@ -137,7 +141,7 @@ public class QueryController {
         while (!startTimes.isEmpty() && !endTimes.isEmpty()) {
 
             if (startTimes.get(0) < endTimes.get(0)) {
-                timeRanges.add(new TimeRangeBean(startTimes.get(0), endTimes.get(0)));
+                timeRanges.add(new TimeRangeBean(startTimes.get(0), min(Utils.getTimeInSec(currentDate),endTimes.get(0))));
                 startTimes.remove(0);
                 endTimes.remove(0);
             } else {
@@ -216,5 +220,9 @@ public class QueryController {
          }
         }
         return null;
+    }
+
+    public boolean isCleanCacheQuery(QueryBean query) {
+        return query.getMetaData().get("meta_data").equalsIgnoreCase("clean_cache");
     }
 }

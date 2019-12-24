@@ -210,4 +210,14 @@ public class BitmapController {
     }
 
 
+    public void cleanBitmap(BitmapBean bitmapBean, TimeRangeBean timeRange) {
+        LogManager.logInfo("[Cleaning Bitmap]["+timeRange+"]");
+        for(GranularityBean granularityBean:bitmapBean.granularityBeanBitSetMap.keySet()){
+            BitSet bitSet = bitmapBean.granularityBeanBitSetMap.get(granularityBean);
+            int start = (int) ((timeRange.startTime - getTimeInSec(bitmapBean.startTime)) / granularityBean.getGranularityInTermsOfSeconds());
+            int end = (int) (timeRange.endTime - getTimeInSec(bitmapBean.startTime)) / granularityBean.getGranularityInTermsOfSeconds();
+            bitSet.clear(start, end);
+        }
+        bitmapBean.isDirty = true;
+    }
 }

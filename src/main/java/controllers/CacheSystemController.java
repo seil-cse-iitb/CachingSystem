@@ -190,6 +190,10 @@ public class CacheSystemController {
 
     public void handleQuery(QueryBean query) {
         LogManager.logInfo("[Handling Query][" + query.getQueryStr() + "]");
+        if(queryController.isCleanCacheQuery(query)){
+            cleanCache(query);
+            return;
+        }
         Map<SensorBean, List<TimeRangeBean>> sensorTimeRangeMap = query.getSensorTimeRangeListMap();
         for (SensorBean sensorBean : sensorTimeRangeMap.keySet()) {
             List<TimeRangeBean> timeRanges = sensorTimeRangeMap.get(sensorBean);
@@ -213,7 +217,7 @@ public class CacheSystemController {
             ArrayList<TimeRangeBean> nonExistingDataRanges = new ArrayList<>();
             for (TimeRangeBean timeRange : timeRanges) {
                 timeRange.startTime = timeRange.startTime - (timeRange.startTime % granularity.getGranularityInTermsOfSeconds());
-                timeRange.endTime = timeRange.endTime + (granularity.getGranularityInTermsOfSeconds() - (timeRange.endTime % granularity.getGranularityInTermsOfSeconds()));
+                timeRange.endTime = timeRange.endTime - (timeRange.endTime % granularity.getGranularityInTermsOfSeconds());
                 nonExistingDataRanges.addAll(bitmapController.getNonExistingDataRange(sensorBean.getFlBitmapBean(), granularity, timeRange));
             }
             if (nonExistingDataRanges.size() > 0) {
@@ -229,6 +233,22 @@ public class CacheSystemController {
                 this.granularityExecutingMap.put(granularity, count - 1);
             }
         }
+    }
+
+    private void cleanCache(QueryBean query) {
+        LogManager.logPriorityInfo("[Cleaning Cache]"+ Collections.singletonList(query.getSensorTimeRangeListMap()));
+        Map<SensorBean, List<TimeRangeBean>> sensorTimeRangeMap = query.getSensorTimeRangeListMap();
+        for (SensorBean sensorBean : sensorTimeRangeMap.keySet()) {
+            List<TimeRangeBean> timeRanges = sensorTimeRangeMap.get(sensorBean);
+            for(TimeRangeBean timeRange:timeRanges){
+                flCacheController.cleanCache(sensorBean,timeRange);
+                slCacheController.cleanCache(sensorBean,timeRange);
+                bitmapController.cleanBitmap(sensorBean.getFlBitmapBean(),timeRange);
+                bitmapController.cleanBitmap(sensorBean.getSlBitmapBean(),timeRange);
+            }
+            bitmapController.saveBitmaps(sensorBean);
+        }
+
     }
 
 
