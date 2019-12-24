@@ -190,7 +190,7 @@ public class CacheSystemController {
 
     public void handleQuery(QueryBean query) {
         LogManager.logInfo("[Handling Query][" + query.getQueryStr() + "]");
-        if(queryController.isCleanCacheQuery(query)){
+        if (queryController.isCleanCacheQuery(query)) {
             cleanCache(query);
             return;
         }
@@ -198,10 +198,10 @@ public class CacheSystemController {
         for (SensorBean sensorBean : sensorTimeRangeMap.keySet()) {
             List<TimeRangeBean> timeRanges = sensorTimeRangeMap.get(sensorBean);
             GranularityBean granularity;
-            if(queryController.isGranularitySpecified(query)){
+            if (queryController.isGranularitySpecified(query)) {
                 granularity = queryController.getSpecifiedGranularity(query);
-                granularity = granularity==null?granularityController.eligibleGranularity(timeRanges):granularity;
-            }else {
+                granularity = granularity == null ? granularityController.eligibleGranularity(timeRanges) : granularity;
+            } else {
                 granularity = granularityController.eligibleGranularity(timeRanges);
             }
             String poolName = "queryExecutingThreads(" + granularity.getGranularityId() + ")";
@@ -228,7 +228,7 @@ public class CacheSystemController {
                 LogManager.logInfo("[Complete data exists of this query]");
             }
             bitmapController.saveBitmaps(sensorBean);
-            synchronized (this.granularityExecutingMap){
+            synchronized (this.granularityExecutingMap) {
                 Integer count = this.granularityExecutingMap.get(granularity);
                 this.granularityExecutingMap.put(granularity, count - 1);
             }
@@ -236,15 +236,26 @@ public class CacheSystemController {
     }
 
     private void cleanCache(QueryBean query) {
-        LogManager.logPriorityInfo("[Cleaning Cache]"+ Collections.singletonList(query.getSensorTimeRangeListMap()));
+        LogManager.logPriorityInfo("[Cleaning Cache]" + Collections.singletonList(query.getSensorTimeRangeListMap()));
+        GranularityBean specifiedGranularity = queryController.getSpecifiedGranularity(query);
         Map<SensorBean, List<TimeRangeBean>> sensorTimeRangeMap = query.getSensorTimeRangeListMap();
         for (SensorBean sensorBean : sensorTimeRangeMap.keySet()) {
             List<TimeRangeBean> timeRanges = sensorTimeRangeMap.get(sensorBean);
-            for(TimeRangeBean timeRange:timeRanges){
-                flCacheController.cleanCache(sensorBean,timeRange);
-                slCacheController.cleanCache(sensorBean,timeRange);
-                bitmapController.cleanBitmap(sensorBean.getFlBitmapBean(),timeRange);
-                bitmapController.cleanBitmap(sensorBean.getSlBitmapBean(),timeRange);
+            for (TimeRangeBean timeRange : timeRanges) {
+                if (specifiedGranularity != null) {
+                    flCacheController.cleanCache(sensorBean, specifiedGranularity, timeRange);
+                    slCacheController.cleanCache(sensorBean, specifiedGranularity, timeRange);
+                    bitmapController.cleanBitmap(sensorBean.getFlBitmapBean(), specifiedGranularity, timeRange);
+                    bitmapController.cleanBitmap(sensorBean.getSlBitmapBean(), specifiedGranularity, timeRange);
+                } else {
+                    for (GranularityBean granularityBean :
+                            cb.granularityBeanMap.values()) {
+                        flCacheController.cleanCache(sensorBean, granularityBean, timeRange);
+                        slCacheController.cleanCache(sensorBean, granularityBean, timeRange);
+                        bitmapController.cleanBitmap(sensorBean.getFlBitmapBean(), granularityBean, timeRange);
+                        bitmapController.cleanBitmap(sensorBean.getSlBitmapBean(), granularityBean, timeRange);
+                    }
+                }
             }
             bitmapController.saveBitmaps(sensorBean);
         }
