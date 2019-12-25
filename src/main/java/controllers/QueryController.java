@@ -140,7 +140,7 @@ public class QueryController {
         sort(endTimes);
         while (!startTimes.isEmpty() && !endTimes.isEmpty()) {
 
-            if (startTimes.get(0) < endTimes.get(0)) {
+            if (startTimes.get(0) < min(Utils.getTimeInSec(currentDate),endTimes.get(0))) {
                 timeRanges.add(new TimeRangeBean(startTimes.get(0), min(Utils.getTimeInSec(currentDate),endTimes.get(0))));
                 startTimes.remove(0);
                 endTimes.remove(0);
