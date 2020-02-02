@@ -34,6 +34,8 @@ public class FLCacheController {
         LogManager.logInfo("[Updating cache databases][NonExistingDataRanges:" + nonExistingDataRanges + "]");
         FLCacheTableBean flCacheTableBean = sensorBean.getFlCacheTableBean();
         for (TimeRangeBean timeRangeBean : nonExistingDataRanges) {
+            c.sparkSession.sparkContext().setLocalProperty("callSite.short", "Sensor:" + sensorBean + " @ " + requiredGranularity.getGranularityId() + " granularity");
+            c.sparkSession.sparkContext().setLocalProperty("callSite.long", "[Sensor:" + sensorBean + "][Granularity:" + requiredGranularity.getGranularityId() + "][" + timeRangeBean + "]");
             List<Pair<TimeRangeBean, SLCacheTableBean>> intersectionTimeRangeVsSLCacheTables = c.sensorController.getIntersectionTimeRangeVsSLCacheTables(sensorBean, timeRangeBean);
             LogManager.logPriorityInfo("intersectionTimeRange:" + intersectionTimeRangeVsSLCacheTables);
             for (Pair<TimeRangeBean, SLCacheTableBean> slCacheTableBeanPair : intersectionTimeRangeVsSLCacheTables) {
@@ -61,27 +63,29 @@ public class FLCacheController {
                 for (TimeRangeBean currentTimeRangeBean : slNonExistingTimeRangeBeans) {
                     if (sensorBean instanceof SensorGroupBean) {
                         updateSLAndFLCacheFromSourceSensorGroup((SensorGroupBean) sensorBean, requiredGranularity, slCacheTableBeanPair.getRight(), flCacheTableBean, currentTimeRangeBean);
-                    }else {
+                    } else {
                         updateSLAndFLCacheFromSource(sensorBean, requiredGranularity, slCacheTableBeanPair.getRight(), flCacheTableBean, currentTimeRangeBean);
                     }
                 }
             }
         }
+        c.sparkSession.sparkContext().setLocalProperty("callSite.short", null);
+        c.sparkSession.sparkContext().setLocalProperty("callSite.long", null);
     }
 
     private void updateSLAndFLCacheFromSourceSensorGroup(SensorGroupBean sensorGroupBean, GranularityBean requiredGranularity, SLCacheTableBean sl, FLCacheTableBean fl, TimeRangeBean timeRangeBean) {
         LogManager.logPriorityInfo("[updateSLAndFLCacheFromSourceSensorGroup]");
         GranularityBean smallerGranularity = c.granularityController.nextSmallerGranularity(requiredGranularity);
         Dataset<Row> sourceDataset = null;
-        SourceTableBean commonSourceTableSchema=null;
+        SourceTableBean commonSourceTableSchema = null;
         for (SensorBean sensorBean : sensorGroupBean.getSensorList()) {
             LogManager.logPriorityInfo(sensorBean.toString());
             List<Pair<TimeRangeBean, SourceTableBean>> intersectionTimeRangeVsSourceTables = c.sensorController.getIntersectionTimeRangeVsSourceTables(sensorBean, timeRangeBean);
             for (Pair<TimeRangeBean, SourceTableBean> sourceTableBeanPair : intersectionTimeRangeVsSourceTables) {
                 TimeRangeBean currentTimeRangeBean = sourceTableBeanPair.getLeft();
                 SourceTableBean sourceTable = sourceTableBeanPair.getRight();
-                if(commonSourceTableSchema==null)commonSourceTableSchema=sourceTable;
-                assert commonSourceTableSchema.getSchemaType()==sourceTable.getSchemaType();
+                if (commonSourceTableSchema == null) commonSourceTableSchema = sourceTable;
+                assert commonSourceTableSchema.getSchemaType() == sourceTable.getSchemaType();
                 LogManager.logInfo("--[From SourceTable][Aggregation Started]: " + currentTimeRangeBean);
                 currentTimeRangeBean.startTime = currentTimeRangeBean.startTime - (currentTimeRangeBean.startTime % requiredGranularity.getGranularityInTermsOfSeconds());
                 currentTimeRangeBean.endTime = currentTimeRangeBean.endTime + (requiredGranularity.getGranularityInTermsOfSeconds() - (currentTimeRangeBean.endTime % requiredGranularity.getGranularityInTermsOfSeconds()));
@@ -95,8 +99,8 @@ public class FLCacheController {
                     Column tsFilter = col(sourceTable.getTsColumnName()).$greater$eq(startTime).and(col(sourceTable.getTsColumnName()).$less(endTime));
                     sensorDataset = sensorDataset.filter(col(sourceTable.getSensorIdColumnName()).equalTo(sensorBean.getSensorId())
                             .and(tsFilter));
-                    sensorDataset = sensorDataset.withColumn(commonSourceTableSchema.getTsColumnName(),col(sourceTable.getTsColumnName()))
-                            .withColumn(commonSourceTableSchema.getSensorIdColumnName(),col(sourceTable.getSensorIdColumnName()));
+                    sensorDataset = sensorDataset.withColumn(commonSourceTableSchema.getTsColumnName(), col(sourceTable.getTsColumnName()))
+                            .withColumn(commonSourceTableSchema.getSensorIdColumnName(), col(sourceTable.getSensorIdColumnName()));
                     if (sourceDataset == null) sourceDataset = sensorDataset;
                     else sourceDataset = sourceDataset.union(sensorDataset);
                     i = endTime;
@@ -105,11 +109,12 @@ public class FLCacheController {
             }
         }
 
-        sourceDataset= c.aggregationManager.aggregateSpatially(sourceDataset,sensorGroupBean,commonSourceTableSchema);
+        sourceDataset = c.aggregationManager.aggregateSpatially(sourceDataset, sensorGroupBean, commonSourceTableSchema);
 
         //update fl and sl after aggregation
         Dataset<Row> aggregatedRequiredGranularity;
         //if smaller granularity available fetch smaller granularity and required granularity from source if not then fetch required granularity only
+        assert commonSourceTableSchema != null;
         if (smallerGranularity != null) {
             Dataset<Row> aggregatedSmallerGranularity = c.aggregationManager.aggregateFromSource(sourceDataset, smallerGranularity, commonSourceTableSchema);
             aggregatedSmallerGranularity = aggregatedSmallerGranularity
@@ -237,27 +242,27 @@ public class FLCacheController {
 
     public void cleanCache(SensorBean sensorBean, GranularityBean specifiedGranularity, TimeRangeBean timeRange) {
         FLCacheTableBean flCacheTableBean = sensorBean.getFlCacheTableBean();
-        Connection connection=null;
+        Connection connection = null;
         try {
             connection = DriverManager.getConnection(c.databaseController.getURL(flCacheTableBean.getDatabaseBean()), c.databaseController.getProperties(flCacheTableBean.getDatabaseBean()));
-            PreparedStatement ps = connection.prepareStatement("DELETE from `"+flCacheTableBean.getTableName()+"` where `"+flCacheTableBean.getSensorIdColumnName()+"`=? and `granularityId`=? and `"+flCacheTableBean.getTsColumnName()+"`>=? and `"+flCacheTableBean.getTsColumnName()+"`<?");
-            ps.setString(1,sensorBean.getSensorId());
-            ps.setString(2,specifiedGranularity.getGranularityId());
-            ps.setLong(3,timeRange.startTime);
-            ps.setLong(4,timeRange.endTime);
+            PreparedStatement ps = connection.prepareStatement("DELETE from `" + flCacheTableBean.getTableName() + "` where `" + flCacheTableBean.getSensorIdColumnName() + "`=? and `granularityId`=? and `" + flCacheTableBean.getTsColumnName() + "`>=? and `" + flCacheTableBean.getTsColumnName() + "`<?");
+            ps.setString(1, sensorBean.getSensorId());
+            ps.setString(2, specifiedGranularity.getGranularityId());
+            ps.setLong(3, timeRange.startTime);
+            ps.setLong(4, timeRange.endTime);
             ps.executeLargeUpdate();
             ps.close();
             connection.close();
         } catch (SQLException e) {
-            LogManager.logError("[" + this.getClass() + "][cleanCache][" + sensorBean + "]["+specifiedGranularity+"]" + e.getMessage());
-        }finally{
-                            if(connection!=null) {
-                                try {
-                                    connection.close();
-                                } catch (SQLException e) {
-                                    LogManager.logError("[" + this.getClass() + "][connection closing exception]" + e.getMessage());
-                                }
-                            }
-                        }
+            LogManager.logError("[" + this.getClass() + "][cleanCache][" + sensorBean + "][" + specifiedGranularity + "]" + e.getMessage());
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    LogManager.logError("[" + this.getClass() + "][connection closing exception]" + e.getMessage());
+                }
+            }
+        }
     }
 }

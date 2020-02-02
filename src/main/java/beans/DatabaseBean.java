@@ -61,4 +61,15 @@ public class DatabaseBean {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @Override
+    public String toString() {
+        return "Database{" +
+                "databaseId='" + databaseId + '\'' +
+                ", databaseType='" + databaseType + '\'' +
+                ", databaseName='" + databaseName + '\'' +
+                ", host='" + host + '\'' +
+                ", port='" + port + '\'' +
+                '}';
+    }
 }

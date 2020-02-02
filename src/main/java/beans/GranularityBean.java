@@ -78,7 +78,7 @@ public class GranularityBean implements Serializable {
 
     @Override
     public String toString() {
-        return "GranularityBean{" +
+        return "Granularity{" +
                 "granularityId='" + granularityId + '\'' +
                 ", windowDuration='" + windowDuration + '\'' +
                 ", granularityInTermsOfSeconds=" + granularityInTermsOfSeconds +

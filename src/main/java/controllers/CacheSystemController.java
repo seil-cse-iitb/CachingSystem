@@ -4,6 +4,10 @@ import beans.*;
 import managers.AggregationManager;
 import managers.LogManager;
 import managers.QueryLogManager;
+import org.apache.spark.SparkException;
+import org.apache.spark.scheduler.DAGScheduler;
+import org.apache.spark.scheduler.JobCancelled;
+import org.apache.spark.scheduler.StageCancelled;
 import org.apache.spark.sql.SparkSession;
 
 import java.sql.Connection;
@@ -226,6 +230,13 @@ public class CacheSystemController {
                     bitmapController.updateBitmap(sensorBean.getFlBitmapBean(), granularity, nonExistingDataRanges);
                     bitmapController.updateBitmap(sensorBean.getSlBitmapBean(), granularity, nonExistingDataRanges);
                 }catch (Exception e){
+                    LogManager.logPriorityInfo("[Cleaning Cache][Sensor:"+sensorBean + "][Granularity:"+granularity.getGranularityId()+"]["+nonExistingDataRanges+"]");
+                    for (TimeRangeBean timeRange:nonExistingDataRanges) {
+                        flCacheController.cleanCache(sensorBean, granularity, timeRange);
+                        slCacheController.cleanCache(sensorBean, granularity, timeRange);
+                        bitmapController.cleanBitmap(sensorBean.getFlBitmapBean(), granularity, timeRange);
+                        bitmapController.cleanBitmap(sensorBean.getSlBitmapBean(), granularity, timeRange);
+                    }
                     LogManager.logError("[" + this.getClass() + "][" + query + "]" + e.getMessage());
                 }
             } else {

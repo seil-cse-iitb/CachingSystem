@@ -83,17 +83,23 @@ public class QueryLogManager {
             List<QueryBean> totalQueries = new ArrayList<>();
             this.cachedResultTill.setTime(System.currentTimeMillis());
             for (DatabaseBean db : databaseBeans) {
+                c.sparkSession.sparkContext().setLocalProperty("callSite.short", "Fetching new queries after "+lastFetchTime);
+                c.sparkSession.sparkContext().setLocalProperty("callSite.long", "Fetching new queries after "+lastFetchTime+" till "+this.cachedResultTill);
                 Dataset<Row> generalLog = c.sparkSession.read().jdbc(c.databaseController.getURL(db, "mysql"), "general_log", c.databaseController.getProperties(db));
                 Dataset<QueryBean> queryBeanDataset = generalLog
                         .where("event_time < '" + this.cachedResultTill + "' and event_time >= '" + lastFetchTime + "' and command_type='Query' and argument like '%meta_data%' and argument not like '%ignore_cache%' and argument not like '%general_log%'")
                         .select(col("user_host"), col("event_time"), regexp_replace(regexp_replace(col("argument").cast("String"), "\n", " "), "  *", " ").as("argument"))
                         .map(QueryBean.queryMapFunction, Encoders.bean(QueryBean.class))
                         .persist();
-                queryBeanDataset.write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(queryDumpDB, queryDumpDB.getDatabaseName()), "query_log", c.databaseController.getProperties(queryDumpDB));
                 List<QueryBean> queries = queryBeanDataset.collectAsList();
+                c.sparkSession.sparkContext().setLocalProperty("callSite.short", "Storing new queries after "+lastFetchTime);
+                c.sparkSession.sparkContext().setLocalProperty("callSite.long", "Storing new queries after "+lastFetchTime+" till "+this.cachedResultTill +" into "+queryDumpDB);
+                queryBeanDataset.write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(queryDumpDB, queryDumpDB.getDatabaseName()), "query_log", c.databaseController.getProperties(queryDumpDB));
                 queryBeanDataset.unpersist();
                 totalQueries.addAll(c.queryController.preprocessQueries(queries));
             }
+            c.sparkSession.sparkContext().setLocalProperty("callSite.short",null);
+            c.sparkSession.sparkContext().setLocalProperty("callSite.long", null);
             LogManager.logInfo("[New queries fetched][cachedResultTill:" + new Date(cachedResultTill.getTime()) + "][queries_count:" + totalQueries.size() + "]");
             return totalQueries;
         } catch (Exception e) {
