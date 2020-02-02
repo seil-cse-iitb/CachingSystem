@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 10.129.149.22
--- Generation Time: Jan 26, 2020 at 10:44 AM
+-- Generation Time: Feb 02, 2020 at 02:30 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.14
 
@@ -31,23 +31,50 @@ USE `seil_sl_cache1_prod`;
 --
 
 CREATE TABLE IF NOT EXISTS `power_cache` (
-  `sensor_id` varchar(20) DEFAULT NULL,
-  `sum_power` double DEFAULT NULL,
-  `sum_voltage` double DEFAULT NULL,
-  `sum_current` double DEFAULT NULL,
+  `sensor_id` varchar(50) DEFAULT NULL,
+  `sum_voltage_1` double DEFAULT NULL,
+  `min_voltage_1` double DEFAULT NULL,
+  `max_voltage_1` double DEFAULT NULL,
+  `sum_voltage_2` double DEFAULT NULL,
+  `min_voltage_2` double DEFAULT NULL,
+  `max_voltage_2` double DEFAULT NULL,
+  `sum_voltage_3` double DEFAULT NULL,
+  `min_voltage_3` double DEFAULT NULL,
+  `max_voltage_3` double DEFAULT NULL,
+  `sum_current_1` double DEFAULT NULL,
+  `min_current_1` double DEFAULT NULL,
+  `max_current_1` double DEFAULT NULL,
+  `sum_current_2` double DEFAULT NULL,
+  `min_current_2` double DEFAULT NULL,
+  `max_current_2` double DEFAULT NULL,
+  `sum_current_3` double DEFAULT NULL,
+  `min_current_3` double DEFAULT NULL,
+  `max_current_3` double DEFAULT NULL,
+  `sum_power_1` double DEFAULT NULL,
+  `min_power_1` double DEFAULT NULL,
+  `max_power_1` double DEFAULT NULL,
+  `sum_power_2` double DEFAULT NULL,
+  `min_power_2` double DEFAULT NULL,
+  `max_power_2` double DEFAULT NULL,
+  `sum_power_3` double DEFAULT NULL,
+  `min_power_3` double DEFAULT NULL,
+  `max_power_3` double DEFAULT NULL,
+  `sum_power_factor_1` double DEFAULT NULL,
+  `min_power_factor_1` double DEFAULT NULL,
+  `max_power_factor_1` double DEFAULT NULL,
+  `sum_power_factor_2` double DEFAULT NULL,
+  `min_power_factor_2` double DEFAULT NULL,
+  `max_power_factor_2` double DEFAULT NULL,
+  `sum_power_factor_3` double DEFAULT NULL,
+  `min_power_factor_3` double DEFAULT NULL,
+  `max_power_factor_3` double DEFAULT NULL,
   `energy_consumed` double DEFAULT NULL,
-  `min_power` double DEFAULT NULL,
-  `max_power` double DEFAULT NULL,
-  `min_voltage` double DEFAULT NULL,
-  `max_voltage` double DEFAULT NULL,
-  `min_current` double DEFAULT NULL,
-  `max_current` double DEFAULT NULL,
   `slot_energy_consumed` double DEFAULT NULL,
   `count_agg_rows` bigint(20) NOT NULL,
   `ts` double DEFAULT NULL,
-  `granularityId` varchar(100) NOT NULL,
-  KEY `granularityId` (`granularityId`,`sensor_id`,`ts`),
-  KEY `sensor_id` (`sensor_id`,`ts`)
+  `granularityId` varchar(50) NOT NULL,
+  KEY `sensor_id` (`sensor_id`,`ts`),
+  KEY `granularityId` (`granularityId`,`sensor_id`,`ts`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 COMMIT;
 

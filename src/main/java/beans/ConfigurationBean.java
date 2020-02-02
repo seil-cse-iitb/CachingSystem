@@ -28,6 +28,7 @@ public class ConfigurationBean {
     public String bitmapTableNameSuffix = "bitmap";
     public Date bitmapStartTime;
     public Date bitmapEndTime;
+    public String schedulerAllocationFile = null;
     JsonObject jsonObject;
 
     public int getQueryLogCleanupDurationInSeconds() {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 10.129.149.22
--- Generation Time: Jan 26, 2020 at 10:43 AM
+-- Generation Time: Feb 02, 2020 at 02:30 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.14
 
@@ -53,9 +53,11 @@ CREATE TABLE IF NOT EXISTS `power` (
 ,`max_power` double
 ,`min_power` double
 ,`granularity` varchar(50)
-,`sensor_id` varchar(20)
+,`sensor_id` varchar(50)
 ,`ts` double
 ,`power` double
+,`voltage` double
+,`current` double
 ,`agg_row_count` bigint(20)
 );
 
@@ -66,23 +68,50 @@ CREATE TABLE IF NOT EXISTS `power` (
 --
 
 CREATE TABLE IF NOT EXISTS `power_cache` (
-  `sensor_id` varchar(20) DEFAULT NULL,
-  `sum_power` double DEFAULT NULL,
-  `sum_voltage` double DEFAULT NULL,
-  `sum_current` double DEFAULT NULL,
+  `sensor_id` varchar(50) DEFAULT NULL,
+  `sum_voltage_1` double DEFAULT NULL,
+  `min_voltage_1` double DEFAULT NULL,
+  `max_voltage_1` double DEFAULT NULL,
+  `sum_voltage_2` double DEFAULT NULL,
+  `min_voltage_2` double DEFAULT NULL,
+  `max_voltage_2` double DEFAULT NULL,
+  `sum_voltage_3` double DEFAULT NULL,
+  `min_voltage_3` double DEFAULT NULL,
+  `max_voltage_3` double DEFAULT NULL,
+  `sum_current_1` double DEFAULT NULL,
+  `min_current_1` double DEFAULT NULL,
+  `max_current_1` double DEFAULT NULL,
+  `sum_current_2` double DEFAULT NULL,
+  `min_current_2` double DEFAULT NULL,
+  `max_current_2` double DEFAULT NULL,
+  `sum_current_3` double DEFAULT NULL,
+  `min_current_3` double DEFAULT NULL,
+  `max_current_3` double DEFAULT NULL,
+  `sum_power_1` double DEFAULT NULL,
+  `min_power_1` double DEFAULT NULL,
+  `max_power_1` double DEFAULT NULL,
+  `sum_power_2` double DEFAULT NULL,
+  `min_power_2` double DEFAULT NULL,
+  `max_power_2` double DEFAULT NULL,
+  `sum_power_3` double DEFAULT NULL,
+  `min_power_3` double DEFAULT NULL,
+  `max_power_3` double DEFAULT NULL,
+  `sum_power_factor_1` double DEFAULT NULL,
+  `min_power_factor_1` double DEFAULT NULL,
+  `max_power_factor_1` double DEFAULT NULL,
+  `sum_power_factor_2` double DEFAULT NULL,
+  `min_power_factor_2` double DEFAULT NULL,
+  `max_power_factor_2` double DEFAULT NULL,
+  `sum_power_factor_3` double DEFAULT NULL,
+  `min_power_factor_3` double DEFAULT NULL,
+  `max_power_factor_3` double DEFAULT NULL,
   `energy_consumed` double DEFAULT NULL,
-  `min_power` double DEFAULT NULL,
-  `max_power` double DEFAULT NULL,
-  `min_voltage` double DEFAULT NULL,
-  `max_voltage` double DEFAULT NULL,
-  `min_current` double DEFAULT NULL,
-  `max_current` double DEFAULT NULL,
   `slot_energy_consumed` double DEFAULT NULL,
   `count_agg_rows` bigint(20) NOT NULL,
   `ts` double DEFAULT NULL,
   `granularityId` varchar(50) NOT NULL,
-  KEY `sensor_id` (`granularityId`,`sensor_id`,`ts`) USING BTREE,
-  KEY `sensor_id_2` (`sensor_id`,`ts`)
+  KEY `sensor_id` (`sensor_id`,`ts`),
+  KEY `granularityId` (`granularityId`,`sensor_id`,`ts`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -140,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `temperature_humidity_cache_bitmap` (
 --
 DROP TABLE IF EXISTS `power`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `power`  AS  select `power_cache`.`energy_consumed` AS `energy_consumed`,`power_cache`.`slot_energy_consumed` AS `slot_energy_consumed`,`power_cache`.`max_power` AS `max_power`,`power_cache`.`min_power` AS `min_power`,`power_cache`.`granularityId` AS `granularity`,`power_cache`.`sensor_id` AS `sensor_id`,`power_cache`.`ts` AS `ts`,(`power_cache`.`sum_power` / `power_cache`.`count_agg_rows`) AS `power`,`power_cache`.`count_agg_rows` AS `agg_row_count` from `power_cache` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `power`  AS  select `power_cache`.`energy_consumed` AS `energy_consumed`,`power_cache`.`slot_energy_consumed` AS `slot_energy_consumed`,`power_cache`.`max_power_1` AS `max_power`,`power_cache`.`min_power_1` AS `min_power`,`power_cache`.`granularityId` AS `granularity`,`power_cache`.`sensor_id` AS `sensor_id`,`power_cache`.`ts` AS `ts`,(`power_cache`.`sum_power_1` / `power_cache`.`count_agg_rows`) AS `power`,(`power_cache`.`sum_voltage_1` / `power_cache`.`count_agg_rows`) AS `voltage`,(`power_cache`.`sum_current_1` / `power_cache`.`count_agg_rows`) AS `current`,`power_cache`.`count_agg_rows` AS `agg_row_count` from `power_cache` ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

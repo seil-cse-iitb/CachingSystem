@@ -27,8 +27,6 @@ public class QueryBean implements Serializable {
     private String queryStr;
     private String userHost;
     private final Map<String,String> metaData=new HashMap<>();
-    //    private final ArrayList<Expression> tsConditions = new ArrayList<>();
-    //    private final ArrayList<Expression> sensorIdConditions = new ArrayList<>();
 
     public Map<SensorBean, List<TimeRangeBean>> getSensorTimeRangeListMap() {
         return sensorTimeRangeListMap;
