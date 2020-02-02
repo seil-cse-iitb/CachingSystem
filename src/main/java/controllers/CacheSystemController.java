@@ -63,6 +63,7 @@ public class CacheSystemController {
 
         this.addAllSensorsToExecutingList();
         this.addAllGranularityToExecutingMap();
+        LogManager.logPriorityInfo("[CachingSystem is ready to work!!!]");
         while (true) {
             //poll query log and get new queries
             List<QueryBean> newQueries = queryLogManager.getNewQueries();
@@ -238,6 +239,13 @@ public class CacheSystemController {
                         bitmapController.cleanBitmap(sensorBean.getSlBitmapBean(), granularity, timeRange);
                     }
                     LogManager.logError("[" + this.getClass() + "][" + query + "]" + e.getMessage());
+                    LogManager.logPriorityInfo("[Cleaning Cache][Sensor:"+sensorBean + "][Granularity:"+granularity.getGranularityId()+"]["+nonExistingDataRanges+"]");
+                    for (TimeRangeBean timeRange:nonExistingDataRanges) {
+                        flCacheController.cleanCache(sensorBean, granularity, timeRange);
+                        slCacheController.cleanCache(sensorBean, granularity, timeRange);
+                        bitmapController.cleanBitmap(sensorBean.getFlBitmapBean(), granularity, timeRange);
+                        bitmapController.cleanBitmap(sensorBean.getSlBitmapBean(), granularity, timeRange);
+                    }
                 }
             } else {
                 LogManager.logInfo("[Complete data exists of this query]");
