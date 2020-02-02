@@ -32,6 +32,7 @@ public class ConfigurationController {
             cb.queryPollingDurationInSeconds = jsonObject.get("queryPollingDurationInSeconds").getAsInt();
             cb.reportReceiverEmail = jsonObject.get("reportReceiverEmail").getAsString();
             cb.logFilePath = jsonObject.get("logFilePath").getAsString();
+            cb.schedulerAllocationFile = jsonObject.get("schedulerAllocationFile").getAsString();
             cb.appName = jsonObject.get("appName").getAsString();
             cb.reportError = jsonObject.get("reportError").getAsBoolean();
             cb.debug = jsonObject.get("debug").getAsBoolean();

@@ -24,6 +24,7 @@ public class Main {
         SparkConf conf = new SparkConf().setAppName(cb.appName);
         conf.setIfMissing("spark.master", "local[4]");
         conf.set("spark.scheduler.mode", "FAIR");
+        conf.set("spark.scheduler.allocation.file", cb.schedulerAllocationFile);
         SparkSession sparkSession = SparkSession.builder().config(conf).getOrCreate();
         CacheSystemController cacheSystemController = new CacheSystemController(sparkSession,cb);
         cacheSystemController.start();

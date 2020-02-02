@@ -5,6 +5,7 @@
   "queryPollingDurationInSeconds": "5",
   "reportReceiverEmail": "sapantanted99@gmail.com",
   "logFilePath": "cachesystem.log",
+  "schedulerAllocationFile": "./conf/fairscheduler.xml",
   "appName": "CacheSystem",
   "reportError": "False",
   "debug": "True",
@@ -125,6 +126,15 @@
       "databaseType": "SQL",
       "databaseName": "fl_cache",
       "host": "10.129.6.68",
+      "port": "3306",
+      "username": "root",
+      "password": "MySQL@seil"
+    },
+    {
+      "databaseId": "query_dump",
+      "databaseType": "SQL",
+      "databaseName": "visualization_query",
+      "host": "10.129.149.24",
       "port": "3306",
       "username": "root",
       "password": "MySQL@seil"

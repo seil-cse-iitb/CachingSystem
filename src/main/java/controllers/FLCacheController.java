@@ -18,6 +18,10 @@ import java.util.List;
 
 import static org.apache.spark.sql.functions.col;
 
+// Specifying create table column data types on write
+//jdbcDF.write
+//        .option("createTableColumnTypes", "name CHAR(64), comments VARCHAR(1024)")
+//        .jdbc("jdbc:postgresql:dbserver", "schema.tablename", connectionProperties)
 
 public class FLCacheController {
     private CacheSystemController c;
