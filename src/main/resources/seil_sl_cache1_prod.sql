@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 10.129.149.22
--- Generation Time: Feb 02, 2020 at 02:30 PM
+-- Generation Time: Feb 05, 2020 at 05:53 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.14
 
@@ -70,6 +70,48 @@ CREATE TABLE IF NOT EXISTS `power_cache` (
   `max_power_factor_3` double DEFAULT NULL,
   `energy_consumed` double DEFAULT NULL,
   `slot_energy_consumed` double DEFAULT NULL,
+  `count_agg_rows` bigint(20) NOT NULL,
+  `ts` double DEFAULT NULL,
+  `granularityId` varchar(50) NOT NULL,
+  KEY `sensor_id` (`sensor_id`,`ts`),
+  KEY `granularityId` (`granularityId`,`sensor_id`,`ts`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `temperature_cache`
+--
+
+CREATE TABLE IF NOT EXISTS `temperature_cache` (
+  `sensor_id` varchar(50) DEFAULT NULL,
+  `sum_temperature` double DEFAULT NULL,
+  `min_temperature` double DEFAULT NULL,
+  `max_temperature` double DEFAULT NULL,
+  `count_agg_rows` bigint(20) NOT NULL,
+  `ts` double DEFAULT NULL,
+  `granularityId` varchar(50) NOT NULL,
+  KEY `sensor_id` (`sensor_id`,`ts`),
+  KEY `granularityId` (`granularityId`,`sensor_id`,`ts`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `temperature_humidity_cache`
+--
+
+CREATE TABLE IF NOT EXISTS `temperature_humidity_cache` (
+  `sensor_id` varchar(50) DEFAULT NULL,
+  `sum_temperature` double DEFAULT NULL,
+  `min_temperature` double DEFAULT NULL,
+  `max_temperature` double DEFAULT NULL,
+  `sum_humidity` double DEFAULT NULL,
+  `min_humidity` double DEFAULT NULL,
+  `max_humidity` double DEFAULT NULL,
+  `sum_battery_voltage` double DEFAULT NULL,
+  `min_battery_voltage` double DEFAULT NULL,
+  `max_battery_voltage` double DEFAULT NULL,
   `count_agg_rows` bigint(20) NOT NULL,
   `ts` double DEFAULT NULL,
   `granularityId` varchar(50) NOT NULL,

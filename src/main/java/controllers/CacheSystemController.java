@@ -33,7 +33,7 @@ public class CacheSystemController {
     public AggregationManager aggregationManager;
     public QueryLogManager queryLogManager;
     public LogManager logManager;
-    public Map<SensorBean, List<TimeRangeBean>> executingList = new HashMap<>();
+    public final Map<SensorBean, List<TimeRangeBean>> executingList = new HashMap<>();
 
     public CacheSystemController(SparkSession sparkSession, ConfigurationBean cb) {
         this.sparkSession = sparkSession;

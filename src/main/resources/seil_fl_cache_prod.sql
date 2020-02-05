@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 10.129.149.22
--- Generation Time: Feb 02, 2020 at 02:30 PM
+-- Generation Time: Feb 05, 2020 at 05:52 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.14
 
@@ -133,6 +133,39 @@ CREATE TABLE IF NOT EXISTS `power_cache_bitmap` (
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `temperature`
+-- (See below for the actual view)
+--
+CREATE TABLE IF NOT EXISTS `temperature` (
+`granularity` varchar(50)
+,`sensor_id` varchar(50)
+,`ts` double
+,`temperature` double
+,`min_temperature` double
+,`max_temperature` double
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `temperature_cache`
+--
+
+CREATE TABLE IF NOT EXISTS `temperature_cache` (
+  `sensor_id` varchar(50) DEFAULT NULL,
+  `sum_temperature` double DEFAULT NULL,
+  `min_temperature` double DEFAULT NULL,
+  `max_temperature` double DEFAULT NULL,
+  `count_agg_rows` bigint(20) NOT NULL,
+  `ts` double DEFAULT NULL,
+  `granularityId` varchar(50) NOT NULL,
+  KEY `sensor_id` (`sensor_id`,`ts`),
+  KEY `sensor_id_2` (`granularityId`,`sensor_id`,`ts`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `temperature_cache_bitmap`
 --
 
@@ -144,6 +177,51 @@ CREATE TABLE IF NOT EXISTS `temperature_cache_bitmap` (
   `fl_bitset` mediumblob,
   `sl_bitset` mediumblob,
   PRIMARY KEY (`sensor_id`,`granularity`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `temperature_humidity`
+-- (See below for the actual view)
+--
+CREATE TABLE IF NOT EXISTS `temperature_humidity` (
+`granularity` varchar(50)
+,`sensor_id` varchar(50)
+,`ts` double
+,`temperature` double
+,`humidity` double
+,`sum_battery_voltage/ count_agg_rows` double
+,`min_temperature` double
+,`max_temperature` double
+,`min_humidity` double
+,`max_humidity` double
+,`min_battery_voltage` double
+,`max_battery_voltage` double
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `temperature_humidity_cache`
+--
+
+CREATE TABLE IF NOT EXISTS `temperature_humidity_cache` (
+  `sensor_id` varchar(50) DEFAULT NULL,
+  `sum_temperature` double DEFAULT NULL,
+  `min_temperature` double DEFAULT NULL,
+  `max_temperature` double DEFAULT NULL,
+  `sum_humidity` double DEFAULT NULL,
+  `min_humidity` double DEFAULT NULL,
+  `max_humidity` double DEFAULT NULL,
+  `sum_battery_voltage` double DEFAULT NULL,
+  `min_battery_voltage` double DEFAULT NULL,
+  `max_battery_voltage` double DEFAULT NULL,
+  `count_agg_rows` bigint(20) NOT NULL,
+  `ts` double DEFAULT NULL,
+  `granularityId` varchar(50) NOT NULL,
+  KEY `sensor_id` (`sensor_id`,`ts`),
+  KEY `granularityId` (`granularityId`,`sensor_id`,`ts`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -170,6 +248,24 @@ CREATE TABLE IF NOT EXISTS `temperature_humidity_cache_bitmap` (
 DROP TABLE IF EXISTS `power`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `power`  AS  select `power_cache`.`energy_consumed` AS `energy_consumed`,`power_cache`.`slot_energy_consumed` AS `slot_energy_consumed`,`power_cache`.`max_power_1` AS `max_power`,`power_cache`.`min_power_1` AS `min_power`,`power_cache`.`granularityId` AS `granularity`,`power_cache`.`sensor_id` AS `sensor_id`,`power_cache`.`ts` AS `ts`,(`power_cache`.`sum_power_1` / `power_cache`.`count_agg_rows`) AS `power`,(`power_cache`.`sum_voltage_1` / `power_cache`.`count_agg_rows`) AS `voltage`,(`power_cache`.`sum_current_1` / `power_cache`.`count_agg_rows`) AS `current`,`power_cache`.`count_agg_rows` AS `agg_row_count` from `power_cache` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `temperature`
+--
+DROP TABLE IF EXISTS `temperature`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `temperature`  AS  select `temperature_cache`.`granularityId` AS `granularity`,`temperature_cache`.`sensor_id` AS `sensor_id`,`temperature_cache`.`ts` AS `ts`,(`temperature_cache`.`sum_temperature` / `temperature_cache`.`count_agg_rows`) AS `temperature`,`temperature_cache`.`min_temperature` AS `min_temperature`,`temperature_cache`.`max_temperature` AS `max_temperature` from `temperature_cache` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `temperature_humidity`
+--
+DROP TABLE IF EXISTS `temperature_humidity`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `temperature_humidity`  AS  select `temperature_humidity_cache`.`granularityId` AS `granularity`,`temperature_humidity_cache`.`sensor_id` AS `sensor_id`,`temperature_humidity_cache`.`ts` AS `ts`,(`temperature_humidity_cache`.`sum_temperature` / `temperature_humidity_cache`.`count_agg_rows`) AS `temperature`,(`temperature_humidity_cache`.`sum_humidity` / `temperature_humidity_cache`.`count_agg_rows`) AS `humidity`,(`temperature_humidity_cache`.`sum_battery_voltage` / `temperature_humidity_cache`.`count_agg_rows`) AS `sum_battery_voltage/ count_agg_rows`,`temperature_humidity_cache`.`min_temperature` AS `min_temperature`,`temperature_humidity_cache`.`max_temperature` AS `max_temperature`,`temperature_humidity_cache`.`min_humidity` AS `min_humidity`,`temperature_humidity_cache`.`max_humidity` AS `max_humidity`,`temperature_humidity_cache`.`min_battery_voltage` AS `min_battery_voltage`,`temperature_humidity_cache`.`max_battery_voltage` AS `max_battery_voltage` from `temperature_humidity_cache` ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
