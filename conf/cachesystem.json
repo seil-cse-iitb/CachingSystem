@@ -229,7 +229,7 @@
     {
       "tableId": "source_temperature",
       "databaseId": "source_mysql",
-      "tableName": "temp_3_view",
+      "tableName": "temp_5_view",
       "schemaType": "temperature",
       "sensorIdColumnName": "sensor_id",
       "tsColumnName": "ts"
