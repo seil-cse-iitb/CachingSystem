@@ -4,10 +4,6 @@ import beans.*;
 import managers.AggregationManager;
 import managers.LogManager;
 import managers.QueryLogManager;
-import org.apache.spark.SparkException;
-import org.apache.spark.scheduler.DAGScheduler;
-import org.apache.spark.scheduler.JobCancelled;
-import org.apache.spark.scheduler.StageCancelled;
 import org.apache.spark.sql.SparkSession;
 
 import java.sql.Connection;
@@ -60,6 +56,8 @@ public class CacheSystemController {
         granularityController.saveGranularities(sparkSession);
         //initialize bitmaps if not exists
         bitmapController.initBitmapsIfNotExists();
+        //initialize execution_list table in fl cache
+        flCacheController.initExecutionListIfNotExists();
 
         this.addAllSensorsToExecutingList();
         this.addAllGranularityToExecutingMap();
@@ -80,6 +78,7 @@ public class CacheSystemController {
                     for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
                         List<TimeRangeBean> timeRangeBeans = queryBean.getSensorTimeRangeListMap().get(sensorBean);
                         assert executingList.get(sensorBean).addAll(timeRangeBeans);
+
                         LogManager.logPriorityInfo("added all timeranges");
                     }
                 }
@@ -227,17 +226,11 @@ public class CacheSystemController {
             }
             if (nonExistingDataRanges.size() > 0) {
                 try {
+                    flCacheController.addToExecutionList(sensorBean,granularity,nonExistingDataRanges);
                     flCacheController.updateCache(sensorBean, granularity, nonExistingDataRanges);
                     bitmapController.updateBitmap(sensorBean.getFlBitmapBean(), granularity, nonExistingDataRanges);
                     bitmapController.updateBitmap(sensorBean.getSlBitmapBean(), granularity, nonExistingDataRanges);
                 }catch (Exception e){
-                    LogManager.logPriorityInfo("[Cleaning Cache][Sensor:"+sensorBean + "][Granularity:"+granularity.getGranularityId()+"]["+nonExistingDataRanges+"]");
-                    for (TimeRangeBean timeRange:nonExistingDataRanges) {
-                        flCacheController.cleanCache(sensorBean, granularity, timeRange);
-                        slCacheController.cleanCache(sensorBean, granularity, timeRange);
-                        bitmapController.cleanBitmap(sensorBean.getFlBitmapBean(), granularity, timeRange);
-                        bitmapController.cleanBitmap(sensorBean.getSlBitmapBean(), granularity, timeRange);
-                    }
                     LogManager.logError("[" + this.getClass() + "][" + query + "]" + e.getMessage());
                     LogManager.logPriorityInfo("[Cleaning Cache][Sensor:"+sensorBean + "][Granularity:"+granularity.getGranularityId()+"]["+nonExistingDataRanges+"]");
                     for (TimeRangeBean timeRange:nonExistingDataRanges) {
@@ -246,6 +239,8 @@ public class CacheSystemController {
                         bitmapController.cleanBitmap(sensorBean.getFlBitmapBean(), granularity, timeRange);
                         bitmapController.cleanBitmap(sensorBean.getSlBitmapBean(), granularity, timeRange);
                     }
+                }finally {
+                    flCacheController.removeFromExecutionList(sensorBean,granularity,nonExistingDataRanges);
                 }
             } else {
                 LogManager.logInfo("[Complete data exists of this query]");

@@ -265,4 +265,90 @@ public class FLCacheController {
             }
         }
     }
+
+    public void addToExecutionList(SensorBean sensorBean, GranularityBean granularity, ArrayList<TimeRangeBean> nonExistingDataRanges) {
+        FLCacheTableBean flc = sensorBean.getFlCacheTableBean();
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(c.databaseController.getURL(flc.getDatabaseBean()), c.databaseController.getProperties(flc.getDatabaseBean()));
+            String tableName = "execution_list";
+            for (TimeRangeBean timeRange : nonExistingDataRanges) {
+                PreparedStatement preparedStatement = connection.prepareStatement(String.format("insert into %s (%s,granularity,granularity_in_seconds,startTime,endTime) values(?,?,?,?,?)", tableName, flc.getSensorIdColumnName()));
+                preparedStatement.setString(1, sensorBean.getSensorId());
+                preparedStatement.setString(2, granularity.getGranularityId());
+                preparedStatement.setLong(3, granularity.getGranularityInTermsOfSeconds());
+                preparedStatement.setLong(4, timeRange.startTime);
+                preparedStatement.setLong(5, timeRange.endTime);
+                int i = preparedStatement.executeUpdate();
+                assert i == 1;
+                preparedStatement.close();
+            }
+            connection.close();
+        } catch (SQLException e) {
+            LogManager.logError("[" + this.getClass() + "][addToExecutionList]" + e.getMessage());
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    LogManager.logError("[" + this.getClass() + "][connection closing exception]" + e.getMessage());
+                }
+            }
+        }
+    }
+
+    public void removeFromExecutionList(SensorBean sensorBean, GranularityBean granularity, ArrayList<TimeRangeBean> nonExistingDataRanges) {
+        FLCacheTableBean flc = sensorBean.getFlCacheTableBean();
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(c.databaseController.getURL(flc.getDatabaseBean()), c.databaseController.getProperties(flc.getDatabaseBean()));
+            String tableName = "execution_list";
+            for (TimeRangeBean timeRange : nonExistingDataRanges) {
+                PreparedStatement preparedStatement = connection.prepareStatement(String.format("delete from %s where %s=? and granularity=? and startTime=? and endTime=?", tableName, flc.getSensorIdColumnName()));
+                preparedStatement.setString(1, sensorBean.getSensorId());
+                preparedStatement.setString(2, granularity.getGranularityId());
+                preparedStatement.setLong(3, timeRange.startTime);
+                preparedStatement.setLong(4, timeRange.endTime);
+                int i = preparedStatement.executeUpdate();
+                assert i == 1;
+                preparedStatement.close();
+            }
+            connection.close();
+        } catch (SQLException e) {
+            LogManager.logError("[" + this.getClass() + "][removeFromExecutionList]" + e.getMessage());
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    LogManager.logError("[" + this.getClass() + "][connection closing exception]" + e.getMessage());
+                }
+            }
+        }
+    }
+
+    public void initExecutionListIfNotExists() {
+        LogManager.logPriorityInfo("[Initializing execution_list table for all sensors in their FL Cache]");
+        for (FLCacheTableBean flc : c.cb.flCacheTableBeanMap.values()) {
+            Connection connection = null;
+            try {
+                connection = DriverManager.getConnection(c.databaseController.getURL(flc.getDatabaseBean()), c.databaseController.getProperties(flc.getDatabaseBean()));
+                String tableName = "execution_list";
+                int i = connection.prepareStatement(String.format("create table if not exists %s (%s varchar(200), granularity varchar(50),granularity_in_seconds int, startTime long, endTime long)", tableName, flc.getSensorIdColumnName()))
+                        .executeUpdate();
+                assert i == 0;
+                connection.close();
+            } catch (SQLException e) {
+                LogManager.logError("[" + this.getClass() + "][initExecutionListIfNotExists]" + e.getMessage());
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        LogManager.logError("[" + this.getClass() + "][connection closing exception]" + e.getMessage());
+                    }
+                }
+            }
+        }
+    }
 }
