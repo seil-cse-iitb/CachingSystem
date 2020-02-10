@@ -77,8 +77,7 @@ public class CacheSystemController {
                     //add sensor timeranges in a global list
                     for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
                         List<TimeRangeBean> timeRangeBeans = queryBean.getSensorTimeRangeListMap().get(sensorBean);
-                        assert executingList.get(sensorBean).addAll(timeRangeBeans);
-
+                        assert timeRangeBeans.isEmpty() || executingList.get(sensorBean).addAll(timeRangeBeans);
                         LogManager.logPriorityInfo("added all timeranges");
                     }
                 }
@@ -93,7 +92,7 @@ public class CacheSystemController {
                         synchronized (executingList) {
                             for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
                                 List<TimeRangeBean> timeRangeBeans = queryBean.getSensorTimeRangeListMap().get(sensorBean);
-                                assert executingList.get(sensorBean).removeAll(timeRangeBeans);
+                                assert timeRangeBeans.isEmpty() || executingList.get(sensorBean).removeAll(timeRangeBeans);
                                 LogManager.logPriorityInfo("removed all timeranges");
                             }
                         }
