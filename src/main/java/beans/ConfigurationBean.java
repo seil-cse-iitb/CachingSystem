@@ -29,6 +29,7 @@ public class ConfigurationBean {
     public Date bitmapStartTime;
     public Date bitmapEndTime;
     public String schedulerAllocationFile = null;
+    public boolean storeVisualizationQueries=false;
     JsonObject jsonObject;
 
     public int getQueryLogCleanupDurationInSeconds() {

@@ -92,9 +92,11 @@ public class QueryLogManager {
                         .map(QueryBean.queryMapFunction, Encoders.bean(QueryBean.class))
                         .persist();
                 List<QueryBean> queries = queryBeanDataset.collectAsList();
-                c.sparkSession.sparkContext().setLocalProperty("callSite.short", "Storing new queries after "+lastFetchTime);
-                c.sparkSession.sparkContext().setLocalProperty("callSite.long", "Storing new queries after "+lastFetchTime+" till "+this.cachedResultTill +" into "+queryDumpDB);
-                queryBeanDataset.write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(queryDumpDB, queryDumpDB.getDatabaseName()), "query_log", c.databaseController.getProperties(queryDumpDB));
+                if(c.cb.storeVisualizationQueries) {
+                    c.sparkSession.sparkContext().setLocalProperty("callSite.short", "Storing new queries after " + lastFetchTime);
+                    c.sparkSession.sparkContext().setLocalProperty("callSite.long", "Storing new queries after " + lastFetchTime + " till " + this.cachedResultTill + " into " + queryDumpDB);
+                    queryBeanDataset.write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(queryDumpDB, queryDumpDB.getDatabaseName()), "query_log", c.databaseController.getProperties(queryDumpDB));
+                }
                 queryBeanDataset.unpersist();
                 totalQueries.addAll(c.queryController.preprocessQueries(queries));
             }

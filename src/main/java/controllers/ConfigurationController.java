@@ -37,6 +37,7 @@ public class ConfigurationController {
             cb.reportError = jsonObject.get("reportError").getAsBoolean();
             cb.debug = jsonObject.get("debug").getAsBoolean();
             cb.stopSparkLogging = jsonObject.get("stopSparkLogging").getAsBoolean();
+            cb.storeVisualizationQueries = jsonObject.get("storeVisualizationQueries").getAsBoolean();
 
 
             //Granularity properties
