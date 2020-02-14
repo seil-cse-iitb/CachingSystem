@@ -84,20 +84,23 @@ public class AggregationManager {
             Column power_factor_1 = sum(abs(col("sum_power_factor_1"))).as("sum_power_factor_1");
             Column min_power_factor_1 = min(abs(col("min_power_factor_1"))).as("min_power_factor_1");
             Column max_power_factor_1 = max(abs(col("max_power_factor_1"))).as("max_power_factor_1");
+            Column non_zero_min_power_factor_1 = min(abs(col("non_zero_min_power_factor_1"))).as("non_zero_min_power_factor_1");
 
             Column power_factor_2 = sum(abs(col("sum_power_factor_2"))).as("sum_power_factor_2");
             Column min_power_factor_2 = min(abs(col("min_power_factor_2"))).as("min_power_factor_2");
             Column max_power_factor_2 = max(abs(col("max_power_factor_2"))).as("max_power_factor_2");
+            Column non_zero_min_power_factor_2 = min(abs(col("non_zero_min_power_factor_2"))).as("non_zero_min_power_factor_2");
 
             Column power_factor_3 = sum(abs(col("sum_power_factor_3"))).as("sum_power_factor_3");
             Column min_power_factor_3 = min(abs(col("min_power_factor_3"))).as("min_power_factor_3");
             Column max_power_factor_3 = max(abs(col("max_power_factor_3"))).as("max_power_factor_3");
+            Column non_zero_min_power_factor_3 = min(abs(col("non_zero_min_power_factor_3"))).as("non_zero_min_power_factor_3");
 
             Column energyConsumed = last("energy_consumed").as("energy_consumed");
             Column slotEnergyConsumed = sum("slot_energy_consumed").as("slot_energy_consumed");
 
             agg = rows.groupBy(window, col(sl.getSensorIdColumnName()))
-                    .agg(voltage_1, min_voltage_1, max_voltage_1, voltage_2, min_voltage_2, max_voltage_2, voltage_3, min_voltage_3, max_voltage_3, current_1, min_current_1, max_current_1, current_2, min_current_2, max_current_2, current_3, min_current_3, max_current_3, power_1, min_power_1, max_power_1, power_2, min_power_2, max_power_2, power_3, min_power_3, max_power_3, power_factor_1, min_power_factor_1, max_power_factor_1, power_factor_2, min_power_factor_2, max_power_factor_2, power_factor_3, min_power_factor_3, max_power_factor_3, energyConsumed, slotEnergyConsumed, count_agg_rows);
+                    .agg(voltage_1, min_voltage_1, max_voltage_1, voltage_2, min_voltage_2, max_voltage_2, voltage_3, min_voltage_3, max_voltage_3, current_1, min_current_1, max_current_1, current_2, min_current_2, max_current_2, current_3, min_current_3, max_current_3, power_1, min_power_1, max_power_1, power_2, min_power_2, max_power_2, power_3, min_power_3, max_power_3, power_factor_1, min_power_factor_1, max_power_factor_1, non_zero_min_power_factor_1, power_factor_2, min_power_factor_2, max_power_factor_2, non_zero_min_power_factor_2, power_factor_3, min_power_factor_3, max_power_factor_3, non_zero_min_power_factor_3, energyConsumed, slotEnergyConsumed, count_agg_rows);
         } else if (sl.getSchemaType() == ConfigurationBean.SchemaType.temperature) {
             Column temperature = sum("sum_temperature").as("sum_temperature");
             Column min_temperature = min("min_temperature").as("min_temperature");
