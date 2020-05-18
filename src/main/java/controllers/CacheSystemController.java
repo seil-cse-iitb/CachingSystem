@@ -12,6 +12,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
 
+/*
+* MQTTBean
+* SensorLiveStreamBean
+*
+* */
+
 public class CacheSystemController {
     //TODO cache replacements policy
 
@@ -62,6 +68,8 @@ public class CacheSystemController {
         this.addAllSensorsToExecutingList();
         this.addAllGranularityToExecutingMap();
         LogManager.logPriorityInfo("[CachingSystem is ready to work!!!]");
+
+        if(true)return;
         while (true) {
             //poll query log and get new queries
             List<QueryBean> newQueries = queryLogManager.getNewQueries();

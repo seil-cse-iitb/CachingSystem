@@ -28,5 +28,6 @@ public class Main {
         SparkSession sparkSession = SparkSession.builder().config(conf).getOrCreate();
         CacheSystemController cacheSystemController = new CacheSystemController(sparkSession,cb);
         cacheSystemController.start();
+        LogManager.logDebugInfo("CacheSystem closing");
     }
 }

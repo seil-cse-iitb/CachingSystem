@@ -1,0 +1,79 @@
+
+
+spark-shell --packages org.apache.bahir:spark-streaming-mqtt_2.11:2.3.1,org.apache.bahir:spark-sql-streaming-mqtt_2.11:2.3.1, org.apache.spark:spark-streaming-mqtt_2.11:2.3.1, org.apache.spark:spark-streaming_2.11:2.3.1, org.eclipse.paho:org.eclipse.pahp.client.mqttv3:1.2.0
+
+
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.Column;
+import org.apache.commons.lang.StringUtils;
+import org.apache.spark.api.java.function.MapFunction;
+import org.apache.spark.sql.catalyst.encoders.ExpressionEncoder;
+import org.apache.spark.sql.streaming.OutputMode;
+import org.apache.spark.sql.streaming.StreamingQuery;
+import org.apache.spark.sql.streaming.StreamingQueryException;
+import org.apache.spark.sql.streaming.Trigger;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.StructType;
+import scala.concurrent.duration.Duration;
+import org.apache.spark.sql.functions.split;
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import org.apache.spark.streaming.scheduler.StreamingListener;
+import org.apache.spark.streaming.scheduler.StreamingListenerBatchCompleted;
+import org.apache.spark.streaming.scheduler.StreamingListenerOutputOperationCompleted;
+import org.apache.spark.streaming.StreamingContext._ ;
+import org.apache.spark.sql.streaming.StreamingQueryListener;
+var streamingListener = new StreamingListener{
+    
+    override def onBatchCompleted( batchCompleted: StreamingListenerBatchCompleted) {
+        System.out.println(batchCompleted.batchInfo.productPrefix);
+    }
+    
+    override def onOutputOperationCompleted( outputOperationCompleted: StreamingListenerOutputOperationCompleted) {
+        System.out.println(outputOperationCompleted.outputOperationInfo.description);
+    }
+};
+var  streamingQueryListener = new StreamingQueryListener{
+    override def onQueryStarted(event:StreamingQueryListener.QueryStartedEvent): Unit={
+            System.out.println(event.name);
+    }
+    override def onQueryProgress(event:StreamingQueryListener.QueryProgressEvent): Unit={
+            System.out.println(event.progress.batchId);
+            System.out.println(event.progress.name);
+            System.out.println(event.progress.prettyJson);
+            System.out.println(sc.getConf.get("spark.executor.id"));
+    }
+    override def onQueryTerminated(event:StreamingQueryListener.QueryTerminatedEvent): Unit={
+            System.out.println(event);
+    }
+}
+spark.streams.addListener(streamingQueryListener);
+
+var mqtt_url = "tcp://10.129.149.9:1883";
+var qos = 0;
+var topic = "test1,test2,test3";//"data/kresit/sch/2,data/kresit/sch/37,data/kresit/sch/3,data/kresit/sch/4";
+var clientId = "spark-streaming-test";
+var dataset = spark.readStream.format("org.apache.bahir.sql.streaming.mqtt.MQTTStreamSourceProvider").option("topic", topic).option("localStorage", "/tmp/spark-mqtt/").option("QoS", qos).option("clientId", clientId).load(mqtt_url);
+var timestamp = col("timestamp").cast(DataTypes.TimestampType);//.as("eventTime");
+var expre = expr("count(*) as count");
+// var aggArray = new Array[Column](1);
+dataset = dataset.withColumn("payload",col("payload").cast(DataTypes.StringType));                
+dataset = dataset.withColumn("payload_array" , split(col("payload"),","))
+dataset = dataset.withColumn("ts" , col("payload_array").getItem(1).cast(DataTypes.LongType).cast(DataTypes.TimestampType))
+dataset = dataset.drop(col("payload_array")).drop(col("payload"));
+//dataset.writeStream.format("console").option("numRows",100).option("truncate",false).start();
+dataset.withWatermark("ts", "1 second").groupBy(col("topic"), window(col("ts"), "1 minutes")).agg(expre).writeStream.trigger(Trigger.ProcessingTime(Duration.apply("10 sec"))).outputMode(OutputMode.Update()).format("console").option("numRows",100).option("truncate",false).start();
+// .withColumnRenamed("timestamp","eventTime")
+
+
+//check how will it update different windows aggregation
+
+
+//every sensor will have its own dataset i.e. stream.
+//every stream will have same watermark but might have different latest timestamp recorded.
+//for query progress function: 

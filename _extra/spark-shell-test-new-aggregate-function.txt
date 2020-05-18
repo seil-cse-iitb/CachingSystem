@@ -1,0 +1,21 @@
+import java.util.Properties
+import org.apache.spark.sql.types.DataTypes;
+var url = "jdbc:mysql://mysql.seil.cse.iitb.ac.in:3306/seil_sensor_data?useSSL=false&autoReconnect=true&failOverReadOnly=false&maxReconnects=10&useUnicode=true&characterEncoding=UTF-8";
+var tableName = "power";
+var properties = new Properties();
+properties.setProperty("user", "root");
+properties.setProperty("password", "MySQL@seil");
+properties.setProperty("driver", "com.mysql.cj.jdbc.Driver");
+var ds = spark.read.jdbc(url, tableName,properties);
+var tsFilter = col("TS").$greater$eq(1549902608).and(col("TS").$less(1549904424));
+ds = ds.filter(col("sensor_id").equalTo("power_k_m"));
+ds = ds.filter(tsFilter);
+ds.cache();
+var initDS = ds;
+ds = initDS.select("power_factor_1","ts","sensor_id");
+var window = org.apache.spark.sql.functions.window(col("TS").cast(DataTypes.TimestampType), "1 minute");
+var gds = ds.groupBy(window, col("sensor_id"));
+var min_power_factor_1 = min(abs(col("power_factor_1"))).as("min_power_factor_1");
+var non_zero_min_power_factor_1 = min(when(abs(col("power_factor_1").cast(DataTypes.DoubleType))>0,abs(col("power_factor_1")))).as("non_zero_min_power_factor_1");
+ds = gds.agg(min_power_factor_1,non_zero_min_power_factor_1);
+ds.show();

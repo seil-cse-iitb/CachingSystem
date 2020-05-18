@@ -1,0 +1,21 @@
+jdbc:mysql://mysql.seil.cse.iitb.ac.in:3306/seil_sensor_data?useSSL=false&autoReconnect=true&failOverReadOnly=false&maxReconnects=10&useUnicode=true&characterEncoding=UTF-8 sch_3_view ts 1546214400 1546387200 100 {user=reader, password=reader, driver=com.mysql.cj.jdbc.Driver}
+
+
+spark-shell --packages "mysql:mysql-connector-java:6.0.6"
+
+ val stable="sch_3_view"
+ val url="jdbc:mysql://mysql.seil.cse.iitb.ac.in:3306/seil_sensor_data?useSSL=false&autoReconnect=true&failOverReadOnly=false&maxReconnects=10&useUnicode=true&characterEncoding=UTF-8"
+ val url1="jdbc:mysql://10.129.149.21:3306/seil_sensor_data?useSSL=false&autoReconnect=true&failOverReadOnly=false&maxReconnects=10&useUnicode=true&characterEncoding=UTF-8"
+ val start=1546214400
+ val end=  1546217200
+ val cname ="ts"
+ import java.util.Properties;
+ val p=new Properties();
+ p.setProperty("user","root");
+ p.setProperty("password","MySQL@seil");
+ p.setProperty("driver","com.mysql.cj.jdbc.Driver");
+ val inc = 3600;
+ val d1 = spark.read.jdbc(url,stable,cname,start,end,100,p).where("TS>"+start+" and TS<"+end);
+ val d2 = spark.read.jdbc(url1,stable,cname,start,end,100,p).where("TS>"+(start+inc)+" and TS<"+(end+inc));
+ d1.union(d2).cache().show()
+ d1.cache().union(d2.cache()).show()
