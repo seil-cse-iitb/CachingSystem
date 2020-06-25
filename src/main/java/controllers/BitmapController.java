@@ -239,6 +239,9 @@ public class BitmapController {
 
     public void cleanBitmap(BitmapBean bitmapBean, GranularityBean granularityBean, TimeRangeBean timeRange) {
         LogManager.logPriorityInfo("[Cleaning Bitmap][Granularity:"+granularityBean.getGranularityId()+"]["+timeRange+"]");
+        for(GranularityBean granularityBean1: bitmapBean.granularityBeanBitSetMap.keySet()){
+            LogManager.logDebugInfo(granularityBean1+":"+ (bitmapBean.granularityBeanBitSetMap.get(granularityBean1)!=null));
+        }
         BitSet bitSet = bitmapBean.granularityBeanBitSetMap.get(granularityBean);
         int start = (int) ((timeRange.startTime - getTimeInSec(bitmapBean.startTime)) / granularityBean.getGranularityInTermsOfSeconds());
         int end = (int) (timeRange.endTime - getTimeInSec(bitmapBean.startTime)) / granularityBean.getGranularityInTermsOfSeconds();

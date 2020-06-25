@@ -54,9 +54,10 @@ var  streamingQueryListener = new StreamingQueryListener{
 }
 spark.streams.addListener(streamingQueryListener);
 
-var mqtt_url = "tcp://10.129.149.9:1883";
+//var mqtt_url = "tcp://10.129.149.9:1883";
+var mqtt_url = "tcp://10.129.6.56:1883";
 var qos = 0;
-var topic = "test1,test2,test3";//"data/kresit/sch/2,data/kresit/sch/37,data/kresit/sch/3,data/kresit/sch/4";
+var topic = "SCHNEIDERMETER/power_k_seil_a,test1,test2,test3";//"data/kresit/sch/2,data/kresit/sch/37,data/kresit/sch/3,data/kresit/sch/4";
 var clientId = "spark-streaming-test";
 var dataset = spark.readStream.format("org.apache.bahir.sql.streaming.mqtt.MQTTStreamSourceProvider").option("topic", topic).option("localStorage", "/tmp/spark-mqtt/").option("QoS", qos).option("clientId", clientId).load(mqtt_url);
 var timestamp = col("timestamp").cast(DataTypes.TimestampType);//.as("eventTime");
@@ -68,6 +69,7 @@ dataset = dataset.withColumn("ts" , col("payload_array").getItem(1).cast(DataTyp
 dataset = dataset.drop(col("payload_array")).drop(col("payload"));
 //dataset.writeStream.format("console").option("numRows",100).option("truncate",false).start();
 dataset.withWatermark("ts", "1 second").groupBy(col("topic"), window(col("ts"), "1 minutes")).agg(expre).writeStream.trigger(Trigger.ProcessingTime(Duration.apply("10 sec"))).outputMode(OutputMode.Update()).format("console").option("numRows",100).option("truncate",false).start();
+// console.awaitTermination
 // .withColumnRenamed("timestamp","eventTime")
 
 

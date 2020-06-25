@@ -1,6 +1,8 @@
 package beans;
 
-public class DatabaseBean {
+import java.io.Serializable;
+
+public class DatabaseBean implements Serializable {
     String databaseId;//some unique id for each db
     String databaseType; //SQL, NoSQL
     String databaseName; //granularityId of the db

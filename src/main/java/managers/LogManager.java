@@ -26,7 +26,7 @@ public class LogManager {
     }
 
     public static void logInfo(String text) {
-//        LogManager.log("[Info]" + text);
+        LogManager.log("[Info]" + text);
     }
 
     public static void logDebugInfo(String text) {
@@ -35,7 +35,7 @@ public class LogManager {
     }
 
     public static void logPriorityInfo(String text) {
-        LogManager.log("[Info]" + text);
+        LogManager.log("[PriorityInfo]" + text);
     }
 
     public static void logCacheInit() {

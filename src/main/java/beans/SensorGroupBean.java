@@ -1,12 +1,24 @@
 package beans;
 
 
+import managers.LogManager;
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class SensorGroupBean extends SensorBean {
-    final List<SensorBean> sensorList = new ArrayList<>();
+    final ArrayList<SensorBean> sensorList = new ArrayList<>();
     String spatialAggFunction;
+
+    public SensorGroupBean(){}
+
+    public SensorGroupBean(SensorGroupBean sensorGroupBean) {
+        super(sensorGroupBean);
+        spatialAggFunction = sensorGroupBean.spatialAggFunction;
+        sensorList.addAll((Collection<? extends SensorBean>) sensorGroupBean.sensorList.clone());
+    }
 
     public String getSpatialAggFunction() {
         return spatialAggFunction;

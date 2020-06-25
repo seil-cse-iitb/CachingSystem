@@ -54,4 +54,16 @@ public class SourceTableBean {
     public void setTsColumnName(String tsColumnName) {
         this.tsColumnName = tsColumnName;
     }
+
+    @Override
+    public String toString() {
+        return "SourceTableBean{" +
+                "databaseBean=" + databaseBean +
+                ", tableId='" + tableId + '\'' +
+                ", tableName='" + tableName + '\'' +
+                ", schemaType=" + schemaType +
+                ", sensorIdColumnName='" + sensorIdColumnName + '\'' +
+                ", tsColumnName='" + tsColumnName + '\'' +
+                '}';
+    }
 }

@@ -54,4 +54,16 @@ public class SLCacheTableBean{
     public void setTsColumnName(String tsColumnName) {
         this.tsColumnName = tsColumnName;
     }
+
+    @Override
+    public String toString() {
+        return "SLCacheTableBean{" +
+                "databaseBean=" + databaseBean +
+                ", tableId='" + tableId + '\'' +
+                ", tableName='" + tableName + '\'' +
+                ", schemaType=" + schemaType +
+                ", sensorIdColumnName='" + sensorIdColumnName + '\'' +
+                ", tsColumnName='" + tsColumnName + '\'' +
+                '}';
+    }
 }

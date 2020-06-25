@@ -13,13 +13,16 @@ import static managers.Utils.df;
 import static managers.Utils.getTimeInSec;
 
 public class ConfigurationController {
-
+    static GsonBuilder builder;
+    static Gson gson;
+    public ConfigurationController(){
+        builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+        gson = builder.create();
+    }
     public ConfigurationBean readConfiguration(String configurationFilePath) {
         ConfigurationBean cb = new ConfigurationBean();
         Utils.configurationBean = cb;
-        GsonBuilder builder = new GsonBuilder();
-        builder.setPrettyPrinting();
-        Gson gson = builder.create();
 
         try {
             JsonObject jsonObject = gson.fromJson(new FileReader(configurationFilePath), JsonObject.class);
@@ -38,7 +41,8 @@ public class ConfigurationController {
             cb.debug = jsonObject.get("debug").getAsBoolean();
             cb.stopSparkLogging = jsonObject.get("stopSparkLogging").getAsBoolean();
             cb.storeVisualizationQueries = jsonObject.get("storeVisualizationQueries").getAsBoolean();
-
+            cb.mqttUrl = jsonObject.get("mqttUrl").getAsString();
+            cb.mqttQos = jsonObject.get("mqttQos").getAsInt();
 
             //Granularity properties
             JsonArray granularities = jsonObject.getAsJsonArray("granularities");

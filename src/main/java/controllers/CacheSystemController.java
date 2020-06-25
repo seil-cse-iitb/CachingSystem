@@ -13,10 +13,10 @@ import java.sql.SQLException;
 import java.util.*;
 
 /*
-* MQTTBean
-* SensorLiveStreamBean
-*
-* */
+ * MQTTBean
+ * SensorLiveStreamBean
+ *
+ * */
 
 public class CacheSystemController {
     //TODO cache replacements policy
@@ -32,10 +32,12 @@ public class CacheSystemController {
     public DatabaseController databaseController;
     public SensorController sensorController;
     public TimeRangeController timeRangeController;
+    public LiveStreamController liveStreamController;
     public AggregationManager aggregationManager;
     public QueryLogManager queryLogManager;
     public LogManager logManager;
     public final Map<SensorBean, List<TimeRangeBean>> executingList = new HashMap<>();
+    private final Map<SensorBean, LiveStreamBean> liveStreamingList = new HashMap<>();
 
     public CacheSystemController(SparkSession sparkSession, ConfigurationBean cb) {
         this.sparkSession = sparkSession;
@@ -48,6 +50,7 @@ public class CacheSystemController {
         databaseController = new DatabaseController(this);
         sensorController = new SensorController(this);
         timeRangeController = new TimeRangeController(this);
+        liveStreamController = new LiveStreamController(this);
         aggregationManager = new AggregationManager(this);
         queryLogManager = new QueryLogManager(this);
         logManager = new LogManager();
@@ -59,7 +62,7 @@ public class CacheSystemController {
         //start query log cleanup thread
         queryLogManager.startQueryLogCleanupThread();
         //save granularities in db
-        granularityController.saveGranularities(sparkSession);
+//        granularityController.saveGranularities(sparkSession);
         //initialize bitmaps if not exists
         bitmapController.initBitmapsIfNotExists();
         //initialize execution_list table in fl cache
@@ -69,7 +72,6 @@ public class CacheSystemController {
         this.addAllGranularityToExecutingMap();
         LogManager.logPriorityInfo("[CachingSystem is ready to work!!!]");
 
-        if(true)return;
         while (true) {
             //poll query log and get new queries
             List<QueryBean> newQueries = queryLogManager.getNewQueries();
@@ -77,40 +79,78 @@ public class CacheSystemController {
             //currently assuming a query is about only a single sensor
             //start a thread for each query with their bitmaps
             for (QueryBean queryBean : newQueries) {
-                //minimize the queries by minimizing overlapping of sensor_ids and timeranges
-                synchronized (executingList) {
-                    if (!shouldExecute(queryBean))
-                        continue;
-                    LogManager.logInfo("Executing query:" + queryBean);
-                    //add sensor timeranges in a global list
-                    for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
-                        List<TimeRangeBean> timeRangeBeans = queryBean.getSensorTimeRangeListMap().get(sensorBean);
-                        assert timeRangeBeans.isEmpty() || executingList.get(sensorBean).addAll(timeRangeBeans);
-                        LogManager.logPriorityInfo("added all timeranges");
-                    }
-                }
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
-                            bitmapController.loadBitmaps(sensorBean);
-                        }
-                        handleQuery(queryBean);
-                        //remove sensor's timeranges from global list
-                        synchronized (executingList) {
-                            for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
-                                List<TimeRangeBean> timeRangeBeans = queryBean.getSensorTimeRangeListMap().get(sensorBean);
-                                assert timeRangeBeans.isEmpty() || executingList.get(sensorBean).removeAll(timeRangeBeans);
-                                LogManager.logPriorityInfo("removed all timeranges");
+                try {
+                    if (queryController.isLiveStreamQuery(queryBean)) {
+                        synchronized (liveStreamingList) {
+                            if (!changedStreamStatus(queryBean)) {
+                                LogManager.logDebugInfo("skip ho gyi re query :(");
+                                continue;
+                            }
+                            if (queryController.getLiveStreamDesiredStatus(queryBean) == LiveStreamController.START) {
+                                //add sensor into liveStreaming list.
+                                for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
+                                    LogManager.logPriorityInfo("Starting live stream: " + sensorBean);
+                                    LiveStreamBean liveStreamBean = new LiveStreamBean(sensorBean);
+                                    liveStreamingList.put(sensorBean, liveStreamBean);
+                                    for (String granularityString : cb.granularityBeanMap.keySet()) {
+                                        startLiveStreamThread(liveStreamBean, cb.granularityBeanMap.get(granularityString));
+                                    }
+                                }
+                            } else if (queryController.getLiveStreamDesiredStatus(queryBean) == LiveStreamController.END) {
+                                //TODO shutdown the thread, and remove sensor from liveStreaming list
+                                for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
+                                    LogManager.logPriorityInfo("Ending live stream: " + sensorBean);
+                                    liveStreamController.stopStream(liveStreamingList.get(sensorBean));
+                                    liveStreamingList.remove(sensorBean);
+                                }
                             }
                         }
+                    } else {
+                        //minimize the queries by minimizing overlapping of sensor_ids and timeranges
+                        synchronized (executingList) {
+                            LogManager.logDebugInfo("Should Execute Query: "+queryBean);
+                            try {
+                                if (!shouldExecute(queryBean))
+                                    continue;
+                            }catch(Exception e){
+                                LogManager.logError("Should Execute Error: "+e.getLocalizedMessage());
+                            }
+                            LogManager.logInfo("Executing query:" + queryBean);
+                            //add sensor timeranges in a global list
+                            for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
+                                List<TimeRangeBean> timeRangeBeans = queryBean.getSensorTimeRangeListMap().get(sensorBean);
+                                assert timeRangeBeans.isEmpty() || executingList.get(sensorBean).addAll(timeRangeBeans);
+                                LogManager.logPriorityInfo("added all timeranges");
+                            }
+                        }//TODO reduce time ranges based on if live stream is started or not. if live stream is started then for that sensor, time range should not exceed the startTime of its live stream
+                        Thread thread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
+                                    bitmapController.loadBitmaps(sensorBean);
+                                }
+                                //TODO load bitmap if it is first time. i.e. bitmap is null. Else it is already at the latest state because all the changes are done locally first then sent to db and no external code is changing the bitmap.
+                                //TODO here we load bitmap for every query. Now what if a query is already executing for some different time range and now you replace the bitmap with new bitmap from db. (between the bitmap updated locally and in the db if this function fetches new bitmap then previous local updates will be lost.)
+                                handleQuery(queryBean);
+                                //remove sensor's timeranges from global list
+                                synchronized (executingList) {
+                                    for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
+                                        List<TimeRangeBean> timeRangeBeans = queryBean.getSensorTimeRangeListMap().get(sensorBean);
+                                        assert timeRangeBeans.isEmpty() || executingList.get(sensorBean).removeAll(timeRangeBeans);
+                                        LogManager.logPriorityInfo("removed all timeranges");
+                                    }
+                                }
+                            }
+                        });
+                        String threadName = "";
+                        for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet())
+                            threadName += "(" + sensorBean + ")";
+                        thread.setName(threadName);
+                        thread.start();
                     }
-                });
-                String threadName = "";
-                for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet())
-                    threadName += "(" + sensorBean.getSensorId() + ")";
-                thread.setName(threadName);
-                thread.start();
+                } catch (Exception e) {
+                    LogManager.logError("[Main Thread][Exception: " + e.getMessage() + "]");
+                }
             }
 
             //**join all threads
@@ -120,6 +160,31 @@ public class CacheSystemController {
                 LogManager.logError("[" + this.getClass() + "]" + e.getMessage());
             }
         }
+    }
+
+    private Thread startLiveStreamThread(LiveStreamBean liveStreamBean, GranularityBean granularityBean) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                liveStreamController.startStream(liveStreamBean, granularityBean);
+            }
+        });
+        String threadName = "(LiveStream:" + liveStreamBean.getSensorBean() + ")";
+        thread.setName(threadName);
+        liveStreamBean.setLiveStreamThread(thread);
+        thread.start();
+        return thread;
+    }
+
+    private boolean changedStreamStatus(QueryBean queryBean) {
+        boolean desiredStreamState = queryController.getLiveStreamDesiredStatus(queryBean);
+        for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
+            LogManager.logDebugInfo("[DesiredStreamStatus: " + desiredStreamState + " and CurrentStreamStatus: " + liveStreamingList.containsKey(sensorBean) + "]");
+            if (desiredStreamState == liveStreamingList.containsKey(sensorBean)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void addAllGranularityToExecutingMap() {
@@ -138,6 +203,7 @@ public class CacheSystemController {
         List<SensorBean> faultySensorBean = new ArrayList<>();
         for (SensorBean sensorBean : queryBean.getSensorTimeRangeListMap().keySet()) {
             boolean isSensorOk = true;
+            if(!executingList.containsKey(sensorBean)) executingList.put(sensorBean,new ArrayList<>());
             if (executingList.get(sensorBean).size() > 0) {
                 List<TimeRangeBean> timeRangeBeans = queryBean.getSensorTimeRangeListMap().get(sensorBean);
                 List<TimeRangeBean> executingTimeRangeBeans = executingList.get(sensorBean);
@@ -233,21 +299,21 @@ public class CacheSystemController {
             }
             if (nonExistingDataRanges.size() > 0) {
                 try {
-                    flCacheController.addToExecutionList(sensorBean,granularity,nonExistingDataRanges);
+                    flCacheController.addToExecutionList(sensorBean, granularity, nonExistingDataRanges);
                     flCacheController.updateCache(sensorBean, granularity, nonExistingDataRanges);
                     bitmapController.updateBitmap(sensorBean.getFlBitmapBean(), granularity, nonExistingDataRanges);
                     bitmapController.updateBitmap(sensorBean.getSlBitmapBean(), granularity, nonExistingDataRanges);
-                }catch (Exception e){
+                } catch (Exception e) {
                     LogManager.logError("[" + this.getClass() + "][" + query + "]" + e.getMessage());
-                    LogManager.logPriorityInfo("[Cleaning Cache][Sensor:"+sensorBean + "][Granularity:"+granularity.getGranularityId()+"]["+nonExistingDataRanges+"]");
-                    for (TimeRangeBean timeRange:nonExistingDataRanges) {
+                    LogManager.logPriorityInfo("[Cleaning Cache][Sensor:" + sensorBean + "][Granularity:" + granularity.getGranularityId() + "][" + nonExistingDataRanges + "]");
+                    for (TimeRangeBean timeRange : nonExistingDataRanges) {
                         flCacheController.cleanCache(sensorBean, granularity, timeRange);
                         slCacheController.cleanCache(sensorBean, granularity, timeRange);
                         bitmapController.cleanBitmap(sensorBean.getFlBitmapBean(), granularity, timeRange);
                         bitmapController.cleanBitmap(sensorBean.getSlBitmapBean(), granularity, timeRange);
                     }
-                }finally {
-                    flCacheController.removeFromExecutionList(sensorBean,granularity,nonExistingDataRanges);
+                } finally {
+                    flCacheController.removeFromExecutionList(sensorBean, granularity, nonExistingDataRanges);
                 }
             } else {
                 LogManager.logInfo("[Complete data exists of this query]");
@@ -290,7 +356,7 @@ public class CacheSystemController {
 
     private void clearCacheAndBitmapTables() {
         for (FLCacheTableBean flc : cb.flCacheTableBeanMap.values()) {
-            Connection connection=null;
+            Connection connection = null;
             try {
                 connection = DriverManager.getConnection(databaseController.getURL(flc.getDatabaseBean()), databaseController.getProperties(flc.getDatabaseBean()));
                 String tableName = flc.getTableName() + "_" + cb.bitmapTableNameSuffix;
@@ -306,8 +372,8 @@ public class CacheSystemController {
                 connection.close();
             } catch (SQLException e) {
                 LogManager.logError("[" + this.getClass() + "][clearCacheAndBitmapTables]" + flc + e.getMessage());
-            }finally{
-                if(connection!=null) {
+            } finally {
+                if (connection != null) {
                     try {
                         connection.close();
                     } catch (SQLException e) {
@@ -317,7 +383,7 @@ public class CacheSystemController {
             }
         }
         for (SLCacheTableBean slc : cb.slCacheTableBeanMap.values()) {
-            Connection connection=null;
+            Connection connection = null;
             try {
                 connection = DriverManager.getConnection(databaseController.getURL(slc.getDatabaseBean()), databaseController.getProperties(slc.getDatabaseBean()));
                 String tableName = slc.getTableName();
@@ -328,8 +394,8 @@ public class CacheSystemController {
                 connection.close();
             } catch (SQLException e) {
                 LogManager.logError("[" + this.getClass() + "][clearCacheAndBitmapTables]" + slc + e.getMessage());
-            }finally{
-                if(connection!=null) {
+            } finally {
+                if (connection != null) {
                     try {
                         connection.close();
                     } catch (SQLException e) {

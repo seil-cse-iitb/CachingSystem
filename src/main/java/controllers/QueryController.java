@@ -53,7 +53,7 @@ public class QueryController {
                                     query.getMetaData().put((String) key, (String) metaDataJson.get(key));
                                 }
                             } catch (ParseException e) {
-                                LogManager.logError("["+this.getClass()+"][JSONParsing:" + e.getMessage() + "]putting meta_data=from_cache");
+                                LogManager.logError("[" + this.getClass() + "][JSONParsing:" + e.getMessage() + "]putting meta_data=from_cache");
                                 query.getMetaData().put("meta_data", "from_cache");
                             }
                         }
@@ -73,7 +73,7 @@ public class QueryController {
                     }
                 }
                 if (flCacheTableBean == null) {
-                    LogManager.logError("["+this.getClass()+"][Table not found:" + tableName + "]");
+                    LogManager.logError("[" + this.getClass() + "][Table not found:" + tableName + "]");
                     continue;
                 }
                 ArrayList<Expression> tsConditions = new ArrayList<>();
@@ -86,8 +86,8 @@ public class QueryController {
                     ArrayList<TimeRangeBean> timeRanges = extractTimeRanges(tsConditions);//always create new list of timeranges, so that changes in timeRange.startTime and endTime does not affect other sensors of the query
                     query.getSensorTimeRangeListMap().put(sensor, timeRanges);
                 }
-            }catch (Exception e){
-                LogManager.logError("[" + this.getClass() + "][QueryPreprocessing][Query:"+query.getQueryStr()+"]" + e.getMessage());
+            } catch (Exception e) {
+                LogManager.logError("[" + this.getClass() + "][QueryPreprocessing][Query:" + query.getQueryStr() + "]" + e.getMessage());
             }
         }
         return queries;
@@ -114,7 +114,7 @@ public class QueryController {
         ArrayList<TimeRangeBean> timeRanges = new ArrayList<>();
         ArrayList<Long> startTimes = new ArrayList<>();
         ArrayList<Long> endTimes = new ArrayList<>();
-        Date currentDate =new Date();
+        Date currentDate = new Date();
         for (Expression tsExpr : tsConditions) {
             Long startTime = 0L, endTime = (long) Math.round(System.currentTimeMillis() / 1000);
             if (tsExpr instanceof GreaterThanOrEqual) {
@@ -140,8 +140,8 @@ public class QueryController {
         sort(endTimes);
         while (!startTimes.isEmpty() && !endTimes.isEmpty()) {
 
-            if (startTimes.get(0) < min(Utils.getTimeInSec(currentDate),endTimes.get(0))) {
-                timeRanges.add(new TimeRangeBean(startTimes.get(0), min(Utils.getTimeInSec(currentDate),endTimes.get(0))));
+            if (startTimes.get(0) < min(Utils.getTimeInSec(currentDate), endTimes.get(0))) {
+                timeRanges.add(new TimeRangeBean(startTimes.get(0), min(Utils.getTimeInSec(currentDate), endTimes.get(0))));
                 startTimes.remove(0);
                 endTimes.remove(0);
             } else {
@@ -166,15 +166,15 @@ public class QueryController {
     private ArrayList<SensorBean> extractSensors(ArrayList<Expression> sensorIdConditions) {
         ArrayList<SensorBean> sensors = new ArrayList<>();
         for (Expression sensorIdCondition : sensorIdConditions) { //for now assumption is that there will be only one sensorIdCondition
+            SensorBean sensorBean = null;
+            String sensorId = null;
             if (sensorIdCondition.children().head() instanceof Literal) {
-                SensorBean sensorBean = c.cb.sensorBeanMap.get(((UTF8String) ((Literal) sensorIdCondition.children().head()).value()).toString());
-                if (sensorBean != null)
-                    sensors.add(sensorBean);
+                sensorId = ((UTF8String) ((Literal) sensorIdCondition.children().head()).value()).toString();
             } else if (sensorIdCondition.children().last() instanceof Literal) {
-                SensorBean sensorBean = c.cb.sensorBeanMap.get(((UTF8String) ((Literal) sensorIdCondition.children().last()).value()).toString());
-                if (sensorBean != null)
-                    sensors.add(sensorBean);
+                sensorId = ((UTF8String) ((Literal) sensorIdCondition.children().last()).value()).toString();
             }
+            sensorBean = c.sensorController.fetchSensor(sensorId);
+            if (sensorBean != null) sensors.add(sensorBean);
         }
         return sensors;
     }
@@ -214,10 +214,10 @@ public class QueryController {
     }
 
     public GranularityBean getSpecifiedGranularity(QueryBean query) {
-        for (String gstr:c.cb.granularityBeanMap.keySet()) {
-         if(query.getMetaData().get("specified_granularity").equalsIgnoreCase(gstr)){
-             return c.cb.granularityBeanMap.get(gstr);
-         }
+        for (String granularity_string : c.cb.granularityBeanMap.keySet()) {
+            if (query.getMetaData().get("specified_granularity").equalsIgnoreCase(granularity_string)) {
+                return c.cb.granularityBeanMap.get(granularity_string);
+            }
         }
         return null;
     }
@@ -225,4 +225,14 @@ public class QueryController {
     public boolean isCleanCacheQuery(QueryBean query) {
         return query.getMetaData().get("meta_data").equalsIgnoreCase("clean_cache");
     }
+
+    public boolean isLiveStreamQuery(QueryBean query) {
+        return query.getMetaData().get("meta_data").equalsIgnoreCase("live_stream");
+    }
+
+    public boolean getLiveStreamDesiredStatus(QueryBean query) {
+        String live_stream_desired_status = query.getMetaData().get("live_stream_desired_status");
+        return live_stream_desired_status != null && live_stream_desired_status.equalsIgnoreCase("start");
+    }
+
 }

@@ -30,6 +30,8 @@ public class ConfigurationBean {
     public Date bitmapEndTime;
     public String schedulerAllocationFile = null;
     public boolean storeVisualizationQueries=false;
+    public String mqttUrl="tcp://10.129.6.56:1883";
+    public Integer mqttQos=0;
     JsonObject jsonObject;
 
     public int getQueryLogCleanupDurationInSeconds() {

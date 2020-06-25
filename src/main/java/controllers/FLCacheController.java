@@ -45,28 +45,39 @@ public class FLCacheController {
                 for (GranularityBean currentGranularity = requiredGranularity; currentGranularity != null; currentGranularity = c.granularityController.nextSmallerGranularity(currentGranularity)) {
                     LogManager.logPriorityInfo("Checking granularity: " + currentGranularity.getGranularityId());
                     ArrayList<TimeRangeBean> newTimeRangeBeans = new ArrayList<>();
-                    for (TimeRangeBean currentTimeRangeBean : slNonExistingTimeRangeBeans) {
-                        //aggregate and update flCacheTable & slCacheTable
-                        ArrayList<TimeRangeBean> existingDataRanges = c.bitmapController.getExistingDataRange(sensorBean.getSlBitmapBean(), currentGranularity, currentTimeRangeBean);
-                        LogManager.logPriorityInfo("ExistingDataRange:" + existingDataRanges);
-                        ArrayList<TimeRangeBean> nonExistingDataRange = c.bitmapController.getNonExistingDataRange(sensorBean.getSlBitmapBean(), currentGranularity, currentTimeRangeBean);
-                        LogManager.logPriorityInfo("NonExistingDataRange:" + nonExistingDataRange);
-                        for (TimeRangeBean existingTimeRangeBean : existingDataRanges) {
-                            LogManager.logPriorityInfo("Data found in SL" + existingTimeRangeBean);
-                            updateSLAndFLCacheFromSL(sensorBean, requiredGranularity, slCacheTableBeanPair.getRight(), flCacheTableBean, currentGranularity, existingTimeRangeBean);
+                    try {
+                        for (TimeRangeBean currentTimeRangeBean : slNonExistingTimeRangeBeans) {
+                            //aggregate and update flCacheTable & slCacheTable
+                            ArrayList<TimeRangeBean> existingDataRanges = c.bitmapController.getExistingDataRange(sensorBean.getSlBitmapBean(), currentGranularity, currentTimeRangeBean);
+                            LogManager.logPriorityInfo("ExistingDataRange:" + existingDataRanges);
+                            ArrayList<TimeRangeBean> nonExistingDataRange = c.bitmapController.getNonExistingDataRange(sensorBean.getSlBitmapBean(), currentGranularity, currentTimeRangeBean);
+                            LogManager.logPriorityInfo("NonExistingDataRange:" + nonExistingDataRange);
+                            for (TimeRangeBean existingTimeRangeBean : existingDataRanges) {
+                                LogManager.logPriorityInfo("Data found in SL" + existingTimeRangeBean);
+                                updateSLAndFLCacheFromSL(sensorBean, requiredGranularity, slCacheTableBeanPair.getRight(), flCacheTableBean, currentGranularity, existingTimeRangeBean);
+                            }
+                            newTimeRangeBeans.addAll(c.bitmapController.getNonExistingDataRange(sensorBean.getSlBitmapBean(), currentGranularity, currentTimeRangeBean));
                         }
-                        newTimeRangeBeans.addAll(c.bitmapController.getNonExistingDataRange(sensorBean.getSlBitmapBean(), currentGranularity, currentTimeRangeBean));
+                    } catch (Exception e) {
+                        LogManager.logError("[" + this.getClass() + "][updateCache][SLCache:" + slCacheTableBeanPair.getRight() + "][FLCache:" + flCacheTableBean + "]" + e.getMessage());
+                        throw e;
                     }
                     slNonExistingTimeRangeBeans = newTimeRangeBeans;
                 }
 
                 for (TimeRangeBean currentTimeRangeBean : slNonExistingTimeRangeBeans) {
-                    if (sensorBean instanceof SensorGroupBean) {
-                        updateSLAndFLCacheFromSourceSensorGroup((SensorGroupBean) sensorBean, requiredGranularity, slCacheTableBeanPair.getRight(), flCacheTableBean, currentTimeRangeBean);
-                    } else {
-                        updateSLAndFLCacheFromSource(sensorBean, requiredGranularity, slCacheTableBeanPair.getRight(), flCacheTableBean, currentTimeRangeBean);
+                    try {
+                        if (sensorBean instanceof SensorGroupBean) {
+                            updateSLAndFLCacheFromSourceSensorGroup((SensorGroupBean) sensorBean, requiredGranularity, slCacheTableBeanPair.getRight(), flCacheTableBean, currentTimeRangeBean);
+                        } else {
+                            updateSLAndFLCacheFromSource(sensorBean, requiredGranularity, slCacheTableBeanPair.getRight(), flCacheTableBean, currentTimeRangeBean);
+                        }
+                    } catch (Exception e) {
+                        LogManager.logError("[" + this.getClass() + "][updateCache][SLCache:" + slCacheTableBeanPair.getRight() + "][FLCache:" + flCacheTableBean + "]" + e.getMessage());
+                        throw e;
                     }
                 }
+
             }
         }
         c.sparkSession.sparkContext().setLocalProperty("callSite.short", null);
@@ -78,6 +89,7 @@ public class FLCacheController {
         GranularityBean smallerGranularity = c.granularityController.nextSmallerGranularity(requiredGranularity);
         Dataset<Row> sourceDataset = null;
         SourceTableBean commonSourceTableSchema = null;
+        try {
         for (SensorBean sensorBean : sensorGroupBean.getSensorList()) {
             LogManager.logPriorityInfo(sensorBean.toString());
             List<Pair<TimeRangeBean, SourceTableBean>> intersectionTimeRangeVsSourceTables = c.sensorController.getIntersectionTimeRangeVsSourceTables(sensorBean, timeRangeBean);
@@ -113,30 +125,35 @@ public class FLCacheController {
 
         //update fl and sl after aggregation
         Dataset<Row> aggregatedRequiredGranularity;
-        //if smaller granularity available fetch smaller granularity and required granularity from source if not then fetch required granularity only
-        assert commonSourceTableSchema != null;
-        if (smallerGranularity != null) {
-            Dataset<Row> aggregatedSmallerGranularity = c.aggregationManager.aggregateFromSource(sourceDataset, smallerGranularity, commonSourceTableSchema);
-            aggregatedSmallerGranularity = aggregatedSmallerGranularity
+            //if smaller granularity available fetch smaller granularity and required granularity from source if not then fetch required granularity only
+            assert commonSourceTableSchema != null;
+            if (smallerGranularity != null) {
+                Dataset<Row> aggregatedSmallerGranularity = c.aggregationManager.aggregateFromSource(sourceDataset, smallerGranularity, commonSourceTableSchema);
+                aggregatedSmallerGranularity = aggregatedSmallerGranularity
+                        .withColumn(sl.getTsColumnName(), col(commonSourceTableSchema.getTsColumnName()))
+                        .withColumn(sl.getSensorIdColumnName(), col(commonSourceTableSchema.getSensorIdColumnName()));
+                aggregatedSmallerGranularity = aggregatedSmallerGranularity.cache();
+                aggregatedSmallerGranularity.write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(sl.getDatabaseBean()), sl.getTableName(), c.databaseController.getProperties(sl.getDatabaseBean()));
+                aggregatedRequiredGranularity = c.aggregationManager.aggregateFromSL(aggregatedSmallerGranularity, requiredGranularity, sl);
+                aggregatedSmallerGranularity.unpersist();
+            } else {
+                aggregatedRequiredGranularity = c.aggregationManager.aggregateFromSource(sourceDataset, requiredGranularity, commonSourceTableSchema);
+            }
+            Column tsFilter = col(commonSourceTableSchema.getTsColumnName()).$greater$eq(timeRangeBean.startTime).and(col(commonSourceTableSchema.getTsColumnName()).$less(timeRangeBean.endTime));
+            aggregatedRequiredGranularity = aggregatedRequiredGranularity.filter(tsFilter).cache();
+            aggregatedRequiredGranularity
                     .withColumn(sl.getTsColumnName(), col(commonSourceTableSchema.getTsColumnName()))
-                    .withColumn(sl.getSensorIdColumnName(), col(commonSourceTableSchema.getSensorIdColumnName()));
-            aggregatedSmallerGranularity = aggregatedSmallerGranularity.cache();
-            aggregatedSmallerGranularity.write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(sl.getDatabaseBean()), sl.getTableName(), c.databaseController.getProperties(sl.getDatabaseBean()));
-            aggregatedRequiredGranularity = c.aggregationManager.aggregateFromSL(aggregatedSmallerGranularity, requiredGranularity, sl);
-            aggregatedSmallerGranularity.unpersist();
-        } else {
-            aggregatedRequiredGranularity = c.aggregationManager.aggregateFromSource(sourceDataset, requiredGranularity, commonSourceTableSchema);
+                    .withColumn(sl.getSensorIdColumnName(), col(commonSourceTableSchema.getSensorIdColumnName()))
+                    .write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(sl.getDatabaseBean()), sl.getTableName(), c.databaseController.getProperties(sl.getDatabaseBean()));
+            aggregatedRequiredGranularity
+                    .withColumn(fl.getTsColumnName(), col(commonSourceTableSchema.getTsColumnName()))
+                    .withColumn(fl.getSensorIdColumnName(), col(commonSourceTableSchema.getSensorIdColumnName()))
+                    .write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(fl.getDatabaseBean()), fl.getTableName(), c.databaseController.getProperties(fl.getDatabaseBean()));
+            aggregatedRequiredGranularity.unpersist();
+        } catch (Exception e) {
+            LogManager.logError("[" + this.getClass() + "][updateSLAndFLCacheFromSourceSensorGroup][SLCache:" + sl + "][FLCache:" + fl + "]" + e.getMessage());
+            throw e;
         }
-        aggregatedRequiredGranularity = aggregatedRequiredGranularity.cache();
-        aggregatedRequiredGranularity
-                .withColumn(sl.getTsColumnName(), col(commonSourceTableSchema.getTsColumnName()))
-                .withColumn(sl.getSensorIdColumnName(), col(commonSourceTableSchema.getSensorIdColumnName()))
-                .write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(sl.getDatabaseBean()), sl.getTableName(), c.databaseController.getProperties(sl.getDatabaseBean()));
-        aggregatedRequiredGranularity
-                .withColumn(fl.getTsColumnName(), col(commonSourceTableSchema.getTsColumnName()))
-                .withColumn(fl.getSensorIdColumnName(), col(commonSourceTableSchema.getSensorIdColumnName()))
-                .write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(fl.getDatabaseBean()), fl.getTableName(), c.databaseController.getProperties(fl.getDatabaseBean()));
-        aggregatedRequiredGranularity.unpersist();
         if (smallerGranularity != null) {
             //update bitmap of SL if smaller granularity available
             LogManager.logPriorityInfo("[updateSLAndFLCacheFromSourceSensorGroup]Bitmap update for " + smallerGranularity.getGranularityId() + " in " + timeRangeBean);
@@ -161,6 +178,7 @@ public class FLCacheController {
                 long startTime = i;
                 long endTime = Math.min(startTime + requiredGranularity.getFetchIntervalAtOnceInSeconds(), currentTimeRangeBean.endTime);
                 LogManager.logInfo("----[From SourceTable][" + new Date(startTime * 1000) + "] to [" + new Date(endTime * 1000) + "]");
+                try {
                 Dataset<Row> sourceDataset = c.sparkSession.read()
                         .jdbc(c.databaseController.getURL(sourceTable.getDatabaseBean()), sourceTable.getTableName(), sourceTable.getTsColumnName(), startTime, endTime, requiredGranularity.getNumPartitionsForEachInterval(), c.databaseController.getProperties(sourceTable.getDatabaseBean()));
                 Column tsFilter = col(sourceTable.getTsColumnName()).$greater$eq(startTime).and(col(sourceTable.getTsColumnName()).$less(endTime));
@@ -168,29 +186,33 @@ public class FLCacheController {
                         .and(tsFilter));
                 //update fl and sl after aggregation
                 Dataset<Row> aggregatedRequiredGranularity;
-                //if smaller granularity available fetch smaller granularity and required granularity from source if not then fetch required granularity only
-                if (smallerGranularity != null) {
-                    Dataset<Row> aggregatedSmallerGranularity = c.aggregationManager.aggregateFromSource(sourceDataset, smallerGranularity, sourceTable);
-                    aggregatedSmallerGranularity = aggregatedSmallerGranularity
+                    //if smaller granularity available fetch smaller granularity and required granularity from source if not then fetch required granularity only
+                    if (smallerGranularity != null) {
+                        Dataset<Row> aggregatedSmallerGranularity = c.aggregationManager.aggregateFromSource(sourceDataset, smallerGranularity, sourceTable);
+                        aggregatedSmallerGranularity = aggregatedSmallerGranularity
+                                .withColumn(sl.getTsColumnName(), col(sourceTable.getTsColumnName()))
+                                .withColumn(sl.getSensorIdColumnName(), col(sourceTable.getSensorIdColumnName()));
+                        aggregatedSmallerGranularity = aggregatedSmallerGranularity.cache();
+                        aggregatedSmallerGranularity.write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(sl.getDatabaseBean()), sl.getTableName(), c.databaseController.getProperties(sl.getDatabaseBean()));
+                        aggregatedRequiredGranularity = c.aggregationManager.aggregateFromSL(aggregatedSmallerGranularity, requiredGranularity, sl);
+                        aggregatedSmallerGranularity.unpersist();
+                    } else {
+                        aggregatedRequiredGranularity = c.aggregationManager.aggregateFromSource(sourceDataset, requiredGranularity, sourceTable);
+                    }
+                    aggregatedRequiredGranularity = aggregatedRequiredGranularity.filter(tsFilter).cache();
+                    aggregatedRequiredGranularity
                             .withColumn(sl.getTsColumnName(), col(sourceTable.getTsColumnName()))
-                            .withColumn(sl.getSensorIdColumnName(), col(sourceTable.getSensorIdColumnName()));
-                    aggregatedSmallerGranularity = aggregatedSmallerGranularity.cache();
-                    aggregatedSmallerGranularity.write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(sl.getDatabaseBean()), sl.getTableName(), c.databaseController.getProperties(sl.getDatabaseBean()));
-                    aggregatedRequiredGranularity = c.aggregationManager.aggregateFromSL(aggregatedSmallerGranularity, requiredGranularity, sl);
-                    aggregatedSmallerGranularity.unpersist();
-                } else {
-                    aggregatedRequiredGranularity = c.aggregationManager.aggregateFromSource(sourceDataset, requiredGranularity, sourceTable);
+                            .withColumn(sl.getSensorIdColumnName(), col(sourceTable.getSensorIdColumnName()))
+                            .write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(sl.getDatabaseBean()), sl.getTableName(), c.databaseController.getProperties(sl.getDatabaseBean()));
+                    aggregatedRequiredGranularity
+                            .withColumn(fl.getTsColumnName(), col(sourceTable.getTsColumnName()))
+                            .withColumn(fl.getSensorIdColumnName(), col(sourceTable.getSensorIdColumnName()))
+                            .write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(fl.getDatabaseBean()), fl.getTableName(), c.databaseController.getProperties(fl.getDatabaseBean()));
+                    aggregatedRequiredGranularity.unpersist();
+                } catch (Exception e) {
+                    LogManager.logError("[" + this.getClass() + "][updateSLAndFLCacheFromSource][SourceTable:"+sourceTable+"][SLCache:" + sl + "][FLCache:" + fl + "]" + e.getMessage());
+                    throw e;
                 }
-                aggregatedRequiredGranularity = aggregatedRequiredGranularity.cache();
-                aggregatedRequiredGranularity
-                        .withColumn(sl.getTsColumnName(), col(sourceTable.getTsColumnName()))
-                        .withColumn(sl.getSensorIdColumnName(), col(sourceTable.getSensorIdColumnName()))
-                        .write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(sl.getDatabaseBean()), sl.getTableName(), c.databaseController.getProperties(sl.getDatabaseBean()));
-                aggregatedRequiredGranularity
-                        .withColumn(fl.getTsColumnName(), col(sourceTable.getTsColumnName()))
-                        .withColumn(fl.getSensorIdColumnName(), col(sourceTable.getSensorIdColumnName()))
-                        .write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(fl.getDatabaseBean()), fl.getTableName(), c.databaseController.getProperties(fl.getDatabaseBean()));
-                aggregatedRequiredGranularity.unpersist();
                 i = endTime;
             }
             LogManager.logInfo("--[From SourceTable][Aggregation Finished]: " + currentTimeRangeBean);
@@ -214,26 +236,31 @@ public class FLCacheController {
             long startTime = i;
             long endTime = Math.min(startTime + requiredGranularity.getFetchIntervalAtOnceInSeconds(), currentTimeRangeBean.endTime);
             LogManager.logInfo("----[From SLCache][" + new Date(startTime * 1000) + "] to [" + new Date(endTime * 1000) + "]");
+            try {
             Dataset<Row> slDataset = c.sparkSession.read()
                     .jdbc(c.databaseController.getURL(sl.getDatabaseBean()), sl.getTableName(), sl.getTsColumnName(), startTime, endTime, requiredGranularity.getNumPartitionsForEachInterval(), c.databaseController.getProperties(sl.getDatabaseBean()));
             Column tsFilter = col(sl.getTsColumnName()).$greater$eq(startTime).and(col(sl.getTsColumnName()).$less(endTime));
             slDataset = slDataset.filter(col("granularityId").equalTo(currentGranularity.getGranularityId())
                     .and(col(sl.getSensorIdColumnName()).equalTo(sensorBean.getSensorId()))
                     .and(tsFilter));
-            if (currentGranularity == requiredGranularity) {
-                //update fl only without aggregation i.e. just copy paste
-                slDataset.write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(fl.getDatabaseBean()), fl.getTableName(), c.databaseController.getProperties(fl.getDatabaseBean()));
-            } else {
-                //for smaller granularity of requiredgranularity
-                Dataset<Row> aggregated = c.aggregationManager.aggregateFromSL(slDataset, requiredGranularity, sl);
-                //update fl and sl after aggregation
-                aggregated = aggregated.cache();
-                aggregated.write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(sl.getDatabaseBean()), sl.getTableName(), c.databaseController.getProperties(sl.getDatabaseBean()));
-                aggregated
-                        .withColumn(fl.getTsColumnName(), col(sl.getTsColumnName()))
-                        .withColumn(fl.getSensorIdColumnName(), col(sl.getSensorIdColumnName()))
-                        .write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(fl.getDatabaseBean()), fl.getTableName(), c.databaseController.getProperties(fl.getDatabaseBean()));
-                aggregated.unpersist();
+                if (currentGranularity == requiredGranularity) {
+                    //update fl only without aggregation i.e. just copy paste
+                    slDataset.write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(fl.getDatabaseBean()), fl.getTableName(), c.databaseController.getProperties(fl.getDatabaseBean()));
+                } else {
+                    //for smaller granularity of requiredgranularity
+                    Dataset<Row> aggregated = c.aggregationManager.aggregateFromSL(slDataset, requiredGranularity, sl);
+                    //update fl and sl after aggregation
+                    aggregated = aggregated.filter(tsFilter).cache();
+                    aggregated.write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(sl.getDatabaseBean()), sl.getTableName(), c.databaseController.getProperties(sl.getDatabaseBean()));
+                    aggregated
+                            .withColumn(fl.getTsColumnName(), col(sl.getTsColumnName()))
+                            .withColumn(fl.getSensorIdColumnName(), col(sl.getSensorIdColumnName()))
+                            .write().mode(SaveMode.Append).jdbc(c.databaseController.getURL(fl.getDatabaseBean()), fl.getTableName(), c.databaseController.getProperties(fl.getDatabaseBean()));
+                    aggregated.unpersist();
+                }
+            } catch (Exception e) {
+                LogManager.logError("[" + this.getClass() + "][updateSLAndFLCacheFromSL][SLCache:" + sl + "][FLCache:" + fl + "]" + e.getMessage());
+                throw e;
             }
             i = endTime;
         }

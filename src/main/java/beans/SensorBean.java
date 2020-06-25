@@ -3,22 +3,33 @@ package beans;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class SensorBean {
     public String sensorId;
     public FLCacheTableBean flCacheTableBean;
-    public final List<Pair<TimeRangeBean, SourceTableBean>> timeRangeVsSourceTables = new ArrayList<>();
-    public final List<Pair<TimeRangeBean, SLCacheTableBean>> timeRangeVsSLCacheTables = new ArrayList<>();
+    public final ArrayList<Pair<TimeRangeBean, SourceTableBean>> timeRangeVsSourceTables = new ArrayList<>();
+    public final ArrayList<Pair<TimeRangeBean, SLCacheTableBean>> timeRangeVsSLCacheTables = new ArrayList<>();
     public BitmapBean flBitmapBean,slBitmapBean;
 
+    public  SensorBean(){}
 
-    public List<Pair<TimeRangeBean, SourceTableBean>> getTimeRangeVsSourceTables() {
+    public SensorBean(SensorBean sensorBean){
+        this.sensorId = sensorBean.getSensorId();
+        this.flCacheTableBean = sensorBean.getFlCacheTableBean();
+        timeRangeVsSourceTables.addAll((Collection<? extends Pair<TimeRangeBean, SourceTableBean>>) sensorBean.getTimeRangeVsSourceTables().clone());
+        timeRangeVsSLCacheTables.addAll((Collection<? extends Pair<TimeRangeBean, SLCacheTableBean>>) sensorBean.getTimeRangeVsSLCacheTables().clone());
+        flBitmapBean = new BitmapBean(sensorBean.getFlBitmapBean());
+        slBitmapBean = new BitmapBean(sensorBean.getSlBitmapBean());
+    }
+    public ArrayList<Pair<TimeRangeBean, SourceTableBean>> getTimeRangeVsSourceTables() {
         return timeRangeVsSourceTables;
     }
 
-    public List<Pair<TimeRangeBean, SLCacheTableBean>> getTimeRangeVsSLCacheTables() {
+    public ArrayList<Pair<TimeRangeBean, SLCacheTableBean>> getTimeRangeVsSLCacheTables() {
         return timeRangeVsSLCacheTables;
     }
 
